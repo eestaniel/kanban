@@ -4,10 +4,12 @@
     gap: 0.5rem;
 
     & label {
-        color: var(--medium-grey);
+        color: var(--textfield-label);
     }
 
     & input {
+        background-color: var(--textfield-bg);
+        color: var(--textfield-fc);
         width: 100%;
         border: 1px solid var(--textfield-stroke-idle-active);
         border-radius: 0.25rem;
