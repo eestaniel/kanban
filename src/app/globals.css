@@ -101,6 +101,7 @@
     --dropdown-active-bg: var(--white);
     --dropdown-border-color: var(--main-purple);
     --dropdown-item-fc: var(--medium-grey);
+    --dropdown-item-hover: var(--dark-grey);
 
     .dark-theme {
         /* ---Light Theme Colors--- */
@@ -127,11 +128,12 @@
         /* Dropdown Idle */
         --dropdown-stroke-idle: hsla(216, 15%, 57%, 25%);
         --dropdown-cheveron-idle: var(--main-purple);
-        --dropdown-fc-idle-active: var(--black);
+        --dropdown-fc-idle-active: var(--white);
         --dropdown-label-fc: var(--medium-grey);
 
         /* Dropdown Active */
         --dropdown-active-bg: var(--very-dark-grey);
+        --dropdown-item-hover: var(--light-grey)
     }
 
 

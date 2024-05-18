@@ -3,6 +3,7 @@
 import CustomButton from "@/app/components/buttons/Custom_Button";
 import SubtaskCheckbox from "@/app/components/subtask_checkbox/Subtask_Checkbox";
 import Custom_TextField from "@/app/components/textfiield/Custom_TextField";
+import Dropdown from "@/app/components/dropdown/Dropdown";
 import "./page.css";
 import { useState } from "react";
 
@@ -38,6 +39,10 @@ export default function Home() {
 
       <div className="test-textfield">
         <Custom_TextField label={"Text Field (Idle)"} placeholder={"Enter task name"}/>
+      </div>
+
+      <div className="test-dropdown">
+        <Dropdown options={["Todo", "Doing", "Done"]} />
       </div>
 
     </main>

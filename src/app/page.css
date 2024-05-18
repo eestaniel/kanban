@@ -29,3 +29,12 @@ body {
     gap: 1rem;
     width: 24rem;
 }
+
+.test-dropdown {
+    display: flex;
+    flex-direction: column;
+    margin-top: 3rem;
+    margin-left: 2rem;
+    gap: 1rem;
+    width: 16rem;
+}
