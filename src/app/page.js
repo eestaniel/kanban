@@ -2,6 +2,7 @@
 
 import CustomButton from "@/app/components/buttons/Custom_Button";
 import SubtaskCheckbox from "@/app/components/subtask_checkbox/Subtask_Checkbox";
+import Custom_TextField from "@/app/components/textfiield/Custom_TextField";
 import "./page.css";
 import { useState } from "react";
 
@@ -33,6 +34,10 @@ export default function Home() {
 
       <div className="test-checkbox">
         <SubtaskCheckbox label={'Idle'} />
+      </div>
+
+      <div className="test-textfield">
+        <Custom_TextField label={"Text Field (Idle)"} placeholder={"Enter task name"}/>
       </div>
 
     </main>

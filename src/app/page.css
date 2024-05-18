@@ -20,3 +20,12 @@ body {
     margin-left: 2rem;
     gap: 1rem
 }
+
+.test-textfield {
+    display: flex;
+    flex-direction: column;
+    margin-top: 3rem;
+    margin-left: 2rem;
+    gap: 1rem;
+    width: 24rem;
+}

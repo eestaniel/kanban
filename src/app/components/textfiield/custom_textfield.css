@@ -1,0 +1,34 @@
+.textfield-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    & label {
+        color: var(--medium-grey);
+    }
+
+    & input {
+        width: 100%;
+        border: 1px solid var(--textfield-stroke-idle-active);
+        border-radius: 0.25rem;
+        /* Make room for the error icon */
+        padding: 0.5rem 2rem 0.5rem 1rem;
+    }
+}
+
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    & .error-message {
+        position: absolute;
+        right: 1rem;
+        color: var(--red);
+    }
+
+    & input.error {
+        border-color: var(--red);
+    }
+}
