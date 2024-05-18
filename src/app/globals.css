@@ -30,6 +30,7 @@
     --font-header-size-m: 15px;
     --font-header-size-s: 12px;
 
+
     --font-body-size-l: 13px;
     --font-body-size-m: 12px;
 
@@ -61,9 +62,9 @@
     --btn-primary-s-hover-bacground-color: var(--main-purple-hover);
     --btn-primary-s-hover-text-color: var(--white);
 
-    --btn-secondary-idle-bacground-color: hsla(var(--main-purple), 10%);
+    --btn-secondary-idle-bacground-color: hsla(242, 48%, 58%, 10%);
     --btn-secondary-idle-text-color: var(--main-purple);
-    --btn-secondary-hover-bacground-color: hsla(var(--main-purple), 25%);
+    --btn-secondary-hover-bacground-color: hsla(242, 48%, 58%, 25%);
     --btn-secondary-hover-text-color: var(--main-purple);
 
     --btn-destructive-idle-bacground-color: var(--red);
@@ -86,11 +87,11 @@
     --textfield-fc: var(--black);
     --textfield-opactiy-idle-error: 25%;
     --textfield-opactiy-active: 100%;
-    --textfield-stroke-idle-active: hsla(var(--medium-grey), 25%);
+    --textfield-stroke-idle-active: hsla(216, 15%, 57%, 25%);
     --textfield-stroke-error: var(--red);
 
     /* Dropdown Idle */
-    --dropdown-stroke-idle: hsla(var(--medium-grey), 25%);
+    --dropdown-stroke-idle: hsla(216, 15%, 57%, 25%);
     --dropdown-cheveron-idle: var(--main-purple);
     --dropdown-fc-idle-active: var(--black);
     --dropdown-label-fc: var(--medium-grey);
@@ -121,7 +122,7 @@
         --textfield-fc: var(--white);
 
         /* Dropdown Idle */
-        --dropdown-stroke-idle: hsla(var(--medium-grey), 25%);
+        --dropdown-stroke-idle: hsla(216, 15%, 57%, 25%);
         --dropdown-cheveron-idle: var(--main-purple);
         --dropdown-fc-idle-active: var(--black);
         --dropdown-label-fc: var(--medium-grey);
@@ -177,5 +178,12 @@
 .body-m {
     font-size: var(--font-body-size-m);
     line-height: var(--font-body-line-height-m);
+    font-weight: var(--font-weight-bold);
+}
+
+.btn-bold {
+    font-family: var(--font-heading);
+    font-size: 13px;
+    line-height: var(--font-header-line-height-l);
     font-weight: var(--font-weight-bold);
 }

@@ -1,0 +1,13 @@
+body {
+    background-color: var(--bg-color);
+    min-height: 100vh;
+}
+
+.test-buttons {
+    display: flex;
+    flex-direction: column;
+    width: 12rem;
+    gap: 2rem;
+    margin-top: 2rem;
+    margin-left: 2rem;
+}

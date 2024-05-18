@@ -1,0 +1,59 @@
+/* General Custom Button */
+.custom-button {
+    border: none;
+    border-radius: 1.5rem;
+    padding-inline: 1rem;
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+/* Primary Button */
+.primary-large {
+    background-color: var(--btn-primary-l-idle-bacground-color);
+    color: var(--btn-primary-l-idle-text-color);
+    padding-block: 1rem;
+
+    &:hover {
+        background-color: var(--btn-primary-l-hover-bacground-color);
+    }
+}
+
+/* Group: primary-small, secondary, destructive*/
+.primary-small, .secondary, .destructive {
+    padding-block: 0.5rem;
+}
+
+/* Primary-small Button */
+.primary-small {
+    background-color: var(--btn-primary-s-idle-bacground-color);
+    color: var(--btn-primary-s-idle-text-color);
+
+
+    &:hover {
+        background-color: var(--btn-primary-s-hover-bacground-color);
+    }
+}
+
+/* Secondary Button */
+.secondary {
+    background-color: var(--btn-secondary-idle-bacground-color);
+    color: var(--btn-secondary-idle-text-color);
+
+
+    &:hover {
+        background-color: var(--btn-secondary-hover-bacground-color);
+    }
+}
+
+/* Secondary Button */
+.destructive {
+    background-color: var(--btn-destructive-idle-bacground-color);
+    color: var(--btn-destructive-idle-text-color);
+
+
+    &:hover {
+        background-color: var(--btn-destructive-hover-bacground-color);
+    }
+}
