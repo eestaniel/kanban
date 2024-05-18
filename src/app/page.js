@@ -1,6 +1,7 @@
 "use client";
 
-import CustomButton from "@/app/components/Custom_Button";
+import CustomButton from "@/app/components/buttons/Custom_Button";
+import SubtaskCheckbox from "@/app/components/subtask_checkbox/Subtask_Checkbox";
 import "./page.css";
 import { useState } from "react";
 
@@ -28,6 +29,10 @@ export default function Home() {
         <CustomButton label={"Button Secondary"} type="secondary"/>
         <CustomButton label={"Button Destructive"} type="destructive"/>
         <CustomButton label={"Toggle Dark Mode"} type="primary-large" onClick={(e)=>toggleDarkMode(e)}/>
+      </div>
+
+      <div className="test-checkbox">
+        <SubtaskCheckbox label={'Idle'} />
       </div>
 
     </main>

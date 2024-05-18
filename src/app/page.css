@@ -11,3 +11,12 @@ body {
     margin-top: 2rem;
     margin-left: 2rem;
 }
+
+.test-checkbox {
+    display: flex;
+    flex-direction: column;
+    width: 12rem;
+    margin-top: 3rem;
+    margin-left: 2rem;
+    gap: 1rem
+}

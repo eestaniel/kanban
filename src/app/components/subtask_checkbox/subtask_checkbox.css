@@ -1,0 +1,29 @@
+.subtask-checkbox-container {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    padding: .75rem;
+    justify-content: start;
+    background-color: var(--subtask-chkbox-idle-bg);
+    color: var(--subtask-chkbox-fc);
+    border-radius: 0.25rem;
+
+
+    &:hover {
+        cursor: pointer;
+        background-color: var(--subtask-chkbox-hoverd-bg);
+    }
+
+    & label:hover {
+        cursor: pointer !important;
+    }
+}
+
+#subtask {
+    accent-color: var(--main-purple);
+}
+
+#subtask:checked + label {
+    text-decoration: line-through;
+    color: var(--subtask-chkbox-completed-fc);
+}

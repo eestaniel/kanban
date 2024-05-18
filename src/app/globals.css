@@ -43,7 +43,7 @@
     --font-body-line-height-m: 15px;
 
 
-    --header-kerning-s: 2.4px;
+    --header-kerning-s: 1px;
 
     --font-weight-bold: 700;
     --font-weight-medium: 500;
@@ -75,10 +75,11 @@
     /* Subtask Checkbox */
     /* background */
     --subtask-chkbox-idle-bg: var(--light-grey);
-    --subtask-chkbox-hoverd-bg: var(--main-purple);
+    --subtask-chkbox-hoverd-bg: hsla(242, 48%, 58%, 25%);
     --subtask-chkbox-completed-bg: var(--light-grey);
     /* font color */
     --subtask-chkbox-fc: var(--black);
+    --subtask-chkbox-completed-fc: hsla(237, 100%, 4%, 50%);
     --subtask-chkbox-completed-opacity: 50%;
 
     /* TextField */
@@ -113,8 +114,10 @@
         /* background */
         --subtask-chkbox-idle-bg: var(--very-dark-grey);
         --subtask-chkbox-completed-bg: var(--very-dark-grey);
+        --subtask-chkbox-box-stroke: hsla(216, 15%, 57%, 25%);
         /* font color */
         --subtask-chkbox-fc: var(--white);
+        --subtask-chkbox-completed-fc: hsla(0, 0%, 100%, 50%);
 
         /* TextField */
         --textfield-bg: var(--dark-grey);
@@ -186,4 +189,12 @@
     font-size: 13px;
     line-height: var(--font-header-line-height-l);
     font-weight: var(--font-weight-bold);
+}
+
+.subtask-heading {
+    font-family: var(--font-heading);
+    font-size: 12px;
+    letter-spacing: 0;
+    font-weight: var(--font-weight-bold);
+    color: var(--black);
 }
