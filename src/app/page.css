@@ -1,6 +1,7 @@
 body {
     background-color: var(--bg-color);
-    min-height: 100vh;
+    height: fit-content;
+    overflow-y: hidden;
 }
 
 .test-buttons {
@@ -37,4 +38,11 @@ body {
     margin-left: 2rem;
     gap: 1rem;
     width: 16rem;
+    height: fit-content;
+}
+
+/* Main Container */
+.main-container {
+    background-color: var(--bg-content);
+    min-height: 100vh;
 }

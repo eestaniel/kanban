@@ -1,7 +1,7 @@
 import './dropdown.css'
 import {useState} from "react";
-import Cheveron_Down from '@/app/assets/icon-chevron-down.svg'
-import Cheveron_Up from '@/app/assets/icon-chevron-up.svg'
+import Chevron_Down from '@/app/assets/icon-chevron-down.svg'
+import Chevron_Up from '@/app/assets/icon-chevron-up.svg'
 import Image from 'next/image'
 
 const Dropdown = ({options}) => {
@@ -18,7 +18,7 @@ const Dropdown = ({options}) => {
       <div className="dropdown-container">
         <div className="dropdown-header body-l" onClick={() => setIsOpen(!isOpen)}>
           <span>{selectedOption}</span>
-          <Image src={isOpen ? Cheveron_Up : Cheveron_Down} alt="cheveron" width={10} height={5}/>
+          <Image src={isOpen ? Chevron_Up : Chevron_Down} alt="cheveron" width={10} height={5}/>
         </div>
         {isOpen && (
           <div className="dropdown-options">

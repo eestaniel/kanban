@@ -1,0 +1,24 @@
+.nav-container {
+    display: flex;
+    flex-direction: row;
+    background-color: var(--bg-color);
+    padding: 1.25rem 1rem;
+    align-items: center;
+    gap: 1rem;
+    color: var(--dropdown-fc-idle-active);
+}
+
+.nav-link-header-group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.nav-header {
+    color:var(--textfield-fc)
+}

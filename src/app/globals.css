@@ -50,6 +50,7 @@
 
     /* ---Light Theme Colors--- */
     --bg-color: var(--white);
+    --bg-content: var(--light-grey);
     --label-fc: var(--medium-grey);
     /* Buttons */
     --btn-primary-l-idle-bacground-color: var(--main-purple);
@@ -106,6 +107,7 @@
     .dark-theme {
         /* ---Light Theme Colors--- */
         --bg-color: var(--dark-grey);
+        --bg-content: var(--very-dark-grey);
         --label-fc: var(--white);
         /* Buttons */
         --btn-secondary-idle-bacground-color: var(--white);
