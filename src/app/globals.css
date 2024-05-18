@@ -47,6 +47,90 @@
     --font-weight-bold: 700;
     --font-weight-medium: 500;
 
+    /* ---Light Theme Colors--- */
+    --bg-color: var(--white);
+    --label-fc: var(--medium-grey);
+    /* Buttons */
+    --btn-primary-l-idle-bacground-color: var(--main-purple);
+    --btn-primary-l-idle-text-color: var(--white);
+    --btn-primary-l-hover-bacground-color: var(--main-purple-hover);
+    --btn-primary-l-hover-text-color: var(--white);
+
+    --btn-primary-s-idle-bacground-color: var(--main-purple);
+    --btn-primary-s-idle-text-color: var(--white);
+    --btn-primary-s-hover-bacground-color: var(--main-purple-hover);
+    --btn-primary-s-hover-text-color: var(--white);
+
+    --btn-secondary-idle-bacground-color: hsla(var(--main-purple), 10%);
+    --btn-secondary-idle-text-color: var(--main-purple);
+    --btn-secondary-hover-bacground-color: hsla(var(--main-purple), 25%);
+    --btn-secondary-hover-text-color: var(--main-purple);
+
+    --btn-destructive-idle-bacground-color: var(--red);
+    --btn-destructive-idle-text-color: var(--white);
+    --btn-destructive-hover-bacground-color: var(--red-hover);
+    --btn-destructive-hover-text-color: var(--white);
+
+    /* Subtask Checkbox */
+    /* background */
+    --subtask-chkbox-idle-bg: var(--light-grey);
+    --subtask-chkbox-hoverd-bg: var(--main-purple);
+    --subtask-chkbox-completed-bg: var(--light-grey);
+    /* font color */
+    --subtask-chkbox-fc: var(--black);
+    --subtask-chkbox-completed-opacity: 50%;
+
+    /* TextField */
+    --textfield-bg: var(--white);
+    --textfield-label: var(--medium-grey);
+    --textfield-fc: var(--black);
+    --textfield-opactiy-idle-error: 25%;
+    --textfield-opactiy-active: 100%;
+    --textfield-stroke-idle-active: hsla(var(--medium-grey), 25%);
+    --textfield-stroke-error: var(--red);
+
+    /* Dropdown Idle */
+    --dropdown-stroke-idle: hsla(var(--medium-grey), 25%);
+    --dropdown-cheveron-idle: var(--main-purple);
+    --dropdown-fc-idle-active: var(--black);
+    --dropdown-label-fc: var(--medium-grey);
+
+    /* Dropdown Active */
+    --dropdown-active-bg: var(--white);
+    --dropdown-border-color: var(--main-purple);
+    --dropdown-item-fc: var(--medium-grey);
+
+    .dark-theme {
+        /* ---Light Theme Colors--- */
+        --bg-color: var(--dark-grey);
+        --label-fc: var(--white);
+        /* Buttons */
+        --btn-secondary-idle-bacground-color: var(--white);
+        --btn-secondary-hover-bacground-color: var(--white);
+
+        /* Subtask Checkbox */
+        /* background */
+        --subtask-chkbox-idle-bg: var(--very-dark-grey);
+        --subtask-chkbox-completed-bg: var(--very-dark-grey);
+        /* font color */
+        --subtask-chkbox-fc: var(--white);
+
+        /* TextField */
+        --textfield-bg: var(--dark-grey);
+        --textfield-label: var(--white);
+        --textfield-fc: var(--white);
+
+        /* Dropdown Idle */
+        --dropdown-stroke-idle: hsla(var(--medium-grey), 25%);
+        --dropdown-cheveron-idle: var(--main-purple);
+        --dropdown-fc-idle-active: var(--black);
+        --dropdown-label-fc: var(--medium-grey);
+
+        /* Dropdown Active */
+        --dropdown-active-bg: var(--very-dark-grey);
+    }
+
+
 }
 
 .heading-xl, .heading-l, .heading-m, .heading-s {
