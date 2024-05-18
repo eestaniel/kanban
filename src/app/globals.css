@@ -1,0 +1,97 @@
+@font-face {
+    font-family: "Plus Jakarta Sans";
+    src: url("/public/fonts/PlusJakartaSans-VariableFont_wght.ttf") format("truetype"); /*fix url, next already does public?*/
+    font-weight: 100 900;
+    font-style: normal;
+}
+
+:root {
+    /* Colors */
+
+    --main-purple: hsl(242, 48%, 58%);
+    --main-purple-hover: hsl(243, 100%, 82%);
+    --black: hsl(237, 100%, 4%);
+    --very-dark-grey: hsl(235, 16%, 15%);
+    --dark-grey: hsl(235, 12%, 19%);
+    --lines-dark: hsl(236, 11%, 27%);
+    --medium-grey: hsl(216, 15%, 57%);
+    --lines-light: hsl(221, 69%, 94%);
+    --light-grey: hsl(220, 69%, 97%);
+    --white: hsl(0, 0%, 100%);
+    --red: hsl(0, 78%, 63%);
+    --red-hover: hsl(0, 100%, 80%);
+
+    /* Typography */
+    --font-heading: "Plus Jakarta Sans", sans-serif;
+    --font-body: "Plus Jakarta Sans", sans-serif;
+
+    --font-header-size-xl: 24px;
+    --font-header-size-l: 18px;
+    --font-header-size-m: 15px;
+    --font-header-size-s: 12px;
+
+    --font-body-size-l: 13px;
+    --font-body-size-m: 12px;
+
+    --font-header-line-height-xl: 30px;
+    --font-header-line-height-l: 23px;
+    --font-header-line-height-m: 19px;
+    --font-header-line-height-s: 15px;
+
+    --font-body-line-height-l: 23px;
+    --font-body-line-height-m: 15px;
+
+
+    --header-kerning-s: 2.4px;
+
+    --font-weight-bold: 700;
+    --font-weight-medium: 500;
+
+}
+
+.heading-xl, .heading-l, .heading-m, .heading-s {
+    font-family: var(--font-heading);
+    font-weight: var(--font-weight-bold);
+}
+
+.heading-xl {
+    font-size: var(--font-header-size-xl);
+    line-height: var(--font-header-line-height-xl);
+    color: var(--black);
+}
+
+.heading-l {
+    font-size: var(--font-header-size-l);
+    line-height: var(--font-header-line-height-l);
+    color: var(--black);
+}
+
+.heading-m {
+    font-size: var(--font-header-size-m);
+    line-height: var(--font-header-line-height-m);
+    color: var(--black);
+}
+
+.heading-s {
+    font-size: var(--font-header-size-s);
+    line-height: var(--font-header-line-height-s);
+    letter-spacing: var(--header-kerning-s);
+    color: var(--medium-grey);
+}
+
+.body-l, .body-m {
+    font-family: var(--font-body);
+    color: var(--dark-grey);
+}
+
+.body-l {
+    font-size: var(--font-body-size-l);
+    line-height: var(--font-body-line-height-l);
+    font-weight: var(--font-weight-medium);
+}
+
+.body-m {
+    font-size: var(--font-body-size-m);
+    line-height: var(--font-body-line-height-m);
+    font-weight: var(--font-weight-bold);
+}
