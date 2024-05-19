@@ -1,7 +1,6 @@
 body {
     background-color: var(--bg-color);
     height: fit-content;
-    overflow-y: hidden;
 }
 
 .test-buttons {
@@ -43,6 +42,31 @@ body {
 
 /* Main Container */
 .main-container {
+    display: flex;
+    flex-direction: column;
     background-color: var(--bg-content);
     min-height: 100vh;
+}
+
+.content-container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    justify-content: center;
+    text-align: center;
+}
+
+.empty-state-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-inline: 1rem;
+    align-items: center;
+}
+#new-column-btn {
+        max-width: 174px;
+    }
+
+.dashboard-header {
+    color: var(--medium-grey);
 }

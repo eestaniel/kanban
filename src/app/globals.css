@@ -86,7 +86,7 @@
     /* TextField */
     --textfield-bg: var(--white);
     --textfield-label: var(--medium-grey);
-    --textfield-fc: var(--black);
+    --textfield-fc: var(--medium-grey);
     --textfield-opactiy-idle-error: 25%;
     --textfield-opactiy-active: 100%;
     --textfield-stroke-idle-active: hsla(216, 15%, 57%, 25%);
@@ -104,7 +104,7 @@
     --dropdown-item-fc: var(--medium-grey);
     --dropdown-item-hover: var(--dark-grey);
 
-    .dark-theme {
+    .dark-mode {
         /* ---Light Theme Colors--- */
         --bg-color: var(--dark-grey);
         --bg-content: var(--very-dark-grey);

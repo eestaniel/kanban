@@ -1,39 +1,49 @@
 import './navbar.css'
 import Logo_Mobile from '@/app/assets/logo-mobile.svg'
 import Image from 'next/image'
-import {useState} from "react";
 import Chevron_Down from '@/app/assets/icon-chevron-down.svg'
 import Chevron_Up from '@/app/assets/icon-chevron-up.svg'
+import Vertical_Ellipsis from '@/app/assets/icon-vertical-ellipsis.svg'
+import CustomButton from "@/app/components/buttons/Custom_Button";
 import Modal from "@/app/components/modal/Modal";
+import useStore from "@/app/store/useStore";
+import {useBoardCount} from "@/app/hooks/useBoardCount";
 
-const Navbar = ({isDarkMode, setIsDarkMode, toggleDarkMode}) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [showModal, setShowModal] = useState(false);
+const Navbar = () => {
 
-  const toggleModal = () => {
-    setIsOpen(!isOpen);
-    setShowModal(!showModal);
-  };
+  const {isModalOpen, modalType, activateModal} = useStore(state => ({
+    isModalOpen: state.isModalOpen,
+    modalType: state.modalType,
+    activateModal: state.activateModal
+  }));
+
+  const boardCount = useBoardCount();
+
   return (
     <>
       <nav>
         <div className="nav-container">
-          <div className="nav-logo">
-            <Image src={Logo_Mobile} alt="Logo"/>
+          <div className="navgroup-1">
+            <div className="nav-logo">
+              <Image src={Logo_Mobile} alt="Logo"/>
+            </div>
+            <div className="nav-link-header-group heading-l" onClick={() => activateModal('board-select')}>
+              <h1 className="nav-header heading-l">
+                {boardCount === 0 ? 'No Boards' : ''}
+              </h1>
+              <Image src={(isModalOpen && modalType === 'board-select') ? Chevron_Up : Chevron_Down} alt="Chevron"/>
+            </div>
           </div>
-          <div className="nav-link-header-group heading-l" onClick={() => toggleModal()}>
-            <h1 className="nav-header heading-l">Platform Launch</h1>
-            <Image src={isOpen ? Chevron_Up : Chevron_Down} alt="Chevron"/>
+          <div className="navgroup-2">
+            <div className="add-task-container">
+              <CustomButton label={'+'} type={'primary-small'} id="add_task" disabled={false}/>
+            </div>
+            <Image src={Vertical_Ellipsis} alt="Vertical Ellipsis"/>
           </div>
         </div>
       </nav>
-      <Modal
-        isOpen={showModal}
-        isDarkMode={isDarkMode}
-        setIsDarkMode={setIsDarkMode}
-        close={() => setShowModal(false)}
-        toggleDarkMode={toggleDarkMode}
-      />
+      <Modal/>
+
     </>
   );
 };

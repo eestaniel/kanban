@@ -1,39 +1,60 @@
 "use client";
 
 import CustomButton from "@/app/components/buttons/Custom_Button";
-import SubtaskCheckbox from "@/app/components/subtask_checkbox/Subtask_Checkbox";
-import Custom_TextField from "@/app/components/textfiield/Custom_TextField";
-import Dropdown from "@/app/components/dropdown/Dropdown";
 import Navbar from "@/app/components/navbar/Navbar";
+import Modal from "@/app/components/modal/Modal";
 import "./page.css";
-import {useState} from "react";
+import {useEffect} from "react";
+import useStore from "@/app/store/useStore";
+import {useBoardCount} from "@/app/hooks/useBoardCount";
 
 export default function Home() {
-  const [isDarkMode, setIsDarkMode] = useState(false);
-  const boardData = {
+  const {isDarkMode, activateModal} = useStore(state => ({
+    isDarkMode: state.isDarkMode,
+    activateModal: state.activateModal
+  }))
 
-  }
+  const boardCount = useBoardCount();
 
-  const toggleDarkMode = (e) => {
-    e.preventDefault()
-    setIsDarkMode(!isDarkMode);
+
+  useEffect(() => {
     if (isDarkMode) {
-      document.body.classList.remove("dark-theme");
+      document.body.classList.add('dark-mode');
     } else {
-      document.body.classList.add("dark-theme");
+      document.body.classList.remove('dark-mode');
     }
-  }
+  }, [isDarkMode]);
+
 
   return (
     <main>
       <div className="main-container">
-        <Navbar isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} toggleDarkMode={toggleDarkMode}/>
+        <Navbar/>
         <div className="content-container">
-          <p>stuff here</p>
-        </div>
 
+          {/* Check if board data state is empty */}
+          {boardCount === 0 ?
+            <div className="empty-state-group">
+              <h2 className="dashboard-header heading-l">No boards detected. Create a new board to get started!</h2>
+              <CustomButton id={'new-column-btn'}
+                            label={'Create New Board'}
+                            type={'primary-large'}
+                            onClick={() => activateModal('new-board')}
+                            disabled={false}
+              />
+            </div>
+
+            :
+            ''
+          }
+
+
+        </div>
       </div>
+      <Modal/>
 
     </main>
+
+
   );
 }

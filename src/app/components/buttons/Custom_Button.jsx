@@ -1,7 +1,7 @@
 import './custom_button.css'
 
 
-const CustomButton = ({label, type, onClick}) => {
+const CustomButton = ({label, type, onClick, id='', disabled=false}) => {
   {/*
         Button Properties
           label: string
@@ -11,8 +11,10 @@ const CustomButton = ({label, type, onClick}) => {
   return (
     <>
       <button
-        className={`custom-button ${type} ${type==='primary-large' ? 'heading-m' : 'btn-bold'}`}
+        className={`custom-button ${type} ${type==='primary-large' ? 'heading-m' : 'btn-bold'} ${disabled ? 'disabled' : ''}`}
+        id={id}
         onClick={onClick}
+        disabled={disabled}
       >
         {label}
       </button>

@@ -1,0 +1,81 @@
+#board-select-header {
+    color: var(--medium-grey) !important;
+}
+
+.create-board-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.board-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    gap: 1rem;
+    align-items: center;
+}
+
+.board-subgroup {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+
+    & h3 {
+        color: var(--main-purple);
+    }
+}
+
+
+
+/* Night Mode Toggle Container */
+.night-mode-toggle-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    background-color: var(--bg-content);
+    padding: 0.875rem;
+    width: 100%;
+    border-radius: 0.375rem;
+}
+
+.toggle-group {
+    display: flex;
+    flex-direction: row;
+    max-width: 120px;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.night-mode-toggle {
+    display: flex;
+    flex-direction: row;
+    width: 40px;
+    height: 20px;
+    background-color: var(--main-purple);
+    border-radius: 0.75rem;
+    padding-inline: 3px;
+    align-items: center;
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.night-mode-toggle-inner {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 14px;
+    aspect-ratio: 1/1;
+    background-color: var(--white);
+    border-radius: 100%;
+}
+
+.dark-mode {
+    justify-content: end;
+
+}

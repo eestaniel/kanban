@@ -20,9 +20,12 @@
 
 
 .input-wrapper {
+
     position: relative;
     display: flex;
     align-items: center;
+    flex-direction: row;
+    gap: 1rem;
 
     & .error-message {
         position: absolute;
@@ -32,5 +35,11 @@
 
     & input.error {
         border-color: var(--red);
+    }
+}
+
+.shorter-field {
+    & .error-message {
+        right: 3rem;
     }
 }

@@ -57,3 +57,13 @@
         background-color: var(--btn-destructive-hover-bacground-color);
     }
 }
+
+.disabled {
+    background-color: hsla(242, 48%, 58%, 100%);
+    opacity: 25%;
+
+    &:hover {
+        cursor: revert;
+        background-color: hsla(242, 48%, 58%, 100%);
+    }
+}
