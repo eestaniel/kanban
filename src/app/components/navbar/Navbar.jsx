@@ -11,13 +11,16 @@ import {useBoardCount} from "@/app/hooks/useBoardCount";
 
 const Navbar = () => {
 
-  const {isModalOpen, modalType, activateModal} = useStore(state => ({
+  const {isModalOpen, modalType, activateModal, boards, selectedBoardId} = useStore(state => ({
     isModalOpen: state.isModalOpen,
     modalType: state.modalType,
-    activateModal: state.activateModal
+    activateModal: state.activateModal,
+    boards: state.boards,
+    selectedBoardId: state.selectedBoardId
   }));
 
   const boardCount = useBoardCount();
+  const selectedBoardHasColumns = boards[selectedBoardId]?.columns && Object.keys(boards[selectedBoardId].columns).length > 0;
 
   return (
     <>
@@ -36,7 +39,7 @@ const Navbar = () => {
           </div>
           <div className="navgroup-2">
             <div className="add-task-container">
-              <CustomButton label={'+'} type={'primary-small'} id="add_task" disabled={false}/>
+              <CustomButton label={'+'} type={'primary-small'} id="add_task" disabled={boardCount=== 0 || !selectedBoardHasColumns}/>
             </div>
             <Image src={Vertical_Ellipsis} alt="Vertical Ellipsis"/>
           </div>
