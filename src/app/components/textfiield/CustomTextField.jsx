@@ -5,6 +5,15 @@ import Image from 'next/image';
 
 const CustomTextField = ({label, placeholder, value, onChange, isList, isListOne, removeColumn}) => {
   const [error, setError] = useState(false);
+
+  const testError = () => {
+    if (value === '') {
+      setError(true);
+    } else {
+      setError(false);
+    }
+  }
+
   return (
     <div className="textfield-container">
       {!isList && <label className="label">{label}</label>}
