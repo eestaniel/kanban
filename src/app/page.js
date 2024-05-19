@@ -31,7 +31,6 @@ export default function Home() {
       <div className="main-container">
         <Navbar/>
         <div className="content-container">
-
           {/* Check if board data state is empty */}
           {boardCount === 0 ?
             <div className="empty-state-group">
@@ -47,11 +46,10 @@ export default function Home() {
             :
             ''
           }
-
-
         </div>
+        <Modal/>
       </div>
-      <Modal/>
+
 
     </main>
 
