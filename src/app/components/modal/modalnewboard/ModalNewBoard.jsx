@@ -18,28 +18,50 @@ const ModalNewBoard = () => {
   *     status: 'To Do'
   * }]
   }*/
+  const [boardName, setBoardName] = useState({title: '', error: ''});
   const [columns, setColumns] = useState([])
-  const { validateInput } = useInputValidator();
+  const {validateInput} = useInputValidator();
+
+  const [boardData, setBoardData] = useState({
+    boardName: '',
+    columns: []
+  });
 
 
   const addColumn = () => {
     setColumns([...columns, {title: '', error: ''}]);
   };
 
-  const printColumns = () => {
-    // check if errors exist
-    const errors = columns.map(column => {
+  const testCreateBoard = () => {
+    // check if errors exist in the board name
+    const boardNameError = validateInput(boardName.title, 'Board Name');
+    setBoardName({title: boardName.title, error: boardNameError});
+
+    // check if errors exist in the columns
+    const columnErrors = columns.map(column => {
       return validateInput(column.title, 'column-title')
     });
     setColumns(columns.map((column, index) => {
-      return {...column, error: errors[index]}
-    } ));
+      return {...column, error: columnErrors[index]}
+    }));
+
+    if (columnErrors.some(error => error !== '') || boardNameError !== '') {
+      console.log('Errors exist');
+    } else {
+      // create board
+      setBoardData({
+        boardName: boardName.title,
+        columns: columns
+      });
+      console.log('board created, updating global state');
+    }
   }
 
+  // validation for column list
   const handleInputChange = useCallback((index, newTitle) => {
-    const error = validateInput(newTitle, 'column-title');
+    const error = validateInput(newTitle, 'Column Title');
     setColumns(prevColumns => prevColumns.map((column, i) => {
-      return i === index ? { ...column, title: newTitle, error } : column;
+      return i === index ? {...column, title: newTitle, error} : column;
     }));
   }, [validateInput]);
 
@@ -48,15 +70,24 @@ const ModalNewBoard = () => {
   }, []);
 
   useEffect(() => {
-      console.log(columns)
+      console.log('Board Data:', boardData)
     }
-    , [columns]);
+    , [boardData]);
 
 
   return (
     <>
       <h3 className=" modal-header heading-l">Add New Board</h3>
-      <CustomTextField label={'Board Name'} id={'board-name'} type={'text'} placeholder={'e.g. Web Design'}/>
+      <CustomTextField label={'Board Name'}
+                       id={'board-name'}
+                       type={'text'}
+                       placeholder={'e.g. Web Design'}
+                       value={boardName.title}
+                       onChange={(e) => setBoardName({title: e.target.value, error: ''})}
+                       error={boardName.error}
+
+      />
+
       {Object.keys(columns).length > 0 && columns.map((column, index) => (
         <CustomTextField
           key={index}
@@ -76,7 +107,7 @@ const ModalNewBoard = () => {
       <CustomButton label={'+ Add New Column'} type={'secondary'} id="add_column" disabled={false}
                     onClick={() => addColumn()}/>
       <CustomButton label={'Create Board'} type={'primary-small'} id="create_board" disabled={false}
-                    onClick={() => printColumns()}/>
+                    onClick={() => testCreateBoard()}/>
 
     </>
   );
