@@ -21,7 +21,7 @@ const ModalNewBoard = () => {
   const [showError, setShowError] = useState(false)
 
   const addColumn = () => {
-    setColumns([...columns, {title: '', error: ''}]);
+    setColumns([...columns, {title: '', error: 'Column title cannot be empty'}]);
   };
 
   const printColumns = () => {
@@ -64,7 +64,6 @@ const ModalNewBoard = () => {
       <h3 className=" modal-header heading-l">Add New Board</h3>
       <CustomTextField label={'Board Name'} id={'board-name'} type={'text'} placeholder={'e.g. Web Design'}/>
       {Object.keys(columns).length > 0 && columns.map((column, index) => (
-        <>
           <CustomTextField
             key={index}
             label={index === 0 ? 'Board Columns' : ''}
@@ -77,8 +76,8 @@ const ModalNewBoard = () => {
             isListOne={index === 0}
             removeColumn={() => removeColumn(index)}
             error={column.error}
+            showError={showError}
           />
-          {showError && <p className="error-message">Please fill out all fields</p>}</>
       ))}
 
       <CustomButton label={'+ Add New Column'} type={'secondary'} id="add_column" disabled={false}
