@@ -1,7 +1,8 @@
 import './modalnewboard.css'
 import CustomTextField from "@/app/components/textfiield/CustomTextField";
 import CustomButton from "@/app/components/buttons/Custom_Button";
-import {useState} from "react";
+import {useState, useEffect, useCallback} from "react";
+import useInputValidator from "@/app/hooks/useInputValidator";
 
 const ModalNewBoard = () => {
   /*Columns contain an array of objects with the following structure:
@@ -18,45 +19,38 @@ const ModalNewBoard = () => {
   * }]
   }*/
   const [columns, setColumns] = useState([])
-  const [showError, setShowError] = useState(false)
+  const { validateInput } = useInputValidator();
+
 
   const addColumn = () => {
-    setColumns([...columns, {title: '', error: 'Column title cannot be empty'}]);
+    setColumns([...columns, {title: '', error: ''}]);
   };
 
   const printColumns = () => {
     // check if errors exist
-    const errors = columns.filter(column => column.error);
-    if (errors.length > 0) {
-      setShowError(true);
-    }
-    console.log(columns);
-  }
-
-  const validateColumn = (title) => {
-    if (!title.trim()) {
-      return 'Column title cannot be empty';
-    }
-    if (title.length > 16) {
-      return 'Column title cannot exceed 16 characters';
-    }
-    return '';
-  }
-
-  const handleInputChange = (index, newTitle) => {
-    const newColumns = columns.map((column, i) => {
-      if (i === index) {
-        const error = validateColumn(newTitle);
-        return {...column, title: newTitle, error: error};
-      }
-      return column;
+    const errors = columns.map(column => {
+      return validateInput(column.title, 'column-title')
     });
-    setColumns(newColumns);
-  };
-
-  const removeColumn = (index) => {
-    setColumns(currentColumns => currentColumns.filter((_, i) => i !== index));
+    setColumns(columns.map((column, index) => {
+      return {...column, error: errors[index]}
+    } ));
   }
+
+  const handleInputChange = useCallback((index, newTitle) => {
+    const error = validateInput(newTitle, 'column-title');
+    setColumns(prevColumns => prevColumns.map((column, i) => {
+      return i === index ? { ...column, title: newTitle, error } : column;
+    }));
+  }, [validateInput]);
+
+  const removeColumn = useCallback((index) => {
+    setColumns(currentColumns => currentColumns.filter((_, i) => i !== index));
+  }, []);
+
+  useEffect(() => {
+      console.log(columns)
+    }
+    , [columns]);
 
 
   return (
@@ -64,20 +58,19 @@ const ModalNewBoard = () => {
       <h3 className=" modal-header heading-l">Add New Board</h3>
       <CustomTextField label={'Board Name'} id={'board-name'} type={'text'} placeholder={'e.g. Web Design'}/>
       {Object.keys(columns).length > 0 && columns.map((column, index) => (
-          <CustomTextField
-            key={index}
-            label={index === 0 ? 'Board Columns' : ''}
-            id={`board-id-${index}`}
-            type="text"
-            placeholder=""
-            value={column.title}
-            onChange={e => handleInputChange(index, e.target.value)}
-            isList={index !== 0}
-            isListOne={index === 0}
-            removeColumn={() => removeColumn(index)}
-            error={column.error}
-            showError={showError}
-          />
+        <CustomTextField
+          key={index}
+          label={index === 0 ? 'Board Columns' : ''}
+          id={`board-id-${index}`}
+          type="text"
+          placeholder=""
+          value={column.title}
+          onChange={e => handleInputChange(index, e.target.value)}
+          isList={index !== 0}
+          isListOne={index === 0}
+          onRemove={() => removeColumn(index)}
+          error={column.error}
+        />
       ))}
 
       <CustomButton label={'+ Add New Column'} type={'secondary'} id="add_column" disabled={false}

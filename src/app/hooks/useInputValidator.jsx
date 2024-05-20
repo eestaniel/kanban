@@ -1,20 +1,24 @@
-import { useState } from "react";
+import { useCallback } from "react";
 
-const useInputValidator = (initialValue) => {
-  const [inputValue, setInputValue] = useState(initialValue);
-  const [isValid, setIsValid] = useState(true);
+const useInputValidator = () => {
 
-  const validateInput = (newValue) => {
-    // Example validation: non-empty and less than 50 characters
-    setIsValid(newValue.trim() !== "" && newValue.length < 50);
-  };
+  const validateInput = useCallback((newValue, inputType) => {
+    let error = '';
+    switch (inputType) {
+      case 'column-title':
+        if (!newValue.trim()) {
+          error = 'Column title cannot be empty';
+        } else if (newValue.length > 16) {
+          error = 'Column title cannot exceed 16 characters';
+        }
+        break;
+      default:
+        error = newValue.trim() === '' ? 'Field cannot be empty' : '';
+    }
+    return error;
+  }, []);
 
-  const handleChange = (newValue) => {
-    validateInput(newValue);
-    setInputValue(newValue);
-  };
-
-  return { inputValue, handleChange, isValid };
+  return { validateInput };
 };
 
 export default useInputValidator;
