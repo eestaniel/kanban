@@ -17,7 +17,6 @@
     flex-direction: column;
     width: 100%;
     padding-block: 1rem;
-    padding-inline: 1.5rem;
     background-color: var(--bg-color);
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -29,12 +28,14 @@
     max-width: 16.5rem;
 }
 
-.board-edit {
+.board-form {
     max-width: 21.375rem;
+    padding: 1.5rem;
+
 }
 
 .modal-header {
     color: var(--dropdown-fc-idle-active);
-
+    padding-left: 1.5rem;
 }
 

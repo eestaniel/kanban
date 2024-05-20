@@ -1,5 +1,6 @@
 #board-select-header {
     color: var(--medium-grey) !important;
+    letter-spacing: 2px;
 }
 
 .create-board-group {
@@ -15,6 +16,11 @@
     width: 100%;
     gap: 1rem;
     align-items: center;
+    padding-left: 1.5rem;
+
+    & svg {
+        color: var(--main-purple);
+    }
 }
 
 .board-subgroup {
@@ -29,16 +35,80 @@
 }
 
 
+/* board list */
+.board-list-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.board-list-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: start;
+    margin-right: 1rem;
+
+    & h3 {
+        color: var(--medium-grey);
+    }
+}
+
+.board-list-subgroup {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    padding-left: 1.5rem;
+    border-radius: 0 24rem 24rem 0;
+    padding-block: 1rem;
+
+    & svg {
+        color: var(--medium-grey);
+    }
+
+    /* Edit this later to proper design */
+    &:hover {
+        cursor: pointer;
+        & h3 {
+            transform: scale(110%);
+            transition: ease all 150ms;
+        }
+    }
+
+}
+
+/* active selector for subgroup */
+.active-selector {
+    background-color: var(--main-purple);
+    margin-right: 1.5rem;
+
+    & h3 {
+        color: var(--white);
+    }
+
+    & svg {
+        color: var(--white);
+    }
+}
+
 
 /* Night Mode Toggle Container */
+.night-wrapper {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    padding-inline: 1rem;
+}
+
 .night-mode-toggle-container {
     display: flex;
     flex-direction: row;
     justify-content: center;
     background-color: var(--bg-content);
     padding: 0.875rem;
-    width: 100%;
     border-radius: 0.375rem;
+    width: 100%;
 }
 
 .toggle-group {

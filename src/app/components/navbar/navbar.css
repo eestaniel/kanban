@@ -20,6 +20,7 @@ nav {
 }
 
 .navgroup-2 {
+    position: relative;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -27,6 +28,17 @@ nav {
     flex-grow: 1;
     gap: 1rem;
     min-height: 2rem;
+
+
+    & img:hover {
+        cursor: pointer;
+        scale: 110%;
+    }
+
+    & img.disabled-icon:hover {
+        cursor: revert;
+        scale: none;
+    }
 }
 
 .add-task-container {
