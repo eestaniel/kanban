@@ -1,4 +1,4 @@
-import './custom_button.css'
+import './custombutton.css'
 
 
 const CustomButton = ({label, type, onClick, id='', disabled=false}) => {

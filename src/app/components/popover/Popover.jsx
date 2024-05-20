@@ -3,10 +3,8 @@ import useStore from "@/app/store/useStore";
 
 
 const Popover = ({setIsPopoverOpen}) => {
-  const { activateModal, deleteBoard, activeBoard } = useStore(state => ({
-    activateModal: state.activateModal,
-    deleteBoard: state.deleteBoard,
-    activeBoard: state.activeBoard
+  const { activateModal } = useStore(state => ({
+    activateModal: state.activateModal
   }))
 
     const handleEditBoard = () => {
@@ -16,7 +14,8 @@ const Popover = ({setIsPopoverOpen}) => {
 
   const handleDeleteBoard = () => {
     // add confirmation later
-    deleteBoard(activeBoard.board_id);
+    /*deleteBoard(activeBoard.board_id);*/
+    activateModal('delete');
     setIsPopoverOpen(false);
   }
 

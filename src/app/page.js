@@ -1,6 +1,6 @@
 "use client";
 
-import CustomButton from "@/app/components/buttons/Custom_Button";
+import CustomButton from "@/app/components/buttons/CustomButton";
 import Navbar from "@/app/components/navbar/Navbar";
 import Modal from "@/app/components/modal/Modal";
 import "./page.css";

@@ -4,7 +4,7 @@ import Image from 'next/image'
 import Chevron_Down from '@/app/assets/icon-chevron-down.svg'
 import Chevron_Up from '@/app/assets/icon-chevron-up.svg'
 import Vertical_Ellipsis from '@/app/assets/icon-vertical-ellipsis.svg'
-import CustomButton from "@/app/components/buttons/Custom_Button";
+import CustomButton from "@/app/components/buttons/CustomButton";
 import useStore from "@/app/store/useStore";
 import {useEffect, useState, useRef} from "react";
 import Popover from "@/app/components/popover/Popover";
