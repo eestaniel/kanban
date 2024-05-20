@@ -1,30 +1,27 @@
 import {create} from 'zustand';
 
 
-const createUniqueId = (boards) => {
-  const generateId = () => Math.random().toString(36).substr(2, 9);
-  //get all board ids and check if the id already exists
-  const boardIds = Object.keys(boards);
-  let newId = generateId();
-  while (boardIds.includes(newId)) {
-    newId = generateId();
-  }
-  return newId;
-}
 
 const useStore = create((set, get) => ({
-  /*boards: {
-  *   board_id: {
-  *     title: '',
-  *     columns: {
-  *       column_id: {
-  *         title: '',
+  /*boards: [{
+  *   board_id: '',
+  *   board_data: {
+  *     name: '',
+  *     columns: [{
+*         column_id: '',
+  *       name: '',
+  *       task_list: [{
+  *         task_id: '',
+  *         name: '',
   *         description: '',
   *         subtasks: [],
-  *         current_state: ''
-  *     }
+  *         status: ''
+  *      }]
+  *    }]
+  * }]
+  *
   *     */
-  boards: {}, //object with all boards containing columns, subtasks, etc.
+  boards: [], // list of objects with all boards containing columns, subtasks, etc.
   selectedBoardId: null, // id of the board currently being viewed
 
   // UI state
@@ -34,15 +31,25 @@ const useStore = create((set, get) => ({
   // Modal state
   modalType: '',
 
+  // unique id generator
+  createUniqueId: (object_key) => {
+    const generateId = () => Math.random().toString(36).substr(2, 9);
+    // check if unique id already exists in either the board or column object
+    let newId = generateId();
+    while (Object.keys(object_key).includes(newId)) {
+      newId = generateId();
+    }
+    return newId;
+  },
+
   // Board actions
-  createBoard: (boardData) => set((state) => {
-    const boardId = createUniqueId(state.boards);
-    const newBoards = {...state.boards, [boardId]: {...boardData}};
-    return {boards: newBoards};
+  createBoard: (newBoard) => set((state) => {
+    // append newBoard object to boards array
+    return {boards: [...state.boards, newBoard]};
   }),
 
   printBoard: () => console.log(get().boards),
-  getBoardAmount: () => Object.keys(get().boards).length,
+  getBoardAmount: () => get().boards.length,
 
   // Dark mode actions
   toggleDarkMode: () => set((state) => ({isDarkMode: !state.isDarkMode})),
