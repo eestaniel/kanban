@@ -3,6 +3,7 @@ import CustomTextField from "@/app/components/textfiield/CustomTextField";
 import CustomButton from "@/app/components/buttons/Custom_Button";
 import {useState, useEffect, useCallback} from "react";
 import useInputValidator from "@/app/hooks/useInputValidator";
+import useStore from "@/app/store/useStore";
 
 const ModalNewBoard = () => {
   /*Columns contain an array of objects with the following structure:
@@ -21,11 +22,7 @@ const ModalNewBoard = () => {
   const [boardName, setBoardName] = useState({title: '', error: ''});
   const [columns, setColumns] = useState([])
   const {validateInput} = useInputValidator();
-
-  const [boardData, setBoardData] = useState({
-    boardName: '',
-    columns: []
-  });
+  const {createBoard, printBoard, boards} = useStore();
 
 
   const addColumn = () => {
@@ -48,12 +45,13 @@ const ModalNewBoard = () => {
     if (columnErrors.some(error => error !== '') || boardNameError !== '') {
       console.log('Errors exist');
     } else {
-      // create board
-      setBoardData({
+      const newBoardData = {
         boardName: boardName.title,
         columns: columns
-      });
+      };
       console.log('board created, updating global state');
+      createBoard(newBoardData);  // Directly create board without setting state
+
     }
   }
 
@@ -69,11 +67,10 @@ const ModalNewBoard = () => {
     setColumns(currentColumns => currentColumns.filter((_, i) => i !== index));
   }, []);
 
-  useEffect(() => {
-      console.log('Board Data:', boardData)
-    }
-    , [boardData]);
 
+  useEffect(() => {
+    console.log('boards', boards)
+  }, [boards])
 
   return (
     <>
