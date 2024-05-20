@@ -1,7 +1,7 @@
 import './modalnewboard.css'
 import CustomTextField from "@/app/components/textfiield/CustomTextField";
 import CustomButton from "@/app/components/buttons/Custom_Button";
-import {useState, useEffect, useCallback} from "react";
+import {useState, useCallback} from "react";
 import useInputValidator from "@/app/hooks/useInputValidator";
 import useStore from "@/app/store/useStore";
 
