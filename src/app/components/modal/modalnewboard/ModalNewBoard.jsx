@@ -22,14 +22,17 @@ const ModalNewBoard = () => {
   const [boardName, setBoardName] = useState({title: '', error: ''});
   const [columns, setColumns] = useState([])
   const {validateInput} = useInputValidator();
-  const {createBoard} = useStore();
+  const {createBoard, closeModal} = useStore(state => ({
+    createBoard: state.createBoard,
+    closeModal: state.closeModal
+  }));
 
 
   const addColumn = () => {
     setColumns([...columns, {title: '', error: ''}]);
   };
 
-  const testCreateBoard = () => {
+  const handleSubmitBoard = () => {
     // check if errors exist in the board name
     const boardNameError = validateInput(boardName.title, 'Board Name');
     setBoardName({title: boardName.title, error: boardNameError});
@@ -51,6 +54,8 @@ const ModalNewBoard = () => {
       };
       console.log('board created, updating global state');
       createBoard(newBoardData);  // Directly create board without setting state
+      //close modal
+      closeModal();
 
     }
   }
@@ -66,8 +71,6 @@ const ModalNewBoard = () => {
   const removeColumn = useCallback((index) => {
     setColumns(currentColumns => currentColumns.filter((_, i) => i !== index));
   }, []);
-
-
 
 
   return (
@@ -102,7 +105,7 @@ const ModalNewBoard = () => {
       <CustomButton label={'+ Add New Column'} type={'secondary'} id="add_column" disabled={false}
                     onClick={() => addColumn()}/>
       <CustomButton label={'Create Board'} type={'primary-small'} id="create_board" disabled={false}
-                    onClick={() => testCreateBoard()}/>
+                    onClick={() => handleSubmitBoard()}/>
 
     </>
   );
