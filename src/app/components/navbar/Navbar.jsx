@@ -79,7 +79,9 @@ const Navbar = () => {
           </div>
           <div className="navgroup-2">
             <div className="add-task-container">
-              <CustomButton label={'+'} type={'primary-small'} id="add_task"
+              <CustomButton label={'add-task'}
+                            type={'primary-small'}
+                            id="add_task"
                             disabled={boardCount === 0 || !selectedBoardHasColumns}/>
             </div>
             <Image className={`ellipsis ${activeBoard? '': 'disabled-icon'}`} src={Vertical_Ellipsis} alt="Vertical Ellipsis" onClick={() => handlePopover()}/>
