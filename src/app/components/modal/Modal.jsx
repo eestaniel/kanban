@@ -1,6 +1,6 @@
 import './modal.css'
-import ModalBoardSelect from "./modalboardselect/ModalBoardSelect";
-import ModalNewBoard from "./modalnewboard/ModalNewBoard";
+import BoardSelector from "@/app/components/modal/board/modalboardselect/BoardSelector";
+import BoardForm from "@/app/components/modal/board/boardform/BoardForm";
 import useStore from "@/app/store/useStore";
 
 
@@ -13,8 +13,8 @@ const Modal = () => {
 
 
   const modalContent = {
-    'board-select': <ModalBoardSelect/>,
-    'new-board': <ModalNewBoard/>
+    'board-select': <BoardSelector/>,
+    'new-board': <BoardForm/>
   }
 
   if (!isModalOpen) return null;
