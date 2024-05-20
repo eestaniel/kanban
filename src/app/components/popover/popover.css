@@ -1,0 +1,27 @@
+.popover-container {
+
+}
+
+.popover-ref-container {
+    display: flex;
+    flex-direction: column;
+    max-width: 192px;
+    width: 100%;
+    position: absolute;
+    background-color: var(--bg-color);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    color: var(--medium-grey);
+    top: 2.5rem;
+    right: 0;
+}
+
+.popover-item {
+
+    &:hover {
+        cursor: pointer;
+        scale: 105%;
+    }
+
+
+}
