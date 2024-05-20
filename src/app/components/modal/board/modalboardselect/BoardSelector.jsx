@@ -6,15 +6,15 @@ import Icon_Dark from '@/app/assets/icon-dark-theme.svg'
 import useStore from "@/app/store/useStore";
 import {useBoardCount} from "@/app/hooks/useBoardCount";
 
+
 const BoardSelector = ({}) => {
   const {isDarkMode, toggleDarkMode, activateModal} = useStore(state => ({
 
     isDarkMode: state.isDarkMode,
     toggleDarkMode: state.toggleDarkMode,
-    activateModal: state.activateModal
+    activateModal: state.activateModal,
   }))
   const boardCount = useBoardCount();
-
 
   return (
     <>

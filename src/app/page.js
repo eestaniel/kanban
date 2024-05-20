@@ -9,9 +9,10 @@ import useStore from "@/app/store/useStore";
 import {useBoardCount} from "@/app/hooks/useBoardCount";
 
 export default function Home() {
-  const {isDarkMode, activateModal} = useStore(state => ({
+  const {isDarkMode, activateModal, printBoard} = useStore(state => ({
     isDarkMode: state.isDarkMode,
-    activateModal: state.activateModal
+    activateModal: state.activateModal,
+    printBoard: state.printBoard
   }))
 
   const boardCount = useBoardCount();
@@ -44,7 +45,12 @@ export default function Home() {
             </div>
 
             :
-            ''
+            <CustomButton id={'new-column-btn'}
+                            label={'print boards'}
+                            type={'primary-large'}
+                            onClick={() => printBoard()}
+                            disabled={false}
+              />
           }
         </div>
         <Modal/>
