@@ -22,7 +22,7 @@ const ModalNewBoard = () => {
   const [boardName, setBoardName] = useState({title: '', error: ''});
   const [columns, setColumns] = useState([])
   const {validateInput} = useInputValidator();
-  const {createBoard, printBoard, boards} = useStore();
+  const {createBoard} = useStore();
 
 
   const addColumn = () => {
