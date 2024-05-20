@@ -1,18 +1,10 @@
-import React, {useState} from "react";
 import './customtextfield.css';
 import CrossIcon from '@/app/assets/icon-cross.svg';
 import Image from 'next/image';
+import {memo} from 'react';
 
-const CustomTextField = ({label, placeholder, value, onChange, isList, isListOne, removeColumn}) => {
-  const [error, setError] = useState(false);
+const CustomTextField = memo(({label, placeholder, value, onChange, isList, isListOne, onRemove, error}) => {
 
-  const testError = () => {
-    if (value === '') {
-      setError(true);
-    } else {
-      setError(false);
-    }
-  }
 
   return (
     <div className="textfield-container">
@@ -26,14 +18,16 @@ const CustomTextField = ({label, placeholder, value, onChange, isList, isListOne
           onChange={onChange}
         />
         {(isList || isListOne) && (
-          <span onClick={removeColumn} style={{cursor: 'pointer'}}>
+          <span onClick={onRemove} style={{cursor: 'pointer'}}>
             <Image src={CrossIcon} alt="Remove"/>
           </span>
         )}
-        {error && <span className="error-message">Can&apos;t be empty</span>}
+        {error && <span className="error-message">{error}</span>}
       </div>
     </div>
   );
-};
+})
 
+CustomTextField.displayName = 'CustomTextField';
 export default CustomTextField;
+

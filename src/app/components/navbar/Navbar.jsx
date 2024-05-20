@@ -5,7 +5,6 @@ import Chevron_Down from '@/app/assets/icon-chevron-down.svg'
 import Chevron_Up from '@/app/assets/icon-chevron-up.svg'
 import Vertical_Ellipsis from '@/app/assets/icon-vertical-ellipsis.svg'
 import CustomButton from "@/app/components/buttons/Custom_Button";
-import Modal from "@/app/components/modal/Modal";
 import useStore from "@/app/store/useStore";
 import {useBoardCount} from "@/app/hooks/useBoardCount";
 
@@ -45,7 +44,6 @@ const Navbar = () => {
           </div>
         </div>
       </nav>
-      <Modal/>
 
     </>
   );
