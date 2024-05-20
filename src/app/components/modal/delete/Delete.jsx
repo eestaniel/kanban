@@ -18,6 +18,10 @@ const Delete = ({type}) => {
     }
   }, [type, activeBoard, deleteBoard, closeModal]);
 
+  const handleCancel = useCallback(() => {
+    closeModal();
+  }, [closeModal]);
+
 
   return (
     <>
@@ -33,7 +37,7 @@ const Delete = ({type}) => {
       </p>
       <div className="modal-button-group">
         <CustomButton label={'Delete'} type={'destructive'} id="delete-btn" onClick={() => handleDelete()}/>
-        <CustomButton label={'Cancel'} type={'secondary'} id="cancel-btn"/>
+        <CustomButton label={'Cancel'} type={'secondary'} id="cancel-btn" onClick={()=> handleCancel()}/>
       </div>
     </>
   );
