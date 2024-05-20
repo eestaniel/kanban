@@ -1,7 +1,6 @@
 import {create} from 'zustand';
 
 
-
 const useStore = create((set, get) => ({
   /*boards: [{
   *   board_id: '',
@@ -22,7 +21,8 @@ const useStore = create((set, get) => ({
   *
   *     */
   boards: [], // list of objects with all boards containing columns, subtasks, etc.
-  selectedBoardId: null, // id of the board currently being viewed
+  selectedBoard: null, // object of board selected by user to edit
+  activeBoard: null, // object of the board currently being viewed main page
 
   // UI state
   isDarkMode: false,
@@ -44,8 +44,35 @@ const useStore = create((set, get) => ({
 
   // Board actions
   createBoard: (newBoard) => set((state) => {
+    // set active board to new board
+    state.activeBoard = newBoard;
+    console.log('active board set to:', state.activeBoard)
     // append newBoard object to boards array
     return {boards: [...state.boards, newBoard]};
+  }),
+
+  updateBoard: (board) => set((state) => {
+    // find board in boards array and update it
+    const updatedBoards = state.boards.map((b) => {
+      if (b.board_id === board.board_id) {
+        return board;
+      }
+      return b;
+    });
+    // update active board
+    state.activeBoard = board;
+    return {boards: updatedBoards};
+  }),
+
+  selectBoardToEdit: (board) => set(() => ({selectedBoard: board})),
+
+  changeActiveBoard: (board) => set(() => ({activeBoard: board})),
+
+  deleteBoard: (boardId) => set((state) => {
+    const updatedBoards = state.boards.filter((board) => board.board_id !== boardId);
+    // replace first board in list as active board, if empty set to null
+    state.activeBoard = updatedBoards.length > 0 ? updatedBoards[0] : null;
+    return {boards: updatedBoards};
   }),
 
   printBoard: () => console.log(get().boards),
