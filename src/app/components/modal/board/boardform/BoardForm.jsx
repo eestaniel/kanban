@@ -31,24 +31,16 @@ const BoardForm = ({mode, initialData}) => {
   const {validateInput} = useInputValidator();
 
   // create board and close modal functions from global state
-  const {createBoard, closeModal} = useStore(state => ({
+  const {createBoard, closeModal, createUniqueId} = useStore(state => ({
     createBoard: state.createBoard,
-    closeModal: state.closeModal
+    closeModal: state.closeModal,
+    createUniqueId: state.createUniqueId
   }));
 
   // if mode is edit and initial data exists, set the board data to the initial data
   useEffect(() => {
     if (mode === 'edit' && initialData) {
       setBoardData(initialData);
-      // reset errors
-      setBoardData(prevData => {
-        return {
-          ...prevData,
-          columns: initialData.columns.map(column => {
-            return {...column, error: null}
-          })
-        }
-      })
     }
   }, [mode, initialData]);
 
@@ -57,7 +49,13 @@ const BoardForm = ({mode, initialData}) => {
     setBoardData(prevData => {
       return {
         ...prevData,
-        columns: [...prevData.columns, {title: '', error: ''}]
+        columns: [...prevData.columns,
+          {
+            column_id: createUniqueId(prevData.columns),
+            title: '',
+            task_list: [],
+            error: '',
+          }]
       }
     });
   };
@@ -117,12 +115,16 @@ const BoardForm = ({mode, initialData}) => {
     if (columnErrors.some(error => error !== '') || boardNameError !== '') {
       console.log('Errors exist');
     } else { // if no errors exist, create the board and close the modal
-      const newBoardData = {
-        title: boardData.title,
-        columns: boardData.columns
+      const newBoard = {
+        board_id: createUniqueId(useStore.getState().boards),
+        board_data:{
+          title: boardData.title,
+          columns: boardData.columns
+        }
       };
+
       console.log('board created, updating global state');
-      createBoard(newBoardData);
+      createBoard(newBoard);
       closeModal();
     }
   }
