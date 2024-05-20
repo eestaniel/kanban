@@ -68,9 +68,7 @@ const ModalNewBoard = () => {
   }, []);
 
 
-  useEffect(() => {
-    console.log('boards', boards)
-  }, [boards])
+
 
   return (
     <>
