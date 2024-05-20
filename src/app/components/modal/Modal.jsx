@@ -1,6 +1,7 @@
 import './modal.css'
 import BoardSelector from "@/app/components/modal/board/modalboardselect/BoardSelector";
 import BoardForm from "@/app/components/modal/board/boardform/BoardForm";
+import Delete from "@/app/components/modal/delete/Delete";
 import useStore from "@/app/store/useStore";
 
 
@@ -16,7 +17,8 @@ const Modal = () => {
   const modalContent = {
     'board-select': <BoardSelector/>,
     'new-board': <BoardForm/>,
-    'edit-board': <BoardForm mode='edit' initialData={activeBoard}/>
+    'edit-board': <BoardForm mode='edit' initialData={activeBoard}/>,
+    'delete': <Delete type={'board'}/>
   }
 
   if (!isModalOpen) return null;

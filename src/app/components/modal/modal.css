@@ -24,6 +24,10 @@
     gap: 1.25rem;
 }
 
+#board-select-header {
+    padding-left: 1.5rem;
+}
+
 .board-select {
     max-width: 16.5rem;
 }
@@ -36,6 +40,6 @@
 
 .modal-header {
     color: var(--dropdown-fc-idle-active);
-    padding-left: 1.5rem;
+
 }
 
