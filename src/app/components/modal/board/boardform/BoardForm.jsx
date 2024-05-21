@@ -139,7 +139,7 @@ const BoardForm = ({mode, initialData}) => {
 
   return (
     <>
-      <h3 className="modal-header heading-l">Add New Board</h3>
+      <h3 className="modal-header heading-l">{mode==='edit'? 'Edit Board' : 'Add New Board'}</h3>
       <CustomTextField
         label={'Board Name'}
         id={'board-name'}
