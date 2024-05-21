@@ -74,7 +74,7 @@ const TaskForm = ({mode, initialData}) => {
         }
       }));
     }
-  }, [mode, initialData]);
+  }, [mode, initialData, activeBoard.board_data.columns]);
 
   const {validateInput} = useInputValidator();
 
@@ -159,7 +159,7 @@ const TaskForm = ({mode, initialData}) => {
     if (updatedTaskData.description_error) hasError = true;
 
     // Validate each subtask
-    updatedTaskData.subtasks = updatedTaskData.subtasks.map((subtask, index) => {
+    updatedTaskData.subtasks = updatedTaskData.subtasks.map((subtask) => {
       const subtaskError = validateInput(subtask.title, 'Subtask Title');
       if (subtaskError) hasError = true;
       return {...subtask, error: subtaskError};
