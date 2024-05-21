@@ -82,10 +82,11 @@ const Navbar = () => {
               <CustomButton label={'add-task'}
                             type={'primary-small'}
                             id="add_task"
-                            disabled={boardCount === 0 || !selectedBoardHasColumns}/>
+                            disabled={boardCount === 0 || !selectedBoardHasColumns}
+                            onClick={() => activateModal('new-task')}
+              />
             </div>
             <Image className={`ellipsis ${activeBoard? '': 'disabled-icon'}`} src={Vertical_Ellipsis} alt="Vertical Ellipsis" onClick={() => handlePopover()}/>
-            {/*{isPopoverOpen && <Popover setIsPopoverOpen={setIsPopoverOpen}/>}*/}
             {isPopoverOpen && (
             <div className="popover-ref-container" ref={popoverRef}>
               {isPopoverOpen && <Popover setIsPopoverOpen={setIsPopoverOpen}/>}
