@@ -1,6 +1,5 @@
 import './boardselector.css'
 import Image from 'next/image'
-import Board_Icon from '@/app/assets/icon-board.svg'
 import Icon_Light from '@/app/assets/icon-light-theme.svg'
 import Icon_Dark from '@/app/assets/icon-dark-theme.svg'
 import useStore from "@/app/store/useStore";
@@ -8,7 +7,7 @@ import {useBoardCount} from "@/app/hooks/useBoardCount";
 
 
 const BoardSelector = ({}) => {
-  const {isDarkMode, toggleDarkMode, activateModal, boards, activeBoard, selectBoardToEdit, changeActiveBoard, closeModal} = useStore(state => ({
+  const {isDarkMode, toggleDarkMode, activateModal, boards, activeBoard, changeActiveBoard, closeModal} = useStore(state => ({
 
     isDarkMode: state.isDarkMode,
     toggleDarkMode: state.toggleDarkMode,

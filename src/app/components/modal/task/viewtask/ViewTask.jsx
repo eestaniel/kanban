@@ -4,9 +4,8 @@ import CustomTextField from "@/app/components/textfiield/CustomTextField";
 import { useCallback, useEffect, useState } from "react";
 
 const ViewTask = () => {
-  const { initialData, activeBoard, updateTask } = useStore((state) => ({
+  const { initialData, updateTask } = useStore((state) => ({
     initialData: state.initialData,
-    activeBoard: state.activeBoard,
     updateTask: state.updateTask
   }));
 
