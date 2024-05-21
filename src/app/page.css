@@ -54,6 +54,7 @@ body {
     flex-grow: 1;
     justify-content: center;
     text-align: center;
+    overflow-x: auto;
 }
 
 .empty-state-group {
