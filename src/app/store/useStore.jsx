@@ -1,4 +1,4 @@
-import { create } from 'zustand';
+import {create} from 'zustand';
 
 // Utility function to generate unique IDs
 const generateId = () => Math.random().toString(36).substr(2, 9);
@@ -28,6 +28,7 @@ const generateId = () => Math.random().toString(36).substr(2, 9);
  * @function toggleDarkMode - Toggles the dark mode state.
  * @function activateModal - Activates a modal with the specified type.
  * @function closeModal - Closes the modal.
+ * @function createTask - Adds a new task to the appropriate column in the active board.
  */
 const useStore = create((set, get) => ({
   // State variables
@@ -96,6 +97,28 @@ const useStore = create((set, get) => ({
       activeBoard: updatedBoards.length > 0 ? updatedBoards[0] : null,
     };
   }),
+
+  /**
+   * Adds a new task to the appropriate column in the active board.
+   * @param {Object} newTask - The new task object to be added.
+   */
+  createTask: (newTask) => set((state) => ({
+    activeBoard: {
+      ...state.activeBoard,
+      board_data: {
+        ...state.activeBoard.board_data,
+        columns: state.activeBoard.board_data.columns.map((column) => {
+          if (column.title === newTask.status) {
+            return {
+              ...column,
+              task_list: [...column.task_list, newTask],
+            };
+          }
+          return column;
+        }),
+      },
+    },
+  })),
 
   /**
    * Returns the number of boards in the state.
