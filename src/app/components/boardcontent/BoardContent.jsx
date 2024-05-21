@@ -45,6 +45,16 @@ const BoardContent = ({boardCount, activateModal}) => {
         {activeBoard.board_data.columns.map((column) => (
           <div key={column.column_id} className="column-card">
             <h3 className="column-header heading-s">{column.title} ({column.task_list.length})</h3>
+            <div className="task-list-group">
+              {column.task_list.map((task) => (
+                <div key={task.task_id} className="task-card">
+                  <h4 className="task-header heading-m">{task.title}</h4>
+
+                  {/*TODO: calculate how many subtasks completed and subtask length*/}
+                  <p className="subtask-amount body-m">{0} of {task.subtasks.length} {column.task_list.length > 1 ? 'subtasks' : 'subtask'}</p>
+                </div>
+              ))}
+            </div>
           </div>
         ))}
       </div>
