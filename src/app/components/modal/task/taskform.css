@@ -1,0 +1,26 @@
+.task-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.task-header {
+    color: var(--subtask-chkbox-fc);
+    font-size: 18px;
+}
+
+.task-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+/*    & #task-description {
+        height: 7rem;
+    }*/
+}
+
+.task-description {
+    max-height: 18.5rem;
+}
+
+
