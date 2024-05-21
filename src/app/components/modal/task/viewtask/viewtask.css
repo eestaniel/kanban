@@ -1,0 +1,9 @@
+
+
+.task-description {
+    color: var(--dropdown-item-fc);
+}
+
+.subtask-header {
+    color: var(--subtask-chkbox-completed-fc);
+}

@@ -1,12 +1,19 @@
 import React from 'react';
 import CustomButton from '@/app/components/buttons/CustomButton';
 import useStore from '@/app/store/useStore';
+import {useCallback} from "react";
 import './boardcontent.css';
 
 const BoardContent = ({boardCount, activateModal}) => {
   const {activeBoard} = useStore((state) => ({
     activeBoard: state.activeBoard,
   }));
+
+
+
+  const handleTaskClick = useCallback((task) => {
+      activateModal('view-task', task);
+    }, [activateModal]);
 
   if (boardCount === 0) {
     return (
@@ -23,6 +30,7 @@ const BoardContent = ({boardCount, activateModal}) => {
         />
       </div>
     );
+
   } else if (activeBoard && activeBoard.board_data.columns.length === 0) {
     return (
       <div className="empty-state-group">
@@ -47,11 +55,12 @@ const BoardContent = ({boardCount, activateModal}) => {
             <h3 className="column-header heading-s">{column.title} ({column.task_list.length})</h3>
             <div className="task-list-group">
               {column.task_list.map((task) => (
-                <div key={task.task_id} className="task-card">
+                <div key={task.task_id} className="task-card" onClick={() => handleTaskClick(task)}>
                   <h4 className="task-header heading-m">{task.title}</h4>
 
                   {/*TODO: calculate how many subtasks completed and subtask length*/}
-                  <p className="subtask-amount body-m">{0} of {task.subtasks.length} {column.task_list.length > 1 ? 'subtasks' : 'subtask'}</p>
+                  <p
+                    className="subtask-amount body-m">{0} of {task.subtasks.length} {column.task_list.length > 1 ? 'subtasks' : 'subtask'}</p>
                 </div>
               ))}
             </div>

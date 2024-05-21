@@ -24,6 +24,7 @@ const BoardSelector = ({}) => {
 
 
   const handleSelectBoard = (board) => {
+    console.log('selected board', board)
     changeActiveBoard(board);
     closeModal();
   }
