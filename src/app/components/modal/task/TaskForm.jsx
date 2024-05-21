@@ -55,9 +55,7 @@ const TaskForm = ({ mode, initialData }) => {
   const { validateInput } = useInputValidator();
 
   /**
-   * Handles input changes for task fields and validates them.
-   *
-   * @param {Object} e - The event object from the input field.
+   * @function handleOnChange - Handles input changes for task fields and validates them.
    */
   const handleOnChange = useCallback((e) => {
     const { name, value } = e.target;
@@ -68,10 +66,11 @@ const TaskForm = ({ mode, initialData }) => {
         [name]: value,
       }
     }));
-  }, [validateInput]);
+  }, []);
+
 
   /**
-   * Adds a new subtask to the task.
+   * @function addSubtask - Adds a new subtask to the task.
    */
   const addSubtask = () => {
     setTaskData(prevData => ({
@@ -84,10 +83,7 @@ const TaskForm = ({ mode, initialData }) => {
   };
 
   /**
-   * Handles input changes for subtasks and validates them.
-   *
-   * @param {number} index - The index of the subtask being updated.
-   * @param {string} newTitle - The new title for the subtask.
+   * @function handleSubtaskChange - Handles input changes for subtasks and validates them.
    */
   const handleSubtaskChange = useCallback((index, newTitle) => {
     setTaskData(prevData => ({
