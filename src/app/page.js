@@ -1,64 +1,38 @@
 "use client";
 
-import CustomButton from "@/app/components/buttons/CustomButton";
 import Navbar from "@/app/components/navbar/Navbar";
 import Modal from "@/app/components/modal/Modal";
 import "./page.css";
 import {useEffect} from "react";
 import useStore from "@/app/store/useStore";
 import {useBoardCount} from "@/app/hooks/useBoardCount";
+import BoardContent from "@/app/components/boardcontent/BoardContent";
 
 export default function Home() {
-  const {isDarkMode, activateModal, printBoard} = useStore(state => ({
+  const {isDarkMode, activateModal} = useStore((state) => ({
     isDarkMode: state.isDarkMode,
     activateModal: state.activateModal,
-    printBoard: state.printBoard
-  }))
+  }));
 
   const boardCount = useBoardCount();
 
-
   useEffect(() => {
     if (isDarkMode) {
-      document.body.classList.add('dark-mode');
+      document.body.classList.add("dark-mode");
     } else {
-      document.body.classList.remove('dark-mode');
+      document.body.classList.remove("dark-mode");
     }
   }, [isDarkMode]);
 
-
   return (
     <main>
+      <Navbar/>
       <div className="main-container">
-        <Navbar/>
         <div className="content-container">
-          {/* Check if board data state is empty */}
-          {boardCount === 0 ?
-            <div className="empty-state-group">
-              <h2 className="dashboard-header heading-l">No boards detected. Create a new board to get started!</h2>
-              <CustomButton id={'new-column-btn'}
-                            label={'Create New Board'}
-                            type={'primary-large'}
-                            onClick={() => activateModal('new-board')}
-                            disabled={false}
-              />
-            </div>
-
-            :
-            <CustomButton id={'new-column-btn'}
-                            label={'print boards'}
-                            type={'primary-large'}
-                            onClick={() => printBoard()}
-                            disabled={false}
-              />
-          }
+          <BoardContent boardCount={boardCount} activateModal={activateModal}/>
         </div>
         <Modal/>
       </div>
-
-
     </main>
-
-
   );
 }
