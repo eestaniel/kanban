@@ -4,6 +4,9 @@ import CustomButton from "@/app/components/buttons/CustomButton";
 import { useState, useEffect, useCallback } from "react";
 import useInputValidator from "@/app/hooks/useInputValidator";
 
+// Utility function to generate unique IDs
+const generateId = () => Math.random().toString(36).substr(2, 9);
+
 /**
  * TaskForm Component
  *
@@ -72,7 +75,8 @@ const TaskForm = ({ mode, initialData }) => {
   /**
    * @function addSubtask - Adds a new subtask to the task.
    */
-  const addSubtask = () => {
+  const addSubtask = (e) => {
+    e.preventDefault()
     setTaskData(prevData => ({
       ...prevData,
       task_data: {
@@ -167,6 +171,9 @@ const TaskForm = ({ mode, initialData }) => {
           id="create_task"
           disabled={false}
         />
+
+
+
       </form>
     </div>
   );
