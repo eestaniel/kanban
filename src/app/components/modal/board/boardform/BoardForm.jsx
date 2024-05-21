@@ -1,27 +1,41 @@
-import './bordform.css'
+import './bordform.css';
 import CustomTextField from "@/app/components/textfiield/CustomTextField";
 import CustomButton from "@/app/components/buttons/CustomButton";
 import {useState, useCallback, useEffect} from "react";
 import useInputValidator from "@/app/hooks/useInputValidator";
 import useStore from "@/app/store/useStore";
 
+// Utility function to generate unique IDs
+const generateId = () => Math.random().toString(36).substr(2, 9);
 
+/**
+ * BoardForm Component
+ *
+ * This component handles the creation and editing of boards. It allows users to add new columns,
+ * update board information, and validate input fields. The form is used in both creation and
+ * editing modes, determined by the `mode` prop.
+ *
+ * Props:
+ * @param {string} mode - Determines if the form is in 'create' or 'edit' mode.
+ * @param {Object} initialData - The initial data for the board, used in edit mode.
+ *
+ * State:
+ * @param {Object} boardData - The state object containing board information including title and columns.
+ * @param {string} boardData.board_id - The unique identifier for the board.
+ * @param {Object} boardData.board_data - The data object for the board.
+ * @param {string} boardData.board_data.title - The title of the board.
+ * @param {Array} boardData.board_data.columns - The list of columns in the board.
+ * @param {string} boardData.error - The error message for board validation.
+ *
+ * Functions:
+ * @function addColumn - Adds a new column to the board with a unique column_id.
+ * @function handleInputChange - Handles input changes for column titles and validates them.
+ * @function removeColumn - Removes a column from the board by index.
+ * @function handleSubmitBoard - Handles form submission, validates the board and columns,
+ * and triggers board creation or update.
+ */
 const BoardForm = ({mode, initialData}) => {
-  /*Columns contain an array of objects with the following structure:
-  * title: string
-  * description: string
-  * subtasks: [''] array of strings
-  * status: string (option list of columns)
-  * example:
-  *   columns: [{
-  *     title: 'To Do',
-  *     description: 'Tasks that need to be done',
-  *     subtasks: ['Task 1', 'Task 2'],
-  *     status: 'To Do'
-  * }]
-  }*/
-
-  // initialize board data
+  // Initialize board data
   const [boardData, setBoardData] = useState({
     board_id: '',
     board_data: {
@@ -30,10 +44,11 @@ const BoardForm = ({mode, initialData}) => {
     },
     error: ''
   });
-  // validate input
+
+  // Validate input
   const {validateInput} = useInputValidator();
 
-  // create board and close modal functions from global state
+  // Create board and close modal functions from global state
   const {createBoard, closeModal, createUniqueId, updateBoard} = useStore(state => ({
     createBoard: state.createBoard,
     closeModal: state.closeModal,
@@ -41,7 +56,7 @@ const BoardForm = ({mode, initialData}) => {
     updateBoard: state.updateBoard
   }));
 
-  // if mode is edit and initial data exists, set the board data to the initial data
+  // If mode is edit and initial data exists, set the board data to the initial data
   useEffect(() => {
     if (mode === 'edit' && initialData) {
       console.log('setting board data to initial data', initialData);
@@ -49,19 +64,18 @@ const BoardForm = ({mode, initialData}) => {
     }
   }, [mode, initialData]);
 
-  // function to add a new column to the board
+  // Function to add a new column to the board
   const addColumn = () => {
     setBoardData(prevData => ({
       ...prevData,
       board_data: {
         ...prevData.board_data,
-        columns: [...prevData.board_data.columns, {title: '', error: ''}]
+        columns: [...prevData.board_data.columns, {column_id: generateId(), title: '', error: ''}]
       }
     }));
   };
 
-
-  // validation for column list
+  // Validation for column list
   const handleInputChange = useCallback((index, newTitle) => {
     setBoardData(prevData => ({
       ...prevData,
@@ -75,21 +89,16 @@ const BoardForm = ({mode, initialData}) => {
   }, [validateInput]);
 
   const removeColumn = useCallback((index) => {
-    setBoardData(prevData => {
-      return {
-        ...prevData,
-        board_data: {
-          title: prevData.board_data.title,
-          columns: prevData.board_data.columns.filter((_, i) => i !== index)
-        }
+    setBoardData(prevData => ({
+      ...prevData,
+      board_data: {
+        title: prevData.board_data.title,
+        columns: prevData.board_data.columns.filter((_, i) => i !== index)
       }
-    });
+    }));
   }, []);
 
-  // function to handle the submission of the board
-  // validate the board name and columns
-  // if no errors exist, create the board and close the modal
-  // if errors exist, log the errors
+  // Function to handle the submission of the board
   const handleSubmitBoard = () => {
     const boardNameError = validateInput(boardData.board_data.title, 'Board Name');
     const columnErrors = boardData.board_data.columns.map(column => validateInput(column.title, 'column-title'));
@@ -111,7 +120,6 @@ const BoardForm = ({mode, initialData}) => {
     }));
 
     if (!hasErrors) {
-      // create new board object if mode is not edit
       if (mode !== 'edit') {
         const newBoard = {
           board_id: createUniqueId({}),
@@ -123,7 +131,6 @@ const BoardForm = ({mode, initialData}) => {
         console.log('board created, updating global state');
         createBoard(newBoard);
       } else {
-        // update the board object if mode is edit
         updateBoard(boardData);
       }
       closeModal();
@@ -134,27 +141,26 @@ const BoardForm = ({mode, initialData}) => {
 
   return (
     <>
-      <h3 className=" modal-header heading-l">Add New Board</h3>
-      <CustomTextField label={'Board Name'}
-                       id={'board-name'}
-                       type={'text'}
-                       placeholder={'e.g. Web Design'}
-                       value={boardData.board_data.title}
-                       onChange={(e) => setBoardData({
-                         ...boardData,
-                         board_data: {
-                           title: e.target.value,
-                           columns: boardData.board_data.columns
-                         }
-                       })
-                       }
-                       error={boardData.error}
-
+      <h3 className="modal-header heading-l">Add New Board</h3>
+      <CustomTextField
+        label={'Board Name'}
+        id={'board-name'}
+        type={'text'}
+        placeholder={'e.g. Web Design'}
+        value={boardData.board_data.title}
+        onChange={(e) => setBoardData({
+          ...boardData,
+          board_data: {
+            title: e.target.value,
+            columns: boardData.board_data.columns
+          }
+        })}
+        error={boardData.error}
       />
 
-      {Object.keys(boardData.board_data.columns).length > 0 && boardData.board_data.columns.map((column, index) => (
+      {boardData.board_data.columns.length > 0 && boardData.board_data.columns.map((column, index) => (
         <CustomTextField
-          key={index}
+          key={column.column_id}
           label={index === 0 ? 'Board Columns' : ''}
           id={`board-id-${index}`}
           type="text"
@@ -168,12 +174,20 @@ const BoardForm = ({mode, initialData}) => {
         />
       ))}
 
-      <CustomButton label={'+ Add New Column'} type={'secondary'} id="add_column" disabled={false}
-                    onClick={() => addColumn()}/>
-      <CustomButton label={`${mode !== 'edit' ? 'Create New Board' : 'Save Changes'}`} type={'primary-small'}
-                    id="create_board" disabled={false}
-                    onClick={() => handleSubmitBoard()}/>
-
+      <CustomButton
+        label={'+ Add New Column'}
+        type={'secondary'}
+        id="add_column"
+        disabled={false}
+        onClick={addColumn}
+      />
+      <CustomButton
+        label={`${mode !== 'edit' ? 'Create New Board' : 'Save Changes'}`}
+        type={'primary-small'}
+        id="create_board"
+        disabled={false}
+        onClick={handleSubmitBoard}
+      />
     </>
   );
 };
