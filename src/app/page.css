@@ -1,6 +1,9 @@
 body {
     background-color: var(--bg-color);
-    height: fit-content;
+    display: flex;
+    flex-direction: column;
+
+    overflow-y: hidden;
 }
 
 .test-buttons {
@@ -55,6 +58,9 @@ body {
     justify-content: center;
     text-align: center;
     overflow-x: auto;
+    height: fit-content;
+
+    overflow-y: auto;
 }
 
 .empty-state-group {

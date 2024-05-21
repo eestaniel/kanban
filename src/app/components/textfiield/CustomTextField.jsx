@@ -1,12 +1,12 @@
 import './customtextfield.css';
 import CrossIcon from '@/app/assets/icon-cross.svg';
 import Image from 'next/image';
-import {memo} from 'react';
+import { memo } from 'react';
 
 /**
  * CustomTextField Component
  *
- * A reusable text field component that supports both input and textarea elements.
+ * A reusable text field component that supports input, textarea, and select elements.
  *
  * Props:
  * @param {string} label - The label for the input field.
@@ -20,13 +20,30 @@ import {memo} from 'react';
  * @param {string} error - The error message to display.
  * @param {string} id - The id attribute for the input field.
  * @param {boolean} multiline - Determines if the field should be a textarea instead of an input.
+ * @param {boolean} select - Determines if the field should be a dropdown menu instead of an input or textarea.
+ * @param {Array} options - The list of options for the dropdown menu.
+ * @Qparam {boolean} disabled - Determines if the field should be disabled.
  */
-const CustomTextField = memo(({ label, name, placeholder, value, onChange, isList, isListOne, onRemove, error, id, multiline }) => {
+const CustomTextField = memo(({ label, name, placeholder, value, onChange, isList, isListOne, onRemove, error, id, multiline, select, options, func }) => {
   return (
     <div className="textfield-container">
       {!isList && <label className="label heading-s">{label}</label>}
       <div className={`input-wrapper ${(isList || isListOne) ? 'shorter-field' : ''}`}>
-        {multiline ? (
+        {select ? (
+          <select
+            className={`body-l ${error ? 'error' : ''}`}
+            id={id}
+            name={name}
+            value={value}
+            onChange={onChange}
+          >
+            {options.map((option, index) => (
+              <option key={index} value={option.title}  onClick={()=>func(option.title)}>
+                {option.title}
+              </option>
+            ))}
+          </select>
+        ) : multiline ? (
           <textarea
             className={`body-l ${error ? 'error' : ''}`}
             id={id}
