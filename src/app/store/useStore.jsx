@@ -1,4 +1,4 @@
-import {create} from 'zustand';
+import { create } from 'zustand';
 
 // Utility function to generate unique IDs
 const generateId = () => Math.random().toString(36).substr(2, 9);
@@ -16,6 +16,7 @@ const generateId = () => Math.random().toString(36).substr(2, 9);
  * @param {boolean} isDarkMode - The state of the dark mode (true if dark mode is enabled).
  * @param {boolean} isModalOpen - The state of the modal visibility (true if a modal is open).
  * @param {string} modalType - The type of modal currently open.
+ * @param {Object} initialData - The initial data for the currently viewed task.
  *
  * Actions:
  * @function createUniqueId - Generates a unique ID that does not exist in the provided object key.
@@ -29,6 +30,8 @@ const generateId = () => Math.random().toString(36).substr(2, 9);
  * @function activateModal - Activates a modal with the specified type.
  * @function closeModal - Closes the modal.
  * @function createTask - Adds a new task to the appropriate column in the active board.
+ * @function updateTask - Updates a task in the initialData.
+ * @function updateActiveBoard - Updates the active board and saves changes to the boards array.
  */
 const useStore = create((set, get) => ({
   // State variables
@@ -38,6 +41,7 @@ const useStore = create((set, get) => ({
   isDarkMode: false,
   isModalOpen: false,
   modalType: '',
+  initialData: {},
 
   // Unique ID generator
   createUniqueId: (object_key) => {
@@ -84,6 +88,8 @@ const useStore = create((set, get) => ({
    */
   changeActiveBoard: (board) => set(() => ({
     activeBoard: board,
+    // reset initialData
+    initialData: {},
   })),
 
   /**
@@ -99,11 +105,11 @@ const useStore = create((set, get) => ({
   }),
 
   /**
-   * Adds a new task to the appropriate column in the active board.
+   * Adds a new task to the appropriate column in the active board and updates the boards array.
    * @param {Object} newTask - The new task object to be added.
    */
-  createTask: (newTask) => set((state) => ({
-    activeBoard: {
+  createTask: (newTask) => set((state) => {
+    const updatedActiveBoard = {
       ...state.activeBoard,
       board_data: {
         ...state.activeBoard.board_data,
@@ -117,8 +123,42 @@ const useStore = create((set, get) => ({
           return column;
         }),
       },
-    },
-  })),
+    };
+    // Update the active board and the boards array
+    return {
+      activeBoard: updatedActiveBoard,
+      boards: state.boards.map((board) =>
+        board.board_id === updatedActiveBoard.board_id ? updatedActiveBoard : board
+      ),
+    };
+  }),
+
+  /**
+   * Updates the initialData task.
+   * @param {Object} updatedTask - The task object with updated data.
+   */
+  updateTask: (updatedTask) => set((state) => {
+    const updatedActiveBoard = {
+      ...state.activeBoard,
+      board_data: {
+        ...state.activeBoard.board_data,
+        columns: state.activeBoard.board_data.columns.map((column) => ({
+          ...column,
+          task_list: column.task_list.map((task) =>
+            task.task_id === updatedTask.task_id ? updatedTask : task
+          ),
+        })),
+      },
+    };
+
+    return {
+      activeBoard: updatedActiveBoard,
+      boards: state.boards.map((board) =>
+        board.board_id === updatedActiveBoard.board_id ? updatedActiveBoard : board
+      ),
+      initialData: updatedTask,
+    };
+  }),
 
   /**
    * Returns the number of boards in the state.
@@ -140,10 +180,12 @@ const useStore = create((set, get) => ({
   /**
    * Activates a modal with the specified type.
    * @param {string} modalType - The type of modal to be activated.
+   * @param {Object} initialData - The initial data for the modal.
    */
-  activateModal: (modalType) => set(() => ({
+  activateModal: (modalType, initialData) => set(() => ({
     isModalOpen: true,
     modalType,
+    initialData,
   })),
 
   /**
@@ -152,6 +194,7 @@ const useStore = create((set, get) => ({
   closeModal: () => set(() => ({
     isModalOpen: false,
     modalType: '',
+    initialData: {},
   })),
 }));
 

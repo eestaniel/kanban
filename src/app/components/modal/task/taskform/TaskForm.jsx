@@ -48,7 +48,7 @@ const TaskForm = ({mode, initialData}) => {
       description_error: '',
       column_id: '',
       subtasks: [],
-      status: '',
+      status: ''
     }
   });
 
@@ -105,7 +105,13 @@ const TaskForm = ({mode, initialData}) => {
       ...prevData,
       task_data: {
         ...prevData.task_data,
-        subtasks: [...prevData.task_data.subtasks, {subtask_id: generateId(), title: '', error: ''}]
+        subtasks: [
+          ...prevData.task_data.subtasks,
+          {subtask_id: generateId(),
+            title: '',
+            error: '',
+            completed: false
+          }]
       }
     }));
   };
@@ -179,7 +185,7 @@ const TaskForm = ({mode, initialData}) => {
       description: taskData.task_data.description,
       column_id: taskData.task_data.column_id,
       subtasks: taskData.task_data.subtasks,
-      status: taskData.task_data.status
+      status: taskData.task_data.status,
     };
     if (hasError) {
       console.log('Task data has errors, cannot submit');

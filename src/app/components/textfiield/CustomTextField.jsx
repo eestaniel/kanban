@@ -6,7 +6,7 @@ import { memo } from 'react';
 /**
  * CustomTextField Component
  *
- * A reusable text field component that supports input, textarea, and select elements.
+ * A reusable text field component that supports input, textarea, select, and checkbox elements.
  *
  * Props:
  * @param {string} label - The label for the input field.
@@ -22,9 +22,11 @@ import { memo } from 'react';
  * @param {boolean} multiline - Determines if the field should be a textarea instead of an input.
  * @param {boolean} select - Determines if the field should be a dropdown menu instead of an input or textarea.
  * @param {Array} options - The list of options for the dropdown menu.
- * @Qparam {boolean} disabled - Determines if the field should be disabled.
+ * @param {boolean} checkbox - Determines if the field should be a checkbox instead of an input, textarea, or select.
+ * @param {boolean} checked - The checked state for the checkbox.
+ * @param {boolean} disabled - Determines if the field should be disabled.
  */
-const CustomTextField = memo(({ label, name, placeholder, value, onChange, isList, isListOne, onRemove, error, id, multiline, select, options, func }) => {
+const CustomTextField = memo(({ label, name, placeholder, value, onChange, isList, isListOne, onRemove, error, id, multiline, select, options, checkbox, checked, disabled }) => {
   return (
     <div className="textfield-container">
       {!isList && <label className="label heading-s">{label}</label>}
@@ -35,10 +37,10 @@ const CustomTextField = memo(({ label, name, placeholder, value, onChange, isLis
             id={id}
             name={name}
             value={value}
-            onChange={onChange}
+            onChange={(e) => onChange(e.target.value)}
           >
             {options.map((option, index) => (
-              <option key={index} value={option.title}  onClick={()=>func(option.title)}>
+              <option key={index} value={option.title}>
                 {option.title}
               </option>
             ))}
@@ -52,6 +54,20 @@ const CustomTextField = memo(({ label, name, placeholder, value, onChange, isLis
             value={value}
             onChange={onChange}
           />
+        ) : checkbox ? (
+          <div className="checkbox-container">
+            <input
+              type="checkbox"
+              id={id}
+              name={name}
+              checked={checked}
+              onChange={onChange}
+              disabled={disabled}
+            />
+            <label htmlFor={id} className={`body-l ${error ? 'error' : ''}`}>
+              {placeholder}
+            </label>
+          </div>
         ) : (
           <input
             className={`body-l ${error ? 'error' : ''}`}
