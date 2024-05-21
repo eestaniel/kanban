@@ -11,29 +11,26 @@ const generateId = () => Math.random().toString(36).substr(2, 9);
 /**
  * BoardForm Component
  *
- * This component handles the creation and editing of boards. It allows users to add new columns,
+ * Handles the creation and editing of boards. Allows users to add new columns,
  * update board information, and validate input fields. The form is used in both creation and
  * editing modes, determined by the `mode` prop.
  *
- * Props:
  * @param {string} mode - Determines if the form is in 'create' or 'edit' mode.
- * @param {Object} initialData - The initial data for the board, used in edit mode.
+ * @param {Object} initialData - Initial data for the board, used in edit mode.
  *
- * State:
- * @param {Object} boardData - The state object containing board information including title and columns.
- * @param {string} boardData.board_id - The unique identifier for the board.
- * @param {Object} boardData.board_data - The data object for the board.
- * @param {string} boardData.board_data.title - The title of the board.
- * @param {Array} boardData.board_data.columns - The list of columns in the board.
- * @param {string} boardData.error - The error message for board validation.
+ * @type {Object} boardData - State object containing the board's data.
+ * @property {string} boardData.board_id - Unique identifier for the board.
+ * @property {Object} boardData.board_data - Contains the board's title and columns.
+ * @property {string} boardData.board_data.title - Title of the board.
+ * @property {Array} boardData.board_data.columns - List of columns in the board, each with `column_id`, `title`, and `error`.
+ * @property {string} boardData.error - Error message for board validation.
  *
- * Functions:
- * @function addColumn - Adds a new column to the board with a unique column_id.
- * @function handleInputChange - Handles input changes for column titles and validates them.
- * @function removeColumn - Removes a column from the board by index.
- * @function handleSubmitBoard - Handles form submission, validates the board and columns,
- * and triggers board creation or update.
+ * @function addColumn - Adds a new column to the board.
+ * @function handleInputChange - Handles changes and validation for column titles.
+ * @function removeColumn - Removes a column by index.
+ * @function handleSubmitBoard - Submits the board, validates data, creates or updates the board.
  */
+
 const BoardForm = ({mode, initialData}) => {
   // Initialize board data
   const [boardData, setBoardData] = useState({
@@ -64,7 +61,7 @@ const BoardForm = ({mode, initialData}) => {
     }
   }, [mode, initialData]);
 
-  // Function to add a new column to the board
+  /** @function addColumn - Adds a new column to the board.*/
   const addColumn = () => {
     setBoardData(prevData => ({
       ...prevData,
@@ -75,7 +72,7 @@ const BoardForm = ({mode, initialData}) => {
     }));
   };
 
-  // Validation for column list
+  /** @function handleInputChange - Handles changes and validation for column titles.*/
   const handleInputChange = useCallback((index, newTitle) => {
     setBoardData(prevData => ({
       ...prevData,
@@ -88,6 +85,7 @@ const BoardForm = ({mode, initialData}) => {
     }));
   }, [validateInput]);
 
+  /** @function removeColumn - Removes a column by index.*/
   const removeColumn = useCallback((index) => {
     setBoardData(prevData => ({
       ...prevData,
@@ -98,7 +96,7 @@ const BoardForm = ({mode, initialData}) => {
     }));
   }, []);
 
-  // Function to handle the submission of the board
+  /** @function handleSubmitBoard - Submits the board, validates data, creates or updates the board.*/
   const handleSubmitBoard = () => {
     const boardNameError = validateInput(boardData.board_data.title, 'Board Name');
     const columnErrors = boardData.board_data.columns.map(column => validateInput(column.title, 'column-title'));
