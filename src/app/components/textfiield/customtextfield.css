@@ -7,7 +7,7 @@
         color: var(--textfield-label);
     }
 
-    & input {
+    & input,textarea {
         background-color: var(--textfield-bg);
         color: var(--textfield-fc);
         width: 100%;
@@ -15,7 +15,17 @@
         border-radius: 0.25rem;
         /* Make room for the error icon */
         padding: 0.5rem 2rem 0.5rem 1rem;
+
+        &::placeholder {
+            color: hsla(0, 0%, 100%, 25%);
+        }
     }
+
+    & textarea {
+        height: 7rem;
+        resize: none;
+    }
+
 }
 
 
