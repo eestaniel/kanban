@@ -67,7 +67,13 @@ const BoardForm = ({mode, initialData}) => {
       ...prevData,
       board_data: {
         ...prevData.board_data,
-        columns: [...prevData.board_data.columns, {column_id: generateId(), title: '', error: ''}]
+        columns: [...prevData.board_data.columns,
+          {
+            column_id: generateId(),
+            title: '',
+            error: '',
+            task_list: [],
+          }]
       }
     }));
   };
@@ -126,7 +132,6 @@ const BoardForm = ({mode, initialData}) => {
             columns: boardData.board_data.columns
           }
         };
-        console.log('board created, updating global state');
         createBoard(newBoard);
       } else {
         updateBoard(boardData);
@@ -139,7 +144,7 @@ const BoardForm = ({mode, initialData}) => {
 
   return (
     <>
-      <h3 className="modal-header heading-l">{mode==='edit'? 'Edit Board' : 'Add New Board'}</h3>
+      <h3 className="modal-header heading-l">{mode === 'edit' ? 'Edit Board' : 'Add New Board'}</h3>
       <CustomTextField
         label={'Board Name'}
         id={'board-name'}
