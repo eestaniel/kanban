@@ -32,6 +32,12 @@
     & h3 {
         color: var(--main-purple);
     }
+
+    &:hover {
+        cursor: pointer;
+        scale: 110%;
+        transition: ease all 50ms
+    }
 }
 
 
