@@ -1,7 +1,7 @@
 import React from 'react';
 import CustomButton from '@/app/components/buttons/CustomButton';
 import useStore from '@/app/store/useStore';
-import {useCallback} from "react";
+import {useCallback, useEffect} from "react";
 import './boardcontent.css';
 
 const BoardContent = ({boardCount, activateModal}) => {
@@ -9,6 +9,10 @@ const BoardContent = ({boardCount, activateModal}) => {
     activeBoard: state.activeBoard,
   }));
 
+
+  useEffect(() => {
+    console.log('active board updated', activeBoard);
+  }, [activeBoard]);
 
 
   const handleTaskClick = useCallback((task) => {

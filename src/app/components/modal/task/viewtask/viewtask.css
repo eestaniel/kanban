@@ -5,7 +5,8 @@
 }
 
 .subtask-header {
-    color: var(--subtask-chkbox-completed-fc);
+    color: var(--subtask-chkbox-fc);
+
 }
 
 
@@ -17,6 +18,13 @@
 .subtask-view {
     display: flex;
     flex-direction: row;
+}
+
+.subtask-group {
+    display: flex;
+    flex-direction: column;
+
+    gap: 0.5rem;
 }
 
 .subtask-container {
@@ -32,3 +40,4 @@
     flex-direction: row-reverse;
     align-items: center;
 }
+

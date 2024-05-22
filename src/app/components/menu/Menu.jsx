@@ -2,18 +2,12 @@ import './menu.css'
 import CustomTextField from "@/app/components/textfiield/CustomTextField";
 import useStore from "@/app/store/useStore";
 
-const Menu = ({taskData, setTaskData}) => {
-  const {activeBoard} = useStore(state => ({
-    activeBoard: state.activeBoard
+const Menu = ({newTask, handleSelectStatus}) => {
+  const {activeBoard, initialData} = useStore(state => ({
+    activeBoard: state.activeBoard,
+    initialData: state.initialData
   }));
 
-  const handleSelectStatus = (value) => {
-    console.log(value);
-    setTaskData(prevData => ({
-      ...prevData,
-      status: value
-    }));
-  }
 
   return (
     <>
@@ -21,8 +15,8 @@ const Menu = ({taskData, setTaskData}) => {
         label={'Current Status'}
         select={true}
         options={activeBoard.columns}
-        value={'taskData.status'}
-        onChange={handleSelectStatus}
+        value={newTask.status}
+        onChange={(menuItem)=> handleSelectStatus(menuItem)}
       />
     </>
   );

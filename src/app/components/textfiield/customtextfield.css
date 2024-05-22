@@ -60,3 +60,9 @@
         right: 3rem;
     }
 }
+
+.checkbox-container {
+    & input {
+        min-width: 1rem;
+    }
+}

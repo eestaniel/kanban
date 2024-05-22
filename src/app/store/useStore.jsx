@@ -145,26 +145,56 @@ const useStore = create((set, get) => ({
    * Updates the initialData task.
    * @param {Object} updatedTask - The task object with updated data.
    */
-  updateTask: (updatedTask) => set((state) => {
-    const updatedActiveBoard = {
-      ...state.activeBoard,
-      columns: state.activeBoard.columns.map((column) => ({
-        ...column,
-        tasks: column.tasks.map((task) =>
-          task.name === updatedTask.name ? updatedTask : task
+  updateTask: (updatedTask, type) => set((state) => {
+
+    // if type is checklist, update the checklist
+    if (type === 'checklist') {
+      const updatedActiveBoard = {
+        ...state.activeBoard,
+        columns: state.activeBoard.columns.map((column) => ({
+          ...column,
+          tasks: column.tasks.map((task) =>
+            task.name === updatedTask.name ? updatedTask : task
+          ),
+        })),
+
+      };
+      return {
+        activeBoard: updatedActiveBoard,
+        boards: state.boards.map((board) =>
+          board.name === updatedActiveBoard.name ? updatedActiveBoard : board
         ),
-      })),
+        initialData: updatedTask,
+      };
+    } //if type is status, move the task to the new status column
+    else if (type === 'status') {
+      const updatedActiveBoard = {
+        ...state.activeBoard,
+        columns: state.activeBoard.columns.map((column) => {
+          if (column.name === updatedTask.status) {
+            return {
+              ...column,
+              tasks: [...column.tasks, updatedTask],
+            };
+          }
+          return {
+            ...column,
+            tasks: column.tasks.filter((task) => task.name !== updatedTask.name),
+          };
+        }),
+      };
+      return {
+        activeBoard: updatedActiveBoard,
+        boards: state.boards.map((board) =>
+          board.name === updatedActiveBoard.name ? updatedActiveBoard : board
+        ),
+        initialData: updatedTask,
+      };
+    }
 
-    };
 
-    return {
-      activeBoard: updatedActiveBoard,
-      boards: state.boards.map((board) =>
-        board.name === updatedActiveBoard.name ? updatedActiveBoard : board
-      ),
-      initialData: updatedTask,
-    };
   }),
+
 
   /**
    * Returns the number of boards in the state.

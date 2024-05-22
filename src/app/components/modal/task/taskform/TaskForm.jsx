@@ -132,16 +132,16 @@ const TaskForm = ({mode, initialData}) => {
     const updatedTaskData = {...taskData};
 
     // Validate task name
-    updatedTaskData.name_error = validateInput(taskData.name, 'Task Title');
+    updatedTaskData.name_error = validateInput(taskData.name, 'task-name');
     if (updatedTaskData.name_error) hasError = true;
 
     // Validate task description
-    updatedTaskData.description_error = validateInput(taskData.description, 'Task Description');
+    updatedTaskData.description_error = validateInput(taskData.description, 'task-description');
     if (updatedTaskData.description_error) hasError = true;
 
     // Validate each subtask
     updatedTaskData.subtasks = updatedTaskData.subtasks.map((subtask) => {
-      const subtaskError = validateInput(subtask.name, 'Subtask Title');
+      const subtaskError = validateInput(subtask.name, 'task-name');
       if (subtaskError) hasError = true;
       return {...subtask, error: subtaskError};
     });
@@ -154,7 +154,6 @@ const TaskForm = ({mode, initialData}) => {
     } else {
       // Prepare the task data for submission
       const newTask = {
-        task_id: generateId(),
         ...taskData,
       };
       console.log('Submitting task:', newTask);
@@ -212,7 +211,7 @@ const TaskForm = ({mode, initialData}) => {
           onClick={addSubtask}
         />
 
-        <Menu taskData={taskData} setTaskData={setTaskData}/>
+        <Menu newTask={taskData} handleSelectStatus={setTaskData}/>
 
         <CustomButton
           label={`${mode !== 'edit' ? 'Create Task' : 'Save Changes'}`}

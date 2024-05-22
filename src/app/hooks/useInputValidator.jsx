@@ -46,7 +46,7 @@ const useInputValidator = () => {
       default:
         return newValue.trim() === '' ? 'Field cannot be empty' : '';
     }
-  }, []);
+  }, [boards]);
 
   return {validateInput};
 };
