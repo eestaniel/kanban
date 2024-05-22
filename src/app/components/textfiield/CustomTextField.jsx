@@ -26,9 +26,9 @@ import { memo } from 'react';
  * @param {boolean} checked - The checked state for the checkbox.
  * @param {boolean} disabled - Determines if the field should be disabled.
  */
-const CustomTextField = memo(({ label, name, placeholder, value, onChange, isList, isListOne, onRemove, error, id, multiline, select, options, checkbox, checked, disabled }) => {
+const CustomTextField = memo(({ label, name, placeholder, value, onChange, isList, isListOne, onRemove, error, id, multiline, select, options, checkbox, checked, disabled, classname }) => {
   return (
-    <div className="textfield-container">
+    <div className={`textfield-container ${classname}`}>
       {!isList && <label className="label heading-s">{label}</label>}
       <div className={`input-wrapper ${(isList || isListOne) ? 'shorter-field' : ''}`}>
         {select ? (

@@ -19,25 +19,31 @@ const ViewTask = () => {
     const updatedTask = {
       ...newTask,
       subtasks: newTask.subtasks.map((task) =>
-        task.subtask_id === subtask.subtask_id ? { ...task, completed: !task.completed } : task
+        task.name === subtask.name ? { ...task, isCompleted: !task.isCompleted } : task
       )
     };
     updateTask(updatedTask);
   }, [newTask, updateTask]);
 
+    const handleCheckboxContainerClick = (id) => {
+    document.getElementById(id).click();
+  };
+
   return (
     <div className="task-container">
-      <h2 className="task-header heading-l">{newTask.title}</h2>
+      <h2 className="task-header heading-l">{newTask.name}</h2>
       <p className="task-description body-l">{newTask.description}</p>
       {newTask?.subtasks?.map((subtask) => (
-        <div key={subtask.subtask_id} className="subtask-container">
+        <div key={subtask.name} className="subtask-container" onClick={()=>handleCheckboxContainerClick(subtask.name)}>
           <CustomTextField
-            label={subtask.title}
-            name={subtask.title}
-            value={subtask.completed}
-            checked={subtask.completed}
+            label={subtask.name}
+            name={subtask.name}
+            value={subtask.isCompleted}
+            checked={subtask.isCompleted}
             onChange={() => handleOnCheck(subtask)}
             checkbox={true}
+            classname={'subtask-checkbox'}
+            id={subtask.name}
           />
         </div>
       ))}

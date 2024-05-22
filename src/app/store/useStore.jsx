@@ -148,15 +148,13 @@ const useStore = create((set, get) => ({
   updateTask: (updatedTask) => set((state) => {
     const updatedActiveBoard = {
       ...state.activeBoard,
-      board_data: {
-        ...state.activeBoard.board_data,
-        columns: state.activeBoard.board_data.columns.map((column) => ({
-          ...column,
-          task_list: column.task_list.map((task) =>
-            task.task_id === updatedTask.task_id ? updatedTask : task
-          ),
-        })),
-      },
+      columns: state.activeBoard.columns.map((column) => ({
+        ...column,
+        tasks: column.tasks.map((task) =>
+          task.name === updatedTask.name ? updatedTask : task
+        ),
+      })),
+
     };
 
     return {

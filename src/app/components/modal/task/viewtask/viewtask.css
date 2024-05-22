@@ -7,3 +7,28 @@
 .subtask-header {
     color: var(--subtask-chkbox-completed-fc);
 }
+
+
+.textfield-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.subtask-view {
+    display: flex;
+    flex-direction: row;
+}
+
+.subtask-container {
+    display: flex;
+    flex-direction: row;
+    background-color: var(--bg-content);
+    padding: 1rem;
+    border-radius: 0.25rem;
+}
+
+.subtask-checkbox {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+}
