@@ -1,4 +1,4 @@
-import { create } from 'zustand';
+import {create} from 'zustand';
 
 // Utility function to generate unique IDs
 const generateId = () => Math.random().toString(36).substr(2, 9);
@@ -112,47 +112,66 @@ const useStore = create((set, get) => ({
   }),
 
   updateTask: (updatedTask, type) => set((state) => {
-    if (type === 'checklist') {
-      const updatedActiveBoard = {
-        ...state.activeBoard,
-        columns: state.activeBoard.columns.map((column) => ({
-          ...column,
-          tasks: column.tasks.map((task) =>
-            task.name === updatedTask.name ? updatedTask : task
-          ),
-        })),
-      };
-      return {
-        activeBoard: updatedActiveBoard,
-        boards: state.boards.map((board) =>
-          board.name === updatedActiveBoard.name ? updatedActiveBoard : board
-        ),
-        initialData: updatedTask,
-      };
-    } else if (type === 'status') {
-      const updatedActiveBoard = {
-        ...state.activeBoard,
-        columns: state.activeBoard.columns.map((column) => {
-          if (column.name === updatedTask.status) {
+    let updatedActiveBoard;
+
+    switch (type) {
+      case 'checklist':
+        updatedActiveBoard = {
+          ...state.activeBoard,
+          columns: state.activeBoard.columns.map((column) => ({
+            ...column,
+            tasks: column.tasks.map((task) =>
+              task.name === updatedTask.name ? updatedTask : task
+            ),
+          })),
+        };
+        break;
+
+      case 'status':
+        updatedActiveBoard = {
+          ...state.activeBoard,
+          columns: state.activeBoard.columns.map((column) => {
+            if (column.name === updatedTask.status) {
+              return {
+                ...column,
+                tasks: [...column.tasks, updatedTask],
+              };
+            }
             return {
               ...column,
-              tasks: [...column.tasks, updatedTask],
+              tasks: column.tasks.filter((task) => task.name !== updatedTask.name),
             };
-          }
-          return {
+          }),
+        };
+        break;
+
+      case 'edit':
+        // Replace the old task with the updated task
+        updatedActiveBoard = {
+          ...state.activeBoard,
+          columns: state.activeBoard.columns.map((column) => ({
             ...column,
-            tasks: column.tasks.filter((task) => task.name !== updatedTask.name),
-          };
-        }),
-      };
-      return {
-        activeBoard: updatedActiveBoard,
-        boards: state.boards.map((board) =>
-          board.name === updatedActiveBoard.name ? updatedActiveBoard : board
-        ),
-        initialData: updatedTask,
-      };
+            tasks: column.tasks.map((task) =>
+              task.name === state.initialData.name ? updatedTask : task
+            ),
+          })),
+        }
+        break;
+
+
+      default:
+        return state;
     }
+
+    return {
+
+      activeBoard: updatedActiveBoard,
+      boards: state.boards.map((board) =>
+        board.name === updatedActiveBoard.name ? updatedActiveBoard : board
+      ),
+
+      initialData: updatedTask,
+    };
   }),
 
   // Dark mode actions
