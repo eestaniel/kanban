@@ -6,9 +6,8 @@ const Popover = ({isPopoverOpen, setIsPopoverOpen, popoverType, task}) => {
 
   const popoverRef = useRef(null);
 
-  const { activateModal, initialData } = useStore(state => ({
+  const { activateModal } = useStore(state => ({
     activateModal: state.activateModal,
-    initialData: state.initialData
   }));
 
 
