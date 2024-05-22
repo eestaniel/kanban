@@ -10,11 +10,10 @@ import useStore from "@/app/store/useStore";
 
 
 const Modal = () => {
-  const { isModalOpen, modalType, closeModal, activeBoard} = useStore(state => ({
+  const { isModalOpen, modalType, closeModal} = useStore(state => ({
     isModalOpen: state.isModalOpen,
     modalType: state.modalType,
     closeModal: state.closeModal,
-    activeBoard: state.activeBoard
   }));
 
 
