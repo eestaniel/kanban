@@ -1,14 +1,15 @@
 import './popover.css'
 import useStore from "@/app/store/useStore";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
-const Popover = ({isPopoverOpen, setIsPopoverOpen}) => {
+const Popover = ({isPopoverOpen, setIsPopoverOpen, popoverType}) => {
 
   const popoverRef = useRef(null);
 
   const { activateModal } = useStore(state => ({
     activateModal: state.activateModal
   }));
+
 
   const handleEditBoard = () => {
     setIsPopoverOpen(false);
@@ -34,17 +35,27 @@ const Popover = ({isPopoverOpen, setIsPopoverOpen}) => {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isPopoverOpen]);
+  }, [isPopoverOpen, setIsPopoverOpen]);
 
 
 
   return (
     <div className="popover-container">
       {isPopoverOpen && (
-        <div className="popover-ref-container" ref={popoverRef}>
+        <div className={`popover-ref-container ${popoverType==='nav-task' && 'popover-task'}`} ref={popoverRef}>
           <div className="popover-content">
-            <div className="popover-item" onClick={handleEditBoard}>Edit Board</div>
-            <div className="popover-item popover-delete" onClick={handleDeleteBoard}>Delete Board</div>
+            {popoverType === 'nav-menu' && (
+              <ul className="popover-menu">
+                <li className="popover-menu-item" onClick={handleEditBoard}>Edit Board</li>
+                <li className="popover-menu-item popover-delete" onClick={handleDeleteBoard}>Delete Board</li>
+              </ul>
+            )}
+            {popoverType === 'nav-task' && (
+              <ul className="popover-menu">
+                <li className="popover-menu-item" onClick={handleEditBoard}>Edit Board</li>
+                <li className="popover-menu-item popover-delete" onClick={handleDeleteBoard}>Delete Board</li>
+              </ul>
+            )}
           </div>
         </div>
       )}

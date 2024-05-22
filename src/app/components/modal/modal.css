@@ -10,8 +10,8 @@
     align-items: start;
     backdrop-filter: blur(1px);
     padding-top: 5rem;
-    overflow-y: auto;
     padding-bottom: 3rem;
+    overflow-y: auto;
 }
 
 .modal-content {
@@ -24,7 +24,7 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     z-index: 10;
     gap: 1.25rem;
-    overflow-y: auto;
+
 }
 
 #board-select-header {

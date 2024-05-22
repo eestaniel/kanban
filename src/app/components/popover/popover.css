@@ -11,7 +11,13 @@
     right: 0;
 }
 
-.popover-item {
+.popover-menu {
+    display: flex;
+    flex-direction: column;
+    list-style-type: none;
+}
+
+.popover-menu-item {
     &.popover-delete {
         color: var(--red);
     }
@@ -24,8 +30,8 @@
             color: var(--red-hover);
         }
     }
+}
 
-
-
-
+.popover-task {
+    right: 0;
 }
