@@ -1,71 +1,130 @@
 .textfield-container {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 
-  & label {
-    color: var(--textfield-label);
-  }
-
-  & input,
-  textarea,
-  select {
-    background-color: var(--textfield-bg);
-    color: var(--textfield-fc);
-    width: 100%;
-    border: 1px solid var(--textfield-stroke-idle-active);
-    border-radius: 0.25rem;
-    padding: 0.5rem 2rem 0.5rem 1rem;
-
-    &::placeholder {
-      color: hsla(0, 0%, 100%, 25%);
+    & label {
+        color: var(--textfield-label);
     }
-  }
 
-  & textarea {
-    height: 7rem;
-    resize: none;
-  }
+    & input,
+    textarea,
+    select {
+        background-color: var(--textfield-bg);
+        color: var(--textfield-fc);
+        width: 100%;
+        border: 1px solid var(--textfield-stroke-idle-active);
+        border-radius: 0.25rem;
+        padding: 0.5rem 2rem 0.5rem 1rem;
 
-  & select {
-    color: var(--subtask-chkbox-fc);
-  }
+        &::placeholder {
+            color: hsla(0, 0%, 100%, 25%);
+        }
+    }
+
+    & textarea {
+        height: 7rem;
+        resize: none;
+    }
+
+    & select {
+        color: var(--subtask-chkbox-fc);
+    }
 }
 
 .input-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-  flex-direction: row;
-  gap: 1rem;
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 1rem;
 
-  & .error-message {
-    position: absolute;
-    right: 1rem;
-    color: var(--red);
-  }
+    & .error-message {
+        position: absolute;
+        right: 1rem;
+        color: var(--red);
+    }
 
-  & input.error {
-    border-color: var(--red);
-  }
+    & input.error {
+        border-color: var(--red);
+    }
 }
 
 .shorter-field {
-  & .error-message {
-    right: 3rem;
-  }
+    & .error-message {
+        right: 3rem;
+    }
 }
 
 .checkbox-container {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
+    width: 16px;
 
-  & input {
-    min-width: 1rem;
-  }
+
+    & input {
+        width: 16px;
+    }
 }
 
 .label.is-checked {
-  color: var(--subtask-chkbox-box-stroke);
-  text-decoration: line-through;
+    color: var(--subtask-chkbox-box-stroke);
+    text-decoration: line-through;
+}
+
+.checkbox-container {
+    display: flex;
+    position: relative;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border: 1px solid hsla(216, 15%, 57%, 25%);
+    border-radius: 0.063rem;
+}
+
+/* Hide the browser's default checkbox */
+.checkbox-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+    height: 1rem;
+    width: 1rem;
+    background-color: var(--subtask-chkbox-idle-bg);
+}
+
+.checkbox-container input:checked ~ .checkmark {
+    background-color: var(--main-purple);
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show the checkmark when checked */
+.checkbox-container input:checked ~ .checkmark:after {
+    display: block;
+}
+
+/* Style the checkmark/indicator */
+.checkbox-container .checkmark:after {
+    left: 0.25rem;
+    top: 0.125rem;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
 }

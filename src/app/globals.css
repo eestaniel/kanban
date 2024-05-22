@@ -75,7 +75,7 @@
 
     /* Subtask Checkbox */
     /* background */
-    --subtask-chkbox-idle-bg: var(--light-grey);
+    --subtask-chkbox-idle-bg: var(--white);
     --subtask-chkbox-hoverd-bg: hsla(242, 48%, 58%, 25%);
     --subtask-chkbox-completed-bg: var(--light-grey);
     /* font color */
@@ -115,7 +115,7 @@
 
         /* Subtask Checkbox */
         /* background */
-        --subtask-chkbox-idle-bg: var(--very-dark-grey);
+        --subtask-chkbox-idle-bg: var(--dark-grey);
         --subtask-chkbox-completed-bg: var(--very-dark-grey);
         --subtask-chkbox-box-stroke: hsla(216, 15%, 57%, 25%);
         /* font color */

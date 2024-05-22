@@ -68,6 +68,7 @@ const CustomTextField = memo(({ label, name, placeholder, value, onChange, isLis
               onChange={onChange}
               disabled={disabled}
             />
+            <span className="checkmark"></span>
             <label htmlFor={id} className={`body-l ${error ? 'error' : ''}`}>
               {placeholder}
             </label>
