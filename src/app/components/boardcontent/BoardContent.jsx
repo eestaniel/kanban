@@ -15,6 +15,11 @@ const BoardContent = ({boardCount, activateModal}) => {
   }, [activeBoard]);
 
 
+  const handletaskCompletions = (task) => {
+    const completedSubtasks = task.subtasks.filter((subtask) => subtask.isCompleted);
+    return completedSubtasks.length;
+  }
+
   const handleTaskClick = useCallback((task) => {
       activateModal('view-task', task);
     }, [activateModal]);
@@ -64,7 +69,7 @@ const BoardContent = ({boardCount, activateModal}) => {
 
                   {/*TODO: calculate how many subtasks completed and subtask length*/}
                   <p
-                    className="subtask-amount body-m">{0} of {task.subtasks.length} {column.tasks.length > 1 ? 'subtasks' : 'subtask'}</p>
+                    className="subtask-amount body-m">{handletaskCompletions(task)} of {task.subtasks.length} {column.tasks.length > 1 ? 'subtasks' : 'subtask'}</p>
                 </div>
               ))}
             </div>
