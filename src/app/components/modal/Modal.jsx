@@ -23,7 +23,8 @@ const Modal = () => {
     'new-board': <BoardForm/>,
     'new-task': <TaskForm />,
     'view-task': <ViewTask />,
-    'edit-board': <BoardForm mode='edit' initialData={activeBoard}/>,
+    'edit-board': <BoardForm mode='edit'/>,
+    'edit-task': <TaskForm mode='edit'/>,
     'delete': <Delete type={'board'}
     />
   }

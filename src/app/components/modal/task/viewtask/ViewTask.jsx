@@ -18,7 +18,7 @@ const ViewTask = () => {
 
   useEffect(() => {
     setNewTask(initialData);
-  }, [initialData]);
+  }, [initialData, newTask, setNewTask]);
 
 
   const handleOnCheck = useCallback((subtask) => {
@@ -64,7 +64,7 @@ const ViewTask = () => {
             <circle cx="2.308" cy="17.692" r="2.308"/>
           </g>
         </svg>
-        <Popover isPopoverOpen={isPopoverOpen} setIsPopoverOpen={setIsPopoverOpen} popoverType={'nav-task'}/>
+        <Popover isPopoverOpen={isPopoverOpen} setIsPopoverOpen={setIsPopoverOpen} popoverType={'nav-task'} task={initialData}/>
       </div>
       <p className="task-description body-l">{newTask.description}</p>
       <div className="subtask-group">

@@ -36,7 +36,7 @@ import useStore from "@/app/store/useStore";
  * @function removeSubtask - Removes a subtask from the task.
  * @function handleSubmitTask - Handles form submission, validates fields, and sets error messages.
  */
-const TaskForm = ({mode, initialData}) => {
+const TaskForm = ({mode}) => {
   const [taskData, setTaskData] = useState({
     name: '',
     name_error: '',
@@ -46,18 +46,21 @@ const TaskForm = ({mode, initialData}) => {
     status: ''
   });
 
-  const {activeBoard, createTask, closeModal} = useStore(state => ({
+  const {activeBoard, createTask, closeModal, initialData} = useStore(state => ({
     activeBoard: state.activeBoard,
     createTask: state.createTask,
-    closeModal: state.closeModal
+    closeModal: state.closeModal,
+    initialData: state.initialData
   }));
 
   const {validateInput} = useInputValidator();
 
   // If mode is edit and initial data exists, set the task data to the initial data
   useEffect(() => {
+    console.log(initialData)
     if (mode === 'edit' && initialData) {
       setTaskData(initialData);
+      console.log('initialData:', initialData);
     } else if (activeBoard && activeBoard.columns.length > 0) {
       // set default status to the first column of the active board
       setTaskData(prevData => ({

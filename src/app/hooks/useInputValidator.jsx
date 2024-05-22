@@ -1,57 +1,60 @@
-import {useCallback} from "react";
+import { useCallback } from "react";
 import useStore from "@/app/store/useStore";
+import DOMPurify from 'dompurify';
 
 const useInputValidator = () => {
-
-  const {boards} = useStore((state) => ({
+  const { boards } = useStore((state) => ({
     boards: state.boards,
   }));
 
-
   // General validation function for handling common logic
-  const validateCommon = (newValue, maxLength, allowedCharsRegex, fieldName) => {
-    if (!newValue.trim()) {
+  const validateCommon = (newValue, maxLength, fieldName, isDescription=false) => {
+    if (!isDescription && !newValue.trim()) {
       return `${fieldName} cannot be empty`;
     }
     if (newValue.length > maxLength) {
       return `${fieldName} cannot exceed ${maxLength} characters`;
     }
-    if (!allowedCharsRegex.test(newValue)) {
-      return `${fieldName} can only contain letters and numbers`;
-    }
     return ''; // No error
   };
 
-  const validateInput = useCallback((newValue, inputType, mode='') => {
+  // Sanitize input to prevent XSS
+  const sanitizeInput = (input) => {
+    return DOMPurify.sanitize(input);
+  };
+
+  const validateInput = useCallback((newValue, inputType, mode = '') => {
+    // Sanitize the input
+    const sanitizedValue = sanitizeInput(newValue);
+
     switch (inputType) {
-      // Validate column name
       case 'column-name':
       case 'task-name':
-        return validateCommon(newValue, 16, /^[a-zA-Z0-9\s]*$/, 'Column name');
+        return validateCommon(sanitizedValue, 256, 'Column name');
 
-      // Validate board name
+      case 'task-description':
+        return validateCommon(sanitizedValue, 1024, 'Description', true);
+
       case 'board-name':
-
-        // check for empty string, length, and allowed characters using validateCommon
-        let boardNameError = validateCommon(newValue, 16, /^[a-zA-Z0-9\s]*$/, 'Board name');
+        let boardNameError = validateCommon(sanitizedValue, 256, 'Board name');
         if (boardNameError) {
           return boardNameError;
         }
 
-          // check if board name already exists
-      if (mode !== 'edit') {
-        const boardNames = boards.map((board) => board.name.toLowerCase());
-        if (boardNames.includes(newValue.toLowerCase())) {
-          return 'Board name already exists';
+        if (mode !== 'edit') {
+          const boardNames = boards.map((board) => board.name.toLowerCase());
+          if (boardNames.includes(sanitizedValue.toLowerCase())) {
+            return 'Board name already exists';
+          }
         }
-      }
         return '';
+
       default:
-        return newValue.trim() === '' ? 'Field cannot be empty' : '';
+        return sanitizedValue.trim() === '' ? 'Field cannot be empty' : '';
     }
   }, [boards]);
 
-  return {validateInput};
+  return { validateInput };
 };
 
 export default useInputValidator;
