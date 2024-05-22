@@ -2,8 +2,7 @@ body {
     background-color: var(--bg-color);
     display: flex;
     flex-direction: column;
-
-    overflow-y: hidden;
+    overflow: auto;
 }
 
 .test-buttons {
@@ -70,9 +69,10 @@ body {
     margin-inline: 1rem;
     align-items: center;
 }
+
 #new-column-btn {
-        max-width: 174px;
-    }
+    max-width: 174px;
+}
 
 .dashboard-header {
     color: var(--medium-grey);
