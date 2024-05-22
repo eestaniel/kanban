@@ -36,7 +36,7 @@ const BoardForm = ({ mode, initialData }) => {
 
   const [errors, setErrors] = useState({ boardName: '', columns: {} });
 
-  const { createBoard, closeModal, createUniqueId, updateBoard } = useStore();
+  const { createBoard, closeModal, updateBoard } = useStore();
 
   const { validateInput } = useInputValidator();
 
