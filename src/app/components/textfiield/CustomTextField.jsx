@@ -29,7 +29,11 @@ import { memo } from 'react';
 const CustomTextField = memo(({ label, name, placeholder, value, onChange, isList, isListOne, onRemove, error, id, multiline, select, options, checkbox, checked, disabled, classname }) => {
   return (
     <div className={`textfield-container ${classname}`}>
-      {!isList && <label className="label heading-s">{label}</label>}
+      {!isList && (
+        <label className={`label heading-s ${checkbox && checked ? 'is-checked' : ''}`}>
+          {label}
+        </label>
+      )}
       <div className={`input-wrapper ${(isList || isListOne) ? 'shorter-field' : ''}`}>
         {select ? (
           <select

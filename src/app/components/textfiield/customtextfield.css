@@ -1,68 +1,71 @@
 .textfield-container {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 
-    & label {
-        color: var(--textfield-label);
+  & label {
+    color: var(--textfield-label);
+  }
 
+  & input,
+  textarea,
+  select {
+    background-color: var(--textfield-bg);
+    color: var(--textfield-fc);
+    width: 100%;
+    border: 1px solid var(--textfield-stroke-idle-active);
+    border-radius: 0.25rem;
+    padding: 0.5rem 2rem 0.5rem 1rem;
+
+    &::placeholder {
+      color: hsla(0, 0%, 100%, 25%);
     }
+  }
 
-    & input,textarea, select {
-        background-color: var(--textfield-bg);
-        color: var(--textfield-fc);
-        width: 100%;
-        border: 1px solid var(--textfield-stroke-idle-active);
-        border-radius: 0.25rem;
-        /* Make room for the error icon */
-        padding: 0.5rem 2rem 0.5rem 1rem;
+  & textarea {
+    height: 7rem;
+    resize: none;
+  }
 
-
-        &::placeholder {
-            color: hsla(0, 0%, 100%, 25%);
-        }
-    }
-
-    & textarea {
-        height: 7rem;
-        resize: none;
-    }
-
-    & select {
-        color: var(--subtask-chkbox-fc);
-
-    }
+  & select {
+    color: var(--subtask-chkbox-fc);
+  }
 }
 
-
-
 .input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  gap: 1rem;
 
-    position: relative;
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-    gap: 1rem;
+  & .error-message {
+    position: absolute;
+    right: 1rem;
+    color: var(--red);
+  }
 
-    & .error-message {
-        position: absolute;
-        right: 1rem;
-        color: var(--red);
-    }
-
-    & input.error {
-        border-color: var(--red);
-    }
+  & input.error {
+    border-color: var(--red);
+  }
 }
 
 .shorter-field {
-    & .error-message {
-        right: 3rem;
-    }
+  & .error-message {
+    right: 3rem;
+  }
 }
 
 .checkbox-container {
-    & input {
-        min-width: 1rem;
-    }
+  display: flex;
+  align-items: center;
+
+  & input {
+    min-width: 1rem;
+  }
+}
+
+.label.is-checked {
+  color: var(--subtask-chkbox-box-stroke);
+  text-decoration: line-through;
 }
