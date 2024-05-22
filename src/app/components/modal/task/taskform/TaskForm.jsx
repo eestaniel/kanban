@@ -103,7 +103,7 @@ const TaskForm = ({mode, initialData}) => {
       ...prevData,
       subtasks: prevData.subtasks.map((subtask, i) => {
         if (i === index) {
-          return {...subtask, name: newTitle, error: validateInput(newTitle, 'Subtask Title')};
+          return {...subtask, name: newTitle, error: validateInput(newTitle, 'task-name')};
         }
         return subtask;
       })

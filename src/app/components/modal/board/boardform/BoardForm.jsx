@@ -47,15 +47,27 @@ const BoardForm = ({ mode, initialData }) => {
   }, [mode, initialData]);
 
   const validateForm = () => {
-    const boardNameError = validateInput(boardData.name, 'boardName');
+    const boardNameError = validateInput(boardData.name, 'board-name');
     const columnErrors = {};
 
+    // validate column names
     boardData.columns.forEach((column, index) => {
-      const error = validateInput(column.name, 'column');
+      const error = validateInput(column.name, 'column-name');
       if (error) {
         columnErrors[index] = error;
       }
     });
+
+    // validate if columns are unique
+    const columnNames = boardData.columns.map(column => column.name.toLowerCase());
+    const uniqueColumns = new Set(columnNames);
+    if (columnNames.length !== uniqueColumns.size) {
+      boardData.columns.forEach((column, index) => {
+        if (columnNames.indexOf(column.name.toLowerCase()) !== index) {
+          columnErrors[index] = 'Column names must be unique';
+        }
+      });
+    }
 
     setErrors({
       boardName: boardNameError,
@@ -72,9 +84,9 @@ const BoardForm = ({ mode, initialData }) => {
       };
 
       if (mode === 'edit') {
-        /*updateBoard(newBoard);*/
+        updateBoard(newBoard);
       } else {
-        createBoard(newBoard)
+        createBoard(newBoard);
       }
       closeModal();
     }
@@ -83,15 +95,35 @@ const BoardForm = ({ mode, initialData }) => {
   const handleInputChange = useCallback((index, newName) => {
     const newColumns = [...boardData.columns];
     newColumns[index] = { ...newColumns[index], name: newName };
+
+    const columnNames = newColumns.map(column => column.name.toLowerCase());
+    const uniqueColumns = new Set(columnNames);
+    const columnErrors = { ...errors.columns };
+
+    // Validate the specific column being changed
+    const error = validateInput(newName, 'column-name');
+    if (error) {
+      columnErrors[index] = error;
+    } else {
+      delete columnErrors[index];
+    }
+
+    // Check for uniqueness errors for the specific column
+    if (columnNames.length !== uniqueColumns.size) {
+      newColumns.forEach((column, i) => {
+        if (i !== index && column.name.toLowerCase() === newName.toLowerCase()) {
+          columnErrors[i] = 'Column names must be unique';
+          columnErrors[index] = 'Column names must be unique';
+        }
+      });
+    }
+
     setBoardData({ ...boardData, columns: newColumns });
     setErrors(prevErrors => ({
       ...prevErrors,
-      columns: {
-        ...prevErrors.columns,
-        [index]: validateInput(newName, 'column')
-      }
+      columns: columnErrors
     }));
-  }, [boardData, validateInput]);
+  }, [boardData, errors.columns, validateInput]);
 
   const handleBoardNameChange = (newName) => {
     setBoardData({ ...boardData, name: newName });
