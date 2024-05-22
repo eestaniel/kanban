@@ -65,7 +65,7 @@ const useStore = create((set, get) => ({
 
   updateBoard: (updatedBoard) => set((state) => ({
     boards: state.boards.map((board) =>
-      board.board_id === updatedBoard.board_id ? updatedBoard : board
+      board.name === updatedBoard.name ? updatedBoard : board
     ),
     activeBoard: updatedBoard,
   })),
