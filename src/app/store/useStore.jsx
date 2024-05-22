@@ -38,7 +38,7 @@ const useStore = create((set, get) => ({
   boards: [],
   selectedBoard: null,
   activeBoard: null,
-  isDarkMode: false,
+  isDarkMode: true,
   isModalOpen: false,
   modalType: '',
   initialData: {},
@@ -53,6 +53,17 @@ const useStore = create((set, get) => ({
   },
 
   // Board actions
+
+  /**
+   * Initializes the board state with the provided data and sets the first board as active.
+   * @param {Array} boardData - List of board objects to initialize the state.
+   * @returns {void}
+   * */
+  initializeBoard: (boardData) => set(() => ({
+    boards: boardData,
+    activeBoard: boardData.length > 0 ? boardData[0] : null,
+  })),
+
 
   /**
    * Adds a new board to the state and sets it as the active board.
