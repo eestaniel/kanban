@@ -47,7 +47,7 @@ const BoardForm = ({ mode, initialData }) => {
   }, [mode, initialData]);
 
   const validateForm = () => {
-    const boardNameError = validateInput(boardData.name, 'board-name');
+    const boardNameError = validateInput(boardData.name, 'board-name', mode );
     const columnErrors = {};
 
     // validate column names

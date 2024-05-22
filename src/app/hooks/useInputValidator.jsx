@@ -22,7 +22,7 @@ const useInputValidator = () => {
     return ''; // No error
   };
 
-  const validateInput = useCallback((newValue, inputType) => {
+  const validateInput = useCallback((newValue, inputType, mode='') => {
     switch (inputType) {
       // Validate column name
       case 'column-name':
@@ -39,9 +39,12 @@ const useInputValidator = () => {
         }
 
           // check if board name already exists
-        if (boards.some(board => board.name.toLowerCase() === newValue.toLowerCase())) {
+      if (mode !== 'edit') {
+        const boardNames = boards.map((board) => board.name.toLowerCase());
+        if (boardNames.includes(newValue.toLowerCase())) {
           return 'Board name already exists';
         }
+      }
         return '';
       default:
         return newValue.trim() === '' ? 'Field cannot be empty' : '';
