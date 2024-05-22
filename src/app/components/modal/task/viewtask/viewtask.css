@@ -1,3 +1,8 @@
+.task-container {
+    position: relative;
+    overflow: visible;
+
+}
 
 
 .task-description {
@@ -7,8 +12,8 @@
 .subtask-header {
     color: var(--subtask-chkbox-fc);
 
-}
 
+}
 
 .textfield-container {
     display: flex;
@@ -37,6 +42,26 @@
     &:hover {
         cursor: pointer;
         background-color: hsla(242, 48%, 58%, 25%);
+    }
+}
+
+.task-header-group {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    & .task-header {
+        display: flex;
+        flex-grow: 1;
+    }
+
+    & svg {
+        min-width: fit-content;
+    }
+
+    & svg:hover {
+        cursor: pointer;
+        scale: 115%;
     }
 }
 

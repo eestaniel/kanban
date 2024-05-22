@@ -1,11 +1,10 @@
 import './taskform.css';
 import CustomTextField from "@/app/components/textfiield/CustomTextField";
 import CustomButton from "@/app/components/buttons/CustomButton";
-import {useState, useEffect, useCallback} from "react";
+import { useState, useEffect, useCallback } from "react";
 import useInputValidator from "@/app/hooks/useInputValidator";
 import Menu from "@/app/components/menu/Menu";
 import useStore from "@/app/store/useStore";
-
 
 /**
  * TaskForm Component
@@ -15,29 +14,10 @@ import useStore from "@/app/store/useStore";
  *
  * Props:
  * @param {string} mode - Determines if the form is in 'create' or 'edit' mode.
- * @param {Object} initialData - The initial data for the task, used in edit mode.
- *
- * State:
- * @typedef {Object} TaskData
- * @property {string} task_id - The unique identifier for the task.
- * @property {Object} task_data - The data object for the task.
- * @property {string} task_data.name - The name of the task.
- * @property {string} task_data.description - The description of the task.
- * @property {string} task_data.column_id - The column ID where the task belongs.
- * @property {Array} task_data.subtasks - The list of subtasks.
- * @property {Array} task_data.status - The status options for the task.
- * @property {string} task_data.name_error - The error message for task name validation.
- * @property {string} task_data.description_error - The error message for task description validation.
- *
- * Functions:
- * @function handleOnChange - Handles input changes for task fields and validates them.
- * @function addSubtask - Adds a new subtask to the task.
- * @function handleSubtaskChange - Handles input changes for subtasks and validates them.
- * @function removeSubtask - Removes a subtask from the task.
- * @function handleSubmitTask - Handles form submission, validates fields, and sets error messages.
  */
-const TaskForm = ({mode, initialData}) => {
+const TaskForm = ({ mode }) => {
   const [taskData, setTaskData] = useState({
+    id: '',
     name: '',
     name_error: '',
     description: '',
@@ -46,13 +26,15 @@ const TaskForm = ({mode, initialData}) => {
     status: ''
   });
 
-  const {activeBoard, createTask, closeModal} = useStore(state => ({
+  const { activeBoard, createTask, closeModal, initialData, updateTask } = useStore(state => ({
     activeBoard: state.activeBoard,
     createTask: state.createTask,
-    closeModal: state.closeModal
+    closeModal: state.closeModal,
+    initialData: state.initialData,
+    updateTask: state.updateTask
   }));
 
-  const {validateInput} = useInputValidator();
+  const { validateInput } = useInputValidator();
 
   // If mode is edit and initial data exists, set the task data to the initial data
   useEffect(() => {
@@ -72,7 +54,7 @@ const TaskForm = ({mode, initialData}) => {
    * @param {Object} e - The event object containing the input data.
    */
   const handleOnChange = useCallback((e) => {
-    const {name, value} = e.target;
+    const { name, value } = e.target;
     setTaskData(prevState => ({
       ...prevState,
       [name]: value
@@ -87,7 +69,7 @@ const TaskForm = ({mode, initialData}) => {
     e.preventDefault();
     setTaskData(prevData => ({
       ...prevData,
-      subtasks: [...prevData.subtasks, {name: '', isCompleted: false}]
+      subtasks: [...prevData.subtasks, { name: '', isCompleted: false }]
     }));
   };
 
@@ -101,7 +83,7 @@ const TaskForm = ({mode, initialData}) => {
       ...prevData,
       subtasks: prevData.subtasks.map((subtask, i) => {
         if (i === index) {
-          return {...subtask, name: newTitle, error: validateInput(newTitle, 'task-name')};
+          return { ...subtask, name: newTitle, error: validateInput(newTitle, 'task-name') };
         }
         return subtask;
       })
@@ -127,7 +109,7 @@ const TaskForm = ({mode, initialData}) => {
     e.preventDefault();
 
     let hasError = false;
-    const updatedTaskData = {...taskData};
+    const updatedTaskData = { ...taskData };
 
     // Validate task name
     updatedTaskData.name_error = validateInput(taskData.name, 'task-name');
@@ -141,7 +123,7 @@ const TaskForm = ({mode, initialData}) => {
     updatedTaskData.subtasks = updatedTaskData.subtasks.map((subtask) => {
       const subtaskError = validateInput(subtask.name, 'task-name');
       if (subtaskError) hasError = true;
-      return {...subtask, error: subtaskError};
+      return { ...subtask, error: subtaskError };
     });
 
     if (hasError) {
@@ -154,8 +136,13 @@ const TaskForm = ({mode, initialData}) => {
       const newTask = {
         ...taskData,
       };
-      console.log('Submitting task:', newTask);
-      createTask(newTask);
+      if (mode === 'edit') {
+        // Update the task
+        updateTask(newTask, 'edit');
+      } else {
+        // Create a new task
+        createTask(newTask);
+      }
       closeModal();
     }
   };
@@ -209,7 +196,7 @@ const TaskForm = ({mode, initialData}) => {
           onClick={addSubtask}
         />
 
-        <Menu newTask={taskData} handleSelectStatus={setTaskData}/>
+        <Menu newTask={taskData} handleSelectStatus={setTaskData} />
 
         <CustomButton
           label={`${mode !== 'edit' ? 'Create Task' : 'Save Changes'}`}

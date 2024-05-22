@@ -5,14 +5,14 @@ import {useCallback, useEffect} from "react";
 import './boardcontent.css';
 
 const BoardContent = ({boardCount, activateModal}) => {
-  const {activeBoard} = useStore((state) => ({
+  const {activeBoard, boards} = useStore((state) => ({
     activeBoard: state.activeBoard,
+    boards: state.boards,
   }));
 
 
   useEffect(() => {
-    console.log('active board updated', activeBoard);
-  }, [activeBoard]);
+  }, [activeBoard, boards]);
 
 
   const handletaskCompletions = (task) => {

@@ -10,11 +10,10 @@ import useStore from "@/app/store/useStore";
 
 
 const Modal = () => {
-  const { isModalOpen, modalType, closeModal, activeBoard} = useStore(state => ({
+  const { isModalOpen, modalType, closeModal} = useStore(state => ({
     isModalOpen: state.isModalOpen,
     modalType: state.modalType,
     closeModal: state.closeModal,
-    activeBoard: state.activeBoard
   }));
 
 
@@ -23,7 +22,8 @@ const Modal = () => {
     'new-board': <BoardForm/>,
     'new-task': <TaskForm />,
     'view-task': <ViewTask />,
-    'edit-board': <BoardForm mode='edit' initialData={activeBoard}/>,
+    'edit-board': <BoardForm mode='edit'/>,
+    'edit-task': <TaskForm mode='edit'/>,
     'delete': <Delete type={'board'}
     />
   }

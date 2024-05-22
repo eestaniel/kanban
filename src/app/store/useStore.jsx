@@ -44,81 +44,52 @@ const useStore = create((set, get) => ({
   initialData: {},
 
   // Unique ID generator
-  createUniqueId: (object_key) => {
+  createUniqueId: (objectKey) => {
     let newId = generateId();
-    while (Object.keys(object_key).includes(newId)) {
+    while (Object.keys(objectKey).includes(newId)) {
       newId = generateId();
     }
     return newId;
   },
 
   // Board actions
-
-  /**
-   * Initializes the board state with the provided data and sets the first board as active.
-   * @param {Array} boardData - List of board objects to initialize the state.
-   * @returns {void}
-   * */
   initializeBoard: (boardData) => set(() => ({
     boards: boardData,
     activeBoard: boardData.length > 0 ? boardData[0] : null,
   })),
 
-
-  /**
-   * Adds a new board to the state and sets it as the active board.
-   * @param {Object} newBoard - The new board object to be added.
-   */
   createBoard: (newBoard) => set((state) => ({
     boards: [...state.boards, newBoard],
     activeBoard: newBoard,
   })),
 
-  /**
-   * Updates an existing board in the state.
-   * @param {Object} updatedBoard - The board object with updated data.
-   */
   updateBoard: (updatedBoard) => set((state) => ({
     boards: state.boards.map((board) =>
-      board.board_id === updatedBoard.board_id ? updatedBoard : board
+      board.name === updatedBoard.name ? updatedBoard : board
     ),
     activeBoard: updatedBoard,
   })),
 
-  /**
-   * Sets the selected board for editing.
-   * @param {Object} board - The board object to be selected for editing.
-   */
   selectBoardToEdit: (board) => set(() => ({
     selectedBoard: board,
   })),
 
-  /**
-   * Sets the active board.
-   * @param {Object} board - The board object to be set as active.
-   */
   changeActiveBoard: (board) => set(() => ({
     activeBoard: board,
-    // reset initialData
     initialData: {},
   })),
 
-  /**
-   * Deletes a board from the state and updates the active board.
-   * @param {string} boardId - The ID of the board to be deleted.
-   */
   deleteBoard: (boardId) => set((state) => {
-    const updatedBoards = state.boards.filter((board) => board.board_id !== boardId);
+    const updatedBoards = state.boards.filter((board) => board.name !== boardId);
     return {
       boards: updatedBoards,
       activeBoard: updatedBoards.length > 0 ? updatedBoards[0] : null,
     };
   }),
 
-  /**
-   * Adds a new task to the appropriate column in the active board and updates the boards array.
-   * @param {Object} newTask - The new task object to be added.
-   */
+  getBoardAmount: () => get().boards.length,
+
+  // Task actions
   createTask: (newTask) => set((state) => {
     const updatedActiveBoard = {
       ...state.activeBoard,
@@ -132,7 +103,6 @@ const useStore = create((set, get) => ({
         return column;
       }),
     };
-    // Update the active board and the boards array
     return {
       activeBoard: updatedActiveBoard,
       boards: state.boards.map((board) =>
@@ -141,93 +111,81 @@ const useStore = create((set, get) => ({
     };
   }),
 
-  /**
-   * Updates the initialData task.
-   * @param {Object} updatedTask - The task object with updated data.
-   * @param {string} type - The type of update to be performed (checklist or status).
-   */
   updateTask: (updatedTask, type) => set((state) => {
+    let updatedActiveBoard;
 
-    // if type is checklist, update the checklist
-    if (type === 'checklist') {
-      const updatedActiveBoard = {
-        ...state.activeBoard,
-        columns: state.activeBoard.columns.map((column) => ({
-          ...column,
-          tasks: column.tasks.map((task) =>
-            task.name === updatedTask.name ? updatedTask : task
-          ),
-        })),
+    switch (type) {
+      case 'checklist':
+        updatedActiveBoard = {
+          ...state.activeBoard,
+          columns: state.activeBoard.columns.map((column) => ({
+            ...column,
+            tasks: column.tasks.map((task) =>
+              task.name === updatedTask.name ? updatedTask : task
+            ),
+          })),
+        };
+        break;
 
-      };
-      return {
-        activeBoard: updatedActiveBoard,
-        boards: state.boards.map((board) =>
-          board.name === updatedActiveBoard.name ? updatedActiveBoard : board
-        ),
-        initialData: updatedTask,
-      };
-    } //if type is status, move the task to the new status column
-    else if (type === 'status') {
-      const updatedActiveBoard = {
-        ...state.activeBoard,
-        columns: state.activeBoard.columns.map((column) => {
-          if (column.name === updatedTask.status) {
+      case 'status':
+        updatedActiveBoard = {
+          ...state.activeBoard,
+          columns: state.activeBoard.columns.map((column) => {
+            if (column.name === updatedTask.status) {
+              return {
+                ...column,
+                tasks: [...column.tasks, updatedTask],
+              };
+            }
             return {
               ...column,
-              tasks: [...column.tasks, updatedTask],
+              tasks: column.tasks.filter((task) => task.name !== updatedTask.name),
             };
-          }
-          return {
+          }),
+        };
+        break;
+
+      case 'edit':
+        // Replace the old task with the updated task
+        updatedActiveBoard = {
+          ...state.activeBoard,
+          columns: state.activeBoard.columns.map((column) => ({
             ...column,
-            tasks: column.tasks.filter((task) => task.name !== updatedTask.name),
-          };
-        }),
-      };
-      return {
-        activeBoard: updatedActiveBoard,
-        boards: state.boards.map((board) =>
-          board.name === updatedActiveBoard.name ? updatedActiveBoard : board
-        ),
-        initialData: updatedTask,
-      };
+            tasks: column.tasks.map((task) =>
+              task.name === state.initialData.name ? updatedTask : task
+            ),
+          })),
+        }
+        break;
+
+
+      default:
+        return state;
     }
 
+    return {
 
+      activeBoard: updatedActiveBoard,
+      boards: state.boards.map((board) =>
+        board.name === updatedActiveBoard.name ? updatedActiveBoard : board
+      ),
+
+      initialData: updatedTask,
+    };
   }),
 
-
-  /**
-   * Returns the number of boards in the state.
-   * @returns {number} The number of boards.
-   */
-  getBoardAmount: () => get().boards.length,
-
   // Dark mode actions
-
-  /**
-   * Toggles the dark mode state.
-   */
   toggleDarkMode: () => set((state) => ({
     isDarkMode: !state.isDarkMode,
   })),
 
   // Modal actions
-
-  /**
-   * Activates a modal with the specified type.
-   * @param {string} modalType - The type of modal to be activated.
-   * @param {Object} initialData - The initial data for the modal.
-   */
   activateModal: (modalType, initialData) => set(() => ({
     isModalOpen: true,
     modalType,
     initialData,
   })),
 
-  /**
-   * Closes the modal.
-   */
   closeModal: () => set(() => ({
     isModalOpen: false,
     modalType: '',

@@ -2,6 +2,7 @@ nav {
     height: fit-content;
     padding: 1rem;
     background-color: var(--bg-color);
+
 }
 
 .nav-container {
@@ -66,4 +67,11 @@ nav {
 
 .nav-header {
     color: var(--textfield-fc)
+}
+
+.popover-trigger {
+    &:hover {
+        cursor: pointer;
+        scale: 115%;
+    }
 }

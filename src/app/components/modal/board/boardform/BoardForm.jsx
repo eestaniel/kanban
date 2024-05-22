@@ -28,7 +28,7 @@ import useStore from "@/app/store/useStore";
  * @type {BoardData} boardData - State object containing the board's data.
  * @type {Errors} errors - State object containing error messages for board and columns.
  */
-const BoardForm = ({ mode, initialData }) => {
+const BoardForm = ({ mode }) => {
   const [boardData, setBoardData] = useState({
     name: '',
     columns: [],
@@ -36,18 +36,27 @@ const BoardForm = ({ mode, initialData }) => {
 
   const [errors, setErrors] = useState({ boardName: '', columns: {} });
 
-  const { createBoard, closeModal, createUniqueId, updateBoard } = useStore();
+  const { createBoard, closeModal, updateBoard, activeBoard } = useStore(state => ({
+    createBoard: state.createBoard,
+    closeModal: state.closeModal,
+    updateBoard: state.updateBoard,
+    activeBoard: state.activeBoard
+  }));
+
 
   const { validateInput } = useInputValidator();
 
   useEffect(() => {
-    if (mode === 'edit' && initialData) {
-      setBoardData(initialData);
+    if (mode === 'edit') {
+      setBoardData({
+        name: activeBoard.name,
+        columns: activeBoard.columns
+      });
     }
-  }, [mode, initialData]);
+  }, [mode, activeBoard]);
 
   const validateForm = () => {
-    const boardNameError = validateInput(boardData.name, 'board-name');
+    const boardNameError = validateInput(boardData.name, 'board-name', mode === 'edit' ? 'edit' : '');
     const columnErrors = {};
 
     // validate column names

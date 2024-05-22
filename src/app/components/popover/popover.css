@@ -1,14 +1,9 @@
-.popover-container {
-
-}
-
 .popover-ref-container {
     display: flex;
     flex-direction: column;
-    max-width: 192px;
-    width: 100%;
+    min-width: 192px;
     position: absolute;
-    background-color: var(--bg-color);
+    background-color: var(--bg-content);
     padding: 1rem;
     border-radius: 0.5rem;
     color: var(--medium-grey);
@@ -16,12 +11,27 @@
     right: 0;
 }
 
-.popover-item {
+.popover-menu {
+    display: flex;
+    flex-direction: column;
+    list-style-type: none;
+}
+
+.popover-menu-item {
+    &.popover-delete {
+        color: var(--red);
+    }
 
     &:hover {
         cursor: pointer;
         scale: 105%;
+
+        &.popover-delete {
+            color: var(--red-hover);
+        }
     }
+}
 
-
+.popover-task {
+    right: 0;
 }
