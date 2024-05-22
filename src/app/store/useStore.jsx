@@ -80,7 +80,7 @@ const useStore = create((set, get) => ({
   })),
 
   deleteBoard: (boardId) => set((state) => {
-    const updatedBoards = state.boards.filter((board) => board.board_id !== boardId);
+    const updatedBoards = state.boards.filter((board) => board.name !== boardId);
     return {
       boards: updatedBoards,
       activeBoard: updatedBoards.length > 0 ? updatedBoards[0] : null,

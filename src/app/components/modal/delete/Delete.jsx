@@ -14,7 +14,7 @@ const Delete = ({type}) => {
   const handleDelete = useCallback(() => {
     if (type === 'board') {
       closeModal();
-      deleteBoard(activeBoard.board_id);
+      deleteBoard(activeBoard.name);
     }
   }, [type, activeBoard, deleteBoard, closeModal]);
 
@@ -30,7 +30,7 @@ const Delete = ({type}) => {
       </h2>
       <p className="body-l modal-body" id="delete-body">
         {type === 'board' ?
-          `Are you sure you want to delete the ‘${activeBoard.board_data.title}’ board? This action will remove all columns and tasks and cannot be reversed.`
+          `Are you sure you want to delete the ‘${activeBoard.name}’ board? This action will remove all columns and tasks and cannot be reversed.`
           :
           // update later when tasks created
           'Are you sure you want to delete this task?'}
