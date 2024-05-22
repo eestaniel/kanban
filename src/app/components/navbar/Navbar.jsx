@@ -42,7 +42,7 @@ const Navbar = () => {
   }));
 
   const boardCount = boards.length;
-  const selectedBoardHasColumns = activeBoard && activeBoard?.board_data.columns?.length > 0;
+  const selectedBoardHasColumns = activeBoard && activeBoard?.columns?.length > 0;
 
   const handlePopover = () => {
     if (activeBoard) {
@@ -72,7 +72,7 @@ const Navbar = () => {
             </div>
             <div className="nav-link-header-group heading-l" onClick={() => activateModal('board-select')}>
               <h1 className="nav-header heading-l">
-                {boardCount === 0 ? 'No Boards' : activeBoard?.board_data.title}
+                {boardCount === 0 ? 'No Boards' : activeBoard?.name}
               </h1>
               <Image src={(isModalOpen && modalType === 'board-select') ? Chevron_Up : Chevron_Down} alt="Chevron"/>
             </div>

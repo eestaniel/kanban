@@ -104,7 +104,11 @@ const BoardForm = ({ mode, initialData }) => {
   const addColumn = () => {
     setBoardData(prev => ({
       ...prev,
-      columns: [...prev.columns, { name: '', error: '' }]
+      columns: [...prev.columns, {
+        name: '',
+        error: '',
+        tasks: []
+      }]
     }));
   };
 
