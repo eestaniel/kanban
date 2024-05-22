@@ -67,3 +67,10 @@ nav {
 .nav-header {
     color: var(--textfield-fc)
 }
+
+.popover-trigger {
+    &:hover {
+        cursor: pointer;
+        scale: 115%;
+    }
+}
