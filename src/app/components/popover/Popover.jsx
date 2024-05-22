@@ -23,7 +23,6 @@ const Popover = ({isPopoverOpen, setIsPopoverOpen, popoverType, task}) => {
 
   const handleEditTask = () => {
     setIsPopoverOpen(false);
-    console.log('task', task)
     activateModal('edit-task', task);
 
 

@@ -24,14 +24,7 @@ const Navbar = () => {
   const selectedBoardHasColumns = activeBoard && activeBoard?.columns?.length > 0;
 
   useEffect(() => {
-    if (boardCount > 0) {
-      console.log('Boards detected');
-    }
-    if (activeBoard) {
-      console.log('Active board detected', activeBoard);
-    }
 
-    console.log(selectedBoardHasColumns);
   }, [activeBoard, boardCount, selectedBoardHasColumns]);
 
   const togglePopover = () => {
