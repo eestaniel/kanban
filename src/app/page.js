@@ -10,9 +10,10 @@ import BoardContent from "@/app/components/boardcontent/BoardContent";
 import Data from "@/app/data.json";
 
 export default function Home() {
-  const {isDarkMode, activateModal} = useStore((state) => ({
+  const {isDarkMode, activateModal, initializeBoard} = useStore((state) => ({
     isDarkMode: state.isDarkMode,
     activateModal: state.activateModal,
+    initializeBoard: state.initializeBoard,
   }));
 
   const boardCount = useBoardCount();
@@ -30,8 +31,9 @@ export default function Home() {
     // Initialize boards from data.json
     if (Data.boards) {
       console.log("initializing boards", Data.boards);
+      initializeBoard(Data.boards);
     }
-  }, []);
+  }, [initializeBoard]);
 
   return (
     <main>
