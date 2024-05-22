@@ -1,10 +1,10 @@
 .columns-container {
     display: flex;
     flex-direction: row;
-    flex-grow: 1;
     padding: 1.5rem 1rem;
     width: fit-content;
     gap: 1.5rem;
+    overflow-y: auto;
 }
 
 .column-card {
