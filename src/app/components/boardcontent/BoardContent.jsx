@@ -55,7 +55,7 @@ const BoardContent = ({boardCount, activateModal}) => {
             <h3 className="column-header heading-s">{column.name} ({column.tasks.length})</h3>
             <div className="task-list-group">
               {column.tasks.map((task) => (
-                <div key={task.task_id} className="task-card" onClick={() => handleTaskClick(task)}>
+                <div key={task.name} className="task-card" onClick={() => handleTaskClick(task)}>
                   <h4 className="task-header heading-m">{task.name}</h4>
 
                   {/*TODO: calculate how many subtasks completed and subtask length*/}
