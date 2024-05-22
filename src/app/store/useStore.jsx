@@ -144,6 +144,7 @@ const useStore = create((set, get) => ({
   /**
    * Updates the initialData task.
    * @param {Object} updatedTask - The task object with updated data.
+   * @param {string} type - The type of update to be performed (checklist or status).
    */
   updateTask: (updatedTask, type) => set((state) => {
 

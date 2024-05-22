@@ -6,8 +6,6 @@ import useInputValidator from "@/app/hooks/useInputValidator";
 import Menu from "@/app/components/menu/Menu";
 import useStore from "@/app/store/useStore";
 
-// Utility function to generate unique IDs
-const generateId = () => Math.random().toString(36).substr(2, 9);
 
 /**
  * TaskForm Component
