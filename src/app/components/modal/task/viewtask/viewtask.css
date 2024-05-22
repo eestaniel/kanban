@@ -5,5 +5,44 @@
 }
 
 .subtask-header {
-    color: var(--subtask-chkbox-completed-fc);
+    color: var(--subtask-chkbox-fc);
+
 }
+
+
+.textfield-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.subtask-view {
+    display: flex;
+    flex-direction: row;
+}
+
+.subtask-group {
+    display: flex;
+    flex-direction: column;
+
+    gap: 0.5rem;
+}
+
+.subtask-container {
+    display: flex;
+    flex-direction: row;
+    background-color: var(--bg-content);
+    padding: 1rem;
+    border-radius: 0.25rem;
+
+    &:hover {
+        cursor: pointer;
+        background-color: hsla(242, 48%, 58%, 25%);
+    }
+}
+
+.subtask-checkbox {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+}
+

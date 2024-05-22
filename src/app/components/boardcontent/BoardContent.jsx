@@ -1,7 +1,7 @@
 import React from 'react';
 import CustomButton from '@/app/components/buttons/CustomButton';
 import useStore from '@/app/store/useStore';
-import {useCallback} from "react";
+import {useCallback, useEffect} from "react";
 import './boardcontent.css';
 
 const BoardContent = ({boardCount, activateModal}) => {
@@ -10,6 +10,15 @@ const BoardContent = ({boardCount, activateModal}) => {
   }));
 
 
+  useEffect(() => {
+    console.log('active board updated', activeBoard);
+  }, [activeBoard]);
+
+
+  const handletaskCompletions = (task) => {
+    const completedSubtasks = task.subtasks.filter((subtask) => subtask.isCompleted);
+    return completedSubtasks.length;
+  }
 
   const handleTaskClick = useCallback((task) => {
       activateModal('view-task', task);
@@ -31,7 +40,7 @@ const BoardContent = ({boardCount, activateModal}) => {
       </div>
     );
 
-  } else if (activeBoard && activeBoard.board_data.columns.length === 0) {
+  } else if (activeBoard && activeBoard.columns.length === 0) {
     return (
       <div className="empty-state-group">
         <h2 className="dashboard-header heading-l">
@@ -46,21 +55,21 @@ const BoardContent = ({boardCount, activateModal}) => {
         />
       </div>
     );
-  } else if (activeBoard && activeBoard.board_data.columns.length > 0) {
+  } else if (activeBoard && activeBoard.columns.length > 0) {
     return (
 
       <div className="columns-container">
-        {activeBoard.board_data.columns.map((column) => (
-          <div key={column.column_id} className="column-card">
-            <h3 className="column-header heading-s">{column.title} ({column.task_list.length})</h3>
+        {activeBoard.columns.map((column,index) => (
+          <div key={index} className="column-card">
+            <h3 className="column-header heading-s">{column.name} ({column.tasks.length})</h3>
             <div className="task-list-group">
-              {column.task_list.map((task) => (
-                <div key={task.task_id} className="task-card" onClick={() => handleTaskClick(task)}>
-                  <h4 className="task-header heading-m">{task.title}</h4>
+              {column.tasks.map((task) => (
+                <div key={task.name} className="task-card" onClick={() => handleTaskClick(task)}>
+                  <h4 className="task-header heading-m">{task.name}</h4>
 
                   {/*TODO: calculate how many subtasks completed and subtask length*/}
                   <p
-                    className="subtask-amount body-m">{0} of {task.subtasks.length} {column.task_list.length > 1 ? 'subtasks' : 'subtask'}</p>
+                    className="subtask-amount body-m">{handletaskCompletions(task)} of {task.subtasks.length} {column.tasks.length > 1 ? 'subtasks' : 'subtask'}</p>
                 </div>
               ))}
             </div>

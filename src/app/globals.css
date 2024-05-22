@@ -1,6 +1,6 @@
 @font-face {
     font-family: "Plus Jakarta Sans";
-    src: url("/fonts/PlusJakartaSans-VariableFont_wght.ttf") format("truetype"); /*fix url, next already does public?*/
+    src: url("/public/fonts/PlusJakartaSans-VariableFont_wght.ttf") format("truetype"); /*fix url, next already does public?*/
     font-weight: 100 900;
     font-style: normal;
 }
@@ -75,7 +75,7 @@
 
     /* Subtask Checkbox */
     /* background */
-    --subtask-chkbox-idle-bg: var(--light-grey);
+    --subtask-chkbox-idle-bg: var(--white);
     --subtask-chkbox-hoverd-bg: hsla(242, 48%, 58%, 25%);
     --subtask-chkbox-completed-bg: var(--light-grey);
     /* font color */
@@ -115,7 +115,7 @@
 
         /* Subtask Checkbox */
         /* background */
-        --subtask-chkbox-idle-bg: var(--very-dark-grey);
+        --subtask-chkbox-idle-bg: var(--dark-grey);
         --subtask-chkbox-completed-bg: var(--very-dark-grey);
         --subtask-chkbox-box-stroke: hsla(216, 15%, 57%, 25%);
         /* font color */
@@ -142,7 +142,7 @@
 }
 
 .heading-xl, .heading-l, .heading-m, .heading-s {
-    font-family: var(--font-heading);
+    font-family: var(--font-heading), serif;
     font-weight: var(--font-weight-bold);
 }
 
@@ -172,7 +172,7 @@
 }
 
 .body-l, .body-m {
-    font-family: var(--font-body);
+    font-family: var(--font-body), serif;
     color: var(--dark-grey);
 }
 
@@ -189,14 +189,14 @@
 }
 
 .btn-bold {
-    font-family: var(--font-heading);
+    font-family: var(--font-heading), serif;
     font-size: 13px;
     line-height: var(--font-header-line-height-l);
     font-weight: var(--font-weight-bold);
 }
 
 .subtask-heading {
-    font-family: var(--font-heading);
+    font-family: var(--font-heading), serif;
     font-size: 12px;
     letter-spacing: 0;
     font-weight: var(--font-weight-bold);

@@ -1,4 +1,4 @@
-import { create } from 'zustand';
+import {create} from 'zustand';
 
 // Utility function to generate unique IDs
 const generateId = () => Math.random().toString(36).substr(2, 9);
@@ -38,7 +38,7 @@ const useStore = create((set, get) => ({
   boards: [],
   selectedBoard: null,
   activeBoard: null,
-  isDarkMode: false,
+  isDarkMode: true,
   isModalOpen: false,
   modalType: '',
   initialData: {},
@@ -53,6 +53,17 @@ const useStore = create((set, get) => ({
   },
 
   // Board actions
+
+  /**
+   * Initializes the board state with the provided data and sets the first board as active.
+   * @param {Array} boardData - List of board objects to initialize the state.
+   * @returns {void}
+   * */
+  initializeBoard: (boardData) => set(() => ({
+    boards: boardData,
+    activeBoard: boardData.length > 0 ? boardData[0] : null,
+  })),
+
 
   /**
    * Adds a new board to the state and sets it as the active board.
@@ -111,24 +122,21 @@ const useStore = create((set, get) => ({
   createTask: (newTask) => set((state) => {
     const updatedActiveBoard = {
       ...state.activeBoard,
-      board_data: {
-        ...state.activeBoard.board_data,
-        columns: state.activeBoard.board_data.columns.map((column) => {
-          if (column.title === newTask.status) {
-            return {
-              ...column,
-              task_list: [...column.task_list, newTask],
-            };
-          }
-          return column;
-        }),
-      },
+      columns: state.activeBoard.columns.map((column) => {
+        if (column.name === newTask.status) {
+          return {
+            ...column,
+            tasks: [...column.tasks, newTask],
+          };
+        }
+        return column;
+      }),
     };
     // Update the active board and the boards array
     return {
       activeBoard: updatedActiveBoard,
       boards: state.boards.map((board) =>
-        board.board_id === updatedActiveBoard.board_id ? updatedActiveBoard : board
+        board.name === updatedActiveBoard.name ? updatedActiveBoard : board
       ),
     };
   }),
@@ -136,29 +144,58 @@ const useStore = create((set, get) => ({
   /**
    * Updates the initialData task.
    * @param {Object} updatedTask - The task object with updated data.
+   * @param {string} type - The type of update to be performed (checklist or status).
    */
-  updateTask: (updatedTask) => set((state) => {
-    const updatedActiveBoard = {
-      ...state.activeBoard,
-      board_data: {
-        ...state.activeBoard.board_data,
-        columns: state.activeBoard.board_data.columns.map((column) => ({
+  updateTask: (updatedTask, type) => set((state) => {
+
+    // if type is checklist, update the checklist
+    if (type === 'checklist') {
+      const updatedActiveBoard = {
+        ...state.activeBoard,
+        columns: state.activeBoard.columns.map((column) => ({
           ...column,
-          task_list: column.task_list.map((task) =>
-            task.task_id === updatedTask.task_id ? updatedTask : task
+          tasks: column.tasks.map((task) =>
+            task.name === updatedTask.name ? updatedTask : task
           ),
         })),
-      },
-    };
 
-    return {
-      activeBoard: updatedActiveBoard,
-      boards: state.boards.map((board) =>
-        board.board_id === updatedActiveBoard.board_id ? updatedActiveBoard : board
-      ),
-      initialData: updatedTask,
-    };
+      };
+      return {
+        activeBoard: updatedActiveBoard,
+        boards: state.boards.map((board) =>
+          board.name === updatedActiveBoard.name ? updatedActiveBoard : board
+        ),
+        initialData: updatedTask,
+      };
+    } //if type is status, move the task to the new status column
+    else if (type === 'status') {
+      const updatedActiveBoard = {
+        ...state.activeBoard,
+        columns: state.activeBoard.columns.map((column) => {
+          if (column.name === updatedTask.status) {
+            return {
+              ...column,
+              tasks: [...column.tasks, updatedTask],
+            };
+          }
+          return {
+            ...column,
+            tasks: column.tasks.filter((task) => task.name !== updatedTask.name),
+          };
+        }),
+      };
+      return {
+        activeBoard: updatedActiveBoard,
+        boards: state.boards.map((board) =>
+          board.name === updatedActiveBoard.name ? updatedActiveBoard : board
+        ),
+        initialData: updatedTask,
+      };
+    }
+
+
   }),
+
 
   /**
    * Returns the number of boards in the state.

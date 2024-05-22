@@ -1,12 +1,8 @@
-import './bordform.css';
+import React, { useState, useCallback, useEffect } from 'react';
 import CustomTextField from "@/app/components/textfiield/CustomTextField";
 import CustomButton from "@/app/components/buttons/CustomButton";
-import {useState, useCallback, useEffect} from "react";
 import useInputValidator from "@/app/hooks/useInputValidator";
 import useStore from "@/app/store/useStore";
-
-// Utility function to generate unique IDs
-const generateId = () => Math.random().toString(36).substr(2, 9);
 
 /**
  * BoardForm Component
@@ -18,179 +14,170 @@ const generateId = () => Math.random().toString(36).substr(2, 9);
  * @param {string} mode - Determines if the form is in 'create' or 'edit' mode.
  * @param {Object} initialData - Initial data for the board, used in edit mode.
  *
- * @type {Object} boardData - State object containing the board's data.
- * @property {string} boardData.board_id - Unique identifier for the board.
- * @property {Object} boardData.board_data - Contains the board's title and columns.
- * @property {string} boardData.board_data.title - Title of the board.
- * @property {Array} boardData.board_data.columns - List of columns in the board, each with `column_id`, `title`, and `error`.
- * @property {string} boardData.error - Error message for board validation.
+ * @typedef {Object} BoardData
+ * @property {string} name - The name of the board.
+ * @property {Array<Column>} columns - The columns in the board.
  *
- * @function addColumn - Adds a new column to the board.
- * @function handleInputChange - Handles changes and validation for column titles.
- * @function removeColumn - Removes a column by index.
- * @function handleSubmitBoard - Submits the board, validates data, creates or updates the board.
+ * @typedef {Object} Column
+ * @property {string} name - The name of the column.
+ *
+ * @typedef {Object} Errors
+ * @property {string} boardName - Error message for the board name.
+ * @property {Object.<number, string>} columns - Error messages for the columns, indexed by column number.
+ *
+ * @type {BoardData} boardData - State object containing the board's data.
+ * @type {Errors} errors - State object containing error messages for board and columns.
  */
-
-const BoardForm = ({mode, initialData}) => {
-  // Initialize board data
+const BoardForm = ({ mode, initialData }) => {
   const [boardData, setBoardData] = useState({
-    board_id: '',
-    board_data: {
-      title: '',
-      columns: [],
-    },
-    error: ''
+    name: '',
+    columns: [],
   });
 
-  // Validate input
-  const {validateInput} = useInputValidator();
+  const [errors, setErrors] = useState({ boardName: '', columns: {} });
 
-  // Create board and close modal functions from global state
-  const {createBoard, closeModal, createUniqueId, updateBoard} = useStore(state => ({
-    createBoard: state.createBoard,
-    closeModal: state.closeModal,
-    createUniqueId: state.createUniqueId,
-    updateBoard: state.updateBoard
-  }));
+  const { createBoard, closeModal, createUniqueId, updateBoard } = useStore();
 
-  // If mode is edit and initial data exists, set the board data to the initial data
+  const { validateInput } = useInputValidator();
+
   useEffect(() => {
     if (mode === 'edit' && initialData) {
-      console.log('setting board data to initial data', initialData);
       setBoardData(initialData);
     }
   }, [mode, initialData]);
 
-  /** @function addColumn - Adds a new column to the board.*/
-  const addColumn = () => {
-    setBoardData(prevData => ({
-      ...prevData,
-      board_data: {
-        ...prevData.board_data,
-        columns: [...prevData.board_data.columns,
-          {
-            column_id: generateId(),
-            title: '',
-            error: '',
-            task_list: [],
-          }]
+  const validateForm = () => {
+    const boardNameError = validateInput(boardData.name, 'board-name');
+    const columnErrors = {};
+
+    // validate column names
+    boardData.columns.forEach((column, index) => {
+      const error = validateInput(column.name, 'column-name');
+      if (error) {
+        columnErrors[index] = error;
       }
+    });
+
+    // validate if columns are unique
+    const columnNames = boardData.columns.map(column => column.name.toLowerCase());
+    const uniqueColumns = new Set(columnNames);
+    if (columnNames.length !== uniqueColumns.size) {
+      boardData.columns.forEach((column, index) => {
+        if (columnNames.indexOf(column.name.toLowerCase()) !== index) {
+          columnErrors[index] = 'Column names must be unique';
+        }
+      });
+    }
+
+    setErrors({
+      boardName: boardNameError,
+      columns: columnErrors
+    });
+
+    return !boardNameError && Object.keys(columnErrors).length === 0;
+  };
+
+  const handleSubmitBoard = () => {
+    if (validateForm()) {
+      const newBoard = {
+        ...boardData,
+      };
+
+      if (mode === 'edit') {
+        updateBoard(newBoard);
+      } else {
+        createBoard(newBoard);
+      }
+      closeModal();
+    }
+  };
+
+  const handleInputChange = useCallback((index, newName) => {
+    const newColumns = [...boardData.columns];
+    newColumns[index] = { ...newColumns[index], name: newName };
+
+    const columnNames = newColumns.map(column => column.name.toLowerCase());
+    const uniqueColumns = new Set(columnNames);
+    const columnErrors = { ...errors.columns };
+
+    // Validate the specific column being changed
+    const error = validateInput(newName, 'column-name');
+    if (error) {
+      columnErrors[index] = error;
+    } else {
+      delete columnErrors[index];
+    }
+
+    // Check for uniqueness errors for the specific column
+    if (columnNames.length !== uniqueColumns.size) {
+      newColumns.forEach((column, i) => {
+        if (i !== index && column.name.toLowerCase() === newName.toLowerCase()) {
+          columnErrors[i] = 'Column names must be unique';
+          columnErrors[index] = 'Column names must be unique';
+        }
+      });
+    }
+
+    setBoardData({ ...boardData, columns: newColumns });
+    setErrors(prevErrors => ({
+      ...prevErrors,
+      columns: columnErrors
+    }));
+  }, [boardData, errors.columns, validateInput]);
+
+  const handleBoardNameChange = (newName) => {
+    setBoardData({ ...boardData, name: newName });
+    setErrors(prevErrors => ({
+      ...prevErrors,
+      boardName: validateInput(newName, 'boardName')
     }));
   };
 
-  /** @function handleInputChange - Handles changes and validation for column titles.*/
-  const handleInputChange = useCallback((index, newTitle) => {
-    setBoardData(prevData => ({
-      ...prevData,
-      board_data: {
-        ...prevData.board_data,
-        columns: prevData.board_data.columns.map((column, i) =>
-          i === index ? {...column, title: newTitle, error: validateInput(newTitle, 'Column Title')} : column
-        )
-      }
+  const addColumn = () => {
+    setBoardData(prev => ({
+      ...prev,
+      columns: [...prev.columns, {
+        name: '',
+        error: '',
+        tasks: []
+      }]
     }));
-  }, [validateInput]);
+  };
 
-  /** @function removeColumn - Removes a column by index.*/
-  const removeColumn = useCallback((index) => {
-    setBoardData(prevData => ({
-      ...prevData,
-      board_data: {
-        title: prevData.board_data.title,
-        columns: prevData.board_data.columns.filter((_, i) => i !== index)
-      }
-    }));
-  }, []);
-
-  /** @function handleSubmitBoard - Submits the board, validates data, creates or updates the board.*/
-  const handleSubmitBoard = () => {
-    const boardNameError = validateInput(boardData.board_data.title, 'Board Name');
-    const columnErrors = boardData.board_data.columns.map(column => validateInput(column.title, 'column-title'));
-
-    const newColumns = boardData.board_data.columns.map((column, index) => ({
-      ...column,
-      error: columnErrors[index]
-    }));
-
-    const hasErrors = columnErrors.some(error => error !== '') || boardNameError !== '';
-
-    setBoardData(prevData => ({
-      ...prevData,
-      error: boardNameError,
-      board_data: {
-        ...prevData.board_data,
-        columns: newColumns
-      }
-    }));
-
-    if (!hasErrors) {
-      if (mode !== 'edit') {
-        const newBoard = {
-          board_id: createUniqueId({}),
-          board_data: {
-            title: boardData.board_data.title,
-            columns: boardData.board_data.columns
-          }
-        };
-        createBoard(newBoard);
-      } else {
-        updateBoard(boardData);
-      }
-      closeModal();
-    } else {
-      console.log('Errors exist');
-    }
+  const removeColumn = (index) => {
+    const newColumns = boardData.columns.filter((_, i) => i !== index);
+    setBoardData(prev => ({ ...prev, columns: newColumns }));
   };
 
   return (
     <>
       <h3 className="modal-header heading-l">{mode === 'edit' ? 'Edit Board' : 'Add New Board'}</h3>
       <CustomTextField
-        label={'Board Name'}
-        id={'board-name'}
-        type={'text'}
-        placeholder={'e.g. Web Design'}
-        value={boardData.board_data.title}
-        onChange={(e) => setBoardData({
-          ...boardData,
-          board_data: {
-            title: e.target.value,
-            columns: boardData.board_data.columns
-          }
-        })}
-        error={boardData.error}
+        label="Board Name"
+        id="board-name"
+        type="text"
+        placeholder="e.g. Web Design"
+        value={boardData.name}
+        onChange={e => handleBoardNameChange(e.target.value)}
+        error={errors.boardName}
       />
-
-      {boardData.board_data.columns.length > 0 && boardData.board_data.columns.map((column, index) => (
+      {boardData.columns.map((column, index) => (
         <CustomTextField
-          key={column.column_id}
+          key={index}
           label={index === 0 ? 'Board Columns' : ''}
           id={`board-id-${index}`}
           type="text"
           placeholder=""
-          value={column.title}
+          value={column.name}
           onChange={e => handleInputChange(index, e.target.value)}
           isList={index !== 0}
           isListOne={index === 0}
           onRemove={() => removeColumn(index)}
-          error={column.error}
+          error={errors.columns[index]}
         />
       ))}
-
-      <CustomButton
-        label={'+ Add New Column'}
-        type={'secondary'}
-        id="add_column"
-        disabled={false}
-        onClick={addColumn}
-      />
-      <CustomButton
-        label={`${mode !== 'edit' ? 'Create New Board' : 'Save Changes'}`}
-        type={'primary-small'}
-        id="create_board"
-        disabled={false}
-        onClick={handleSubmitBoard}
-      />
+      <CustomButton label="+ Add New Column" type="secondary" onClick={addColumn} />
+      <CustomButton label={mode !== 'edit' ? 'Create Board' : 'Save Changes'} type="primary-small" onClick={handleSubmitBoard} />
     </>
   );
 };

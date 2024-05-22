@@ -6,8 +6,6 @@ import useInputValidator from "@/app/hooks/useInputValidator";
 import Menu from "@/app/components/menu/Menu";
 import useStore from "@/app/store/useStore";
 
-// Utility function to generate unique IDs
-const generateId = () => Math.random().toString(36).substr(2, 9);
 
 /**
  * TaskForm Component
@@ -23,12 +21,12 @@ const generateId = () => Math.random().toString(36).substr(2, 9);
  * @typedef {Object} TaskData
  * @property {string} task_id - The unique identifier for the task.
  * @property {Object} task_data - The data object for the task.
- * @property {string} task_data.title - The title of the task.
+ * @property {string} task_data.name - The name of the task.
  * @property {string} task_data.description - The description of the task.
  * @property {string} task_data.column_id - The column ID where the task belongs.
  * @property {Array} task_data.subtasks - The list of subtasks.
  * @property {Array} task_data.status - The status options for the task.
- * @property {string} task_data.title_error - The error message for task title validation.
+ * @property {string} task_data.name_error - The error message for task name validation.
  * @property {string} task_data.description_error - The error message for task description validation.
  *
  * Functions:
@@ -40,16 +38,12 @@ const generateId = () => Math.random().toString(36).substr(2, 9);
  */
 const TaskForm = ({mode, initialData}) => {
   const [taskData, setTaskData] = useState({
-    task_id: '',
-    task_data: {
-      title: '',
-      title_error: '',
-      description: '',
-      description_error: '',
-      column_id: '',
-      subtasks: [],
-      status: ''
-    }
+    name: '',
+    name_error: '',
+    description: '',
+    description_error: '',
+    subtasks: [],
+    status: ''
   });
 
   const {activeBoard, createTask, closeModal} = useStore(state => ({
@@ -58,25 +52,20 @@ const TaskForm = ({mode, initialData}) => {
     closeModal: state.closeModal
   }));
 
+  const {validateInput} = useInputValidator();
+
   // If mode is edit and initial data exists, set the task data to the initial data
   useEffect(() => {
     if (mode === 'edit' && initialData) {
-      console.log('setting task data to initial data', initialData);
       setTaskData(initialData);
-    } else {
-      // set subtasks to index 0 of active board columns
+    } else if (activeBoard && activeBoard.columns.length > 0) {
+      // set default status to the first column of the active board
       setTaskData(prevData => ({
         ...prevData,
-        task_data: {
-          ...prevData.task_data,
-          column_id: activeBoard.board_data.columns[0].column_id,
-          status: activeBoard.board_data.columns[0].title
-        }
+        status: activeBoard.columns[0].name
       }));
     }
-  }, [mode, initialData, activeBoard.board_data.columns]);
-
-  const {validateInput} = useInputValidator();
+  }, [mode, initialData, activeBoard]);
 
   /**
    * @function handleOnChange - Handles input changes for task fields and validates them.
@@ -84,57 +73,40 @@ const TaskForm = ({mode, initialData}) => {
    */
   const handleOnChange = useCallback((e) => {
     const {name, value} = e.target;
-    setTaskData((prevState) => ({
+    setTaskData(prevState => ({
       ...prevState,
-      task_data: {
-        ...prevState.task_data,
-        [name]: value,
-        [`${name}_error`]: validateInput(value, 'Task Title')
-      }
+      [name]: value
     }));
-  }, [validateInput]);
-
+  }, []);
 
   /**
    * @function addSubtask - Adds a new subtask to the task.
    * @param {Object} e - The event object.
    */
   const addSubtask = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     setTaskData(prevData => ({
       ...prevData,
-      task_data: {
-        ...prevData.task_data,
-        subtasks: [
-          ...prevData.task_data.subtasks,
-          {subtask_id: generateId(),
-            title: '',
-            error: '',
-            completed: false
-          }]
-      }
+      subtasks: [...prevData.subtasks, {name: '', isCompleted: false}]
     }));
   };
 
   /**
    * @function handleSubtaskChange - Handles input changes for subtasks and validates them.
    * @param {number} index - The index of the subtask to be updated.
+   * @param {string} newTitle - The new title for the subtask.
    */
   const handleSubtaskChange = useCallback((index, newTitle) => {
     setTaskData(prevData => ({
       ...prevData,
-      task_data: {
-        ...prevData.task_data,
-        subtasks: prevData.task_data.subtasks.map((subtask, i) => {
-          if (i === index) {
-            return {...subtask, title: newTitle, error: validateInput(newTitle, 'Subtask Title')};
-          }
-          return subtask;
-        })
-      }
+      subtasks: prevData.subtasks.map((subtask, i) => {
+        if (i === index) {
+          return {...subtask, name: newTitle, error: validateInput(newTitle, 'task-name')};
+        }
+        return subtask;
+      })
     }));
-  }
-    , [validateInput]);
+  }, [validateInput]);
 
   /**
    * @function removeSubtask - Removes a subtask from the task.
@@ -143,30 +115,31 @@ const TaskForm = ({mode, initialData}) => {
   const removeSubtask = useCallback((index) => {
     setTaskData(prevData => ({
       ...prevData,
-      task_data: {
-        ...prevData.task_data,
-        subtasks: prevData.task_data.subtasks.filter((_, i) => i !== index)
-      }
+      subtasks: prevData.subtasks.filter((_, i) => i !== index)
     }));
   }, []);
 
+  /**
+   * @function handleSubmitTask - Handles form submission, validates fields, and sets error messages.
+   * @param {Object} e - The event object.
+   */
   const handleSubmitTask = (e) => {
     e.preventDefault();
 
     let hasError = false;
-    const updatedTaskData = {...taskData.task_data};
+    const updatedTaskData = {...taskData};
 
-    // Validate task title
-    updatedTaskData.title_error = validateInput(taskData.task_data.title, 'Task Title');
-    if (updatedTaskData.title_error) hasError = true
+    // Validate task name
+    updatedTaskData.name_error = validateInput(taskData.name, 'task-name');
+    if (updatedTaskData.name_error) hasError = true;
 
     // Validate task description
-    updatedTaskData.description_error = validateInput(taskData.task_data.description, 'Task Description');
+    updatedTaskData.description_error = validateInput(taskData.description, 'task-description');
     if (updatedTaskData.description_error) hasError = true;
 
     // Validate each subtask
     updatedTaskData.subtasks = updatedTaskData.subtasks.map((subtask) => {
-      const subtaskError = validateInput(subtask.title, 'Subtask Title');
+      const subtaskError = validateInput(subtask.name, 'task-name');
       if (subtaskError) hasError = true;
       return {...subtask, error: subtaskError};
     });
@@ -174,26 +147,16 @@ const TaskForm = ({mode, initialData}) => {
     if (hasError) {
       setTaskData(prevData => ({
         ...prevData,
-        task_data: updatedTaskData
+        ...updatedTaskData
       }));
-    }
-
-    // Prepare the task data for submission
-    const newTask = {
-      task_id: generateId(),
-      title: taskData.task_data.title,
-      description: taskData.task_data.description,
-      column_id: taskData.task_data.column_id,
-      subtasks: taskData.task_data.subtasks,
-      status: taskData.task_data.status,
-    };
-    if (hasError) {
-      console.log('Task data has errors, cannot submit');
     } else {
+      // Prepare the task data for submission
+      const newTask = {
+        ...taskData,
+      };
       console.log('Submitting task:', newTask);
       createTask(newTask);
       closeModal();
-
     }
   };
 
@@ -205,11 +168,11 @@ const TaskForm = ({mode, initialData}) => {
           className="task-input-headers"
           label="Title"
           type="text"
-          name="title"
+          name="name"
           placeholder="e.g. Take coffee break"
-          value={taskData.task_data.title}
+          value={taskData.name}
           onChange={handleOnChange}
-          error={taskData.task_data.title_error}
+          error={taskData.name_error}
         />
         <CustomTextField
           id="task-description"
@@ -217,19 +180,19 @@ const TaskForm = ({mode, initialData}) => {
           multiline={true}
           name="description"
           placeholder="e.g. It’s always good to take a break. This 15 minute break will recharge the batteries a little."
-          value={taskData.task_data.description}
+          value={taskData.description}
           onChange={handleOnChange}
-          error={taskData.task_data.description_error}
+          error={taskData.description_error}
         />
 
-        {taskData.task_data.subtasks.length > 0 && taskData.task_data.subtasks.map((subtask, index) => (
+        {taskData?.subtasks?.length > 0 && taskData.subtasks.map((subtask, index) => (
           <CustomTextField
-            key={subtask.subtask_id}
+            key={index}
             label={index === 0 ? 'Subtasks' : ''}
             id={`subtask-id-${index}`}
             type="text"
             placeholder="e.g. Make coffee"
-            value={subtask.title}
+            value={subtask.name}
             onChange={e => handleSubtaskChange(index, e.target.value)}
             isList={index !== 0}
             isListOne={index === 0}
@@ -246,7 +209,7 @@ const TaskForm = ({mode, initialData}) => {
           onClick={addSubtask}
         />
 
-        <Menu taskData={taskData} setTaskData={setTaskData}/>
+        <Menu newTask={taskData} handleSelectStatus={setTaskData}/>
 
         <CustomButton
           label={`${mode !== 'edit' ? 'Create Task' : 'Save Changes'}`}
@@ -255,8 +218,6 @@ const TaskForm = ({mode, initialData}) => {
           disabled={false}
           onClick={handleSubmitTask}
         />
-
-
       </form>
     </div>
   );

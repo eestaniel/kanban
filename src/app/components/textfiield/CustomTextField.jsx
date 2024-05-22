@@ -26,10 +26,14 @@ import { memo } from 'react';
  * @param {boolean} checked - The checked state for the checkbox.
  * @param {boolean} disabled - Determines if the field should be disabled.
  */
-const CustomTextField = memo(({ label, name, placeholder, value, onChange, isList, isListOne, onRemove, error, id, multiline, select, options, checkbox, checked, disabled }) => {
+const CustomTextField = memo(({ label, name, placeholder, value, onChange, isList, isListOne, onRemove, error, id, multiline, select, options, checkbox, checked, disabled, classname }) => {
   return (
-    <div className="textfield-container">
-      {!isList && <label className="label heading-s">{label}</label>}
+    <div className={`textfield-container ${classname}`}>
+      {!isList && (
+        <label className={`label heading-s ${checkbox && checked ? 'is-checked' : ''}`}>
+          {label}
+        </label>
+      )}
       <div className={`input-wrapper ${(isList || isListOne) ? 'shorter-field' : ''}`}>
         {select ? (
           <select
@@ -40,8 +44,8 @@ const CustomTextField = memo(({ label, name, placeholder, value, onChange, isLis
             onChange={(e) => onChange(e.target.value)}
           >
             {options.map((option, index) => (
-              <option key={index} value={option.title}>
-                {option.title}
+              <option key={index} value={option.name}>
+                {option.name}
               </option>
             ))}
           </select>
@@ -64,6 +68,7 @@ const CustomTextField = memo(({ label, name, placeholder, value, onChange, isLis
               onChange={onChange}
               disabled={disabled}
             />
+            <span className="checkmark"></span>
             <label htmlFor={id} className={`body-l ${error ? 'error' : ''}`}>
               {placeholder}
             </label>
