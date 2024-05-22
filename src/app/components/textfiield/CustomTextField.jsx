@@ -40,8 +40,8 @@ const CustomTextField = memo(({ label, name, placeholder, value, onChange, isLis
             onChange={(e) => onChange(e.target.value)}
           >
             {options.map((option, index) => (
-              <option key={index} value={option.title}>
-                {option.title}
+              <option key={index} value={option.name}>
+                {option.name}
               </option>
             ))}
           </select>

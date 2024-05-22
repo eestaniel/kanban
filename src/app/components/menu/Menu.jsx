@@ -11,10 +11,7 @@ const Menu = ({taskData, setTaskData}) => {
     console.log(value);
     setTaskData(prevData => ({
       ...prevData,
-      task_data: {
-        ...prevData.task_data,
-        status: value
-      }
+      status: value
     }));
   }
 
@@ -23,8 +20,8 @@ const Menu = ({taskData, setTaskData}) => {
       <CustomTextField
         label={'Current Status'}
         select={true}
-        options={activeBoard.board_data.columns}
-        value={taskData.task_data.status}
+        options={activeBoard.columns}
+        value={'taskData.status'}
         onChange={handleSelectStatus}
       />
     </>

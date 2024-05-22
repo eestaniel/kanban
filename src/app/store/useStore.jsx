@@ -1,4 +1,4 @@
-import { create } from 'zustand';
+import {create} from 'zustand';
 
 // Utility function to generate unique IDs
 const generateId = () => Math.random().toString(36).substr(2, 9);
@@ -122,24 +122,21 @@ const useStore = create((set, get) => ({
   createTask: (newTask) => set((state) => {
     const updatedActiveBoard = {
       ...state.activeBoard,
-      board_data: {
-        ...state.activeBoard.board_data,
-        columns: state.activeBoard.board_data.columns.map((column) => {
-          if (column.title === newTask.status) {
-            return {
-              ...column,
-              task_list: [...column.task_list, newTask],
-            };
-          }
-          return column;
-        }),
-      },
+      columns: state.activeBoard.columns.map((column) => {
+        if (column.name === newTask.status) {
+          return {
+            ...column,
+            tasks: [...column.tasks, newTask],
+          };
+        }
+        return column;
+      }),
     };
     // Update the active board and the boards array
     return {
       activeBoard: updatedActiveBoard,
       boards: state.boards.map((board) =>
-        board.board_id === updatedActiveBoard.board_id ? updatedActiveBoard : board
+        board.name === updatedActiveBoard.name ? updatedActiveBoard : board
       ),
     };
   }),
@@ -165,7 +162,7 @@ const useStore = create((set, get) => ({
     return {
       activeBoard: updatedActiveBoard,
       boards: state.boards.map((board) =>
-        board.board_id === updatedActiveBoard.board_id ? updatedActiveBoard : board
+        board.name === updatedActiveBoard.name ? updatedActiveBoard : board
       ),
       initialData: updatedTask,
     };
