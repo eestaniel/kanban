@@ -31,7 +31,7 @@ const Modal = () => {
   if (!isModalOpen) return null;
 
   return (
-    <div className="modal-backdrop" onClick={()=> closeModal()}>
+    <div className={`modal-backdrop ${modalType==='board-select'?'':'modal-board-form'}`} onClick={()=> closeModal()}>
       <div
         className={`modal-content ${modalType==='board-select' ? 'board-select' : 'board-form'}`}
         onClick={e => e.stopPropagation()}>
