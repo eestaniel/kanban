@@ -7,7 +7,6 @@ import useStore from "@/app/store/useStore";
 import {useState} from "react";
 import Popover from "@/app/components/popover/Popover";
 import Logo from '@/app/components/navbar/logo/Logo';
-import BoardList from '@/app/components/navbar/boardlist/BoardList';
 
 const Navbar = () => {
   const {isModalOpen, modalType, activateModal, boards, activeBoard, isSidePanelOpen} = useStore(state => ({
