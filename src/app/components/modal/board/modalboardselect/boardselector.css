@@ -53,6 +53,9 @@
     gap: 1rem;
     align-items: start;
     margin-right: 1rem;
+    max-height: 50vh;
+    overflow-y: auto;
+    overflow-x: hidden;
 
     & h3 {
         color: var(--medium-grey);
@@ -74,8 +77,10 @@
     }
 
     /* Edit this later to proper design */
+
     &:hover {
         cursor: pointer;
+
         & h3 {
             transform: scale(110%);
             transition: ease all 150ms;
