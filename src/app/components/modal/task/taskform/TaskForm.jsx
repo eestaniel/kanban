@@ -101,6 +101,21 @@ const TaskForm = ({ mode }) => {
     }));
   }, []);
 
+
+  /**
+   * @function handleSelectStatus - Handles the selection of a new status for the task.
+   * @type {(function(*): void)|*}
+   * @param {Object} menuItem - The selected status menu item.
+   * @returns {void}
+   */
+  const handleSelectStatus = useCallback((menuItem) => {
+    // create a new task object with the updated status
+    setTaskData(prevData => ({
+      ...prevData,
+      status: menuItem
+    }));
+  } , []);
+
   /**
    * @function handleSubmitTask - Handles form submission, validates fields, and sets error messages.
    * @param {Object} e - The event object.
@@ -144,6 +159,7 @@ const TaskForm = ({ mode }) => {
         createTask(newTask);
       }
       closeModal();
+      console.log(activeBoard)
     }
   };
 
@@ -196,7 +212,7 @@ const TaskForm = ({ mode }) => {
           onClick={addSubtask}
         />
 
-        <Menu newTask={taskData} handleSelectStatus={setTaskData} />
+        <Menu newTask={taskData} handleSelectStatus={handleSelectStatus} />
 
         <CustomButton
           label={`${mode !== 'edit' ? 'Create Task' : 'Save Changes'}`}

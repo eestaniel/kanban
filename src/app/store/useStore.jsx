@@ -149,15 +149,26 @@ const useStore = create((set, get) => ({
         break;
 
       case 'edit':
-        // Replace the old task with the updated task
+        const oldStatus = state.initialData.status;
+        const newStatus = updatedTask.status;
+
         updatedActiveBoard = {
           ...state.activeBoard,
-          columns: state.activeBoard.columns.map((column) => ({
-            ...column,
-            tasks: column.tasks.map((task) =>
-              task.name === state.initialData.name ? updatedTask : task
-            ),
-          })),
+          columns: state.activeBoard.columns.map((column) => {
+            if (column.name === oldStatus) {
+              return {
+                ...column,
+                tasks: column.tasks.filter((task) => task.name !== state.initialData.name),
+              };
+            }
+            if (column.name === newStatus) {
+              return {
+                ...column,
+                tasks: [...column.tasks, updatedTask],
+              };
+            }
+            return column;
+          }),
         };
         break;
 
