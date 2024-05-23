@@ -53,9 +53,6 @@
     gap: 1rem;
     align-items: start;
     margin-right: 1rem;
-    max-height: 50vh;
-    overflow-y: auto;
-    overflow-x: hidden;
 
     & h3 {
         color: var(--medium-grey);
