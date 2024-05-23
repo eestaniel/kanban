@@ -1,35 +1,29 @@
+/* customtextfield.css */
+
 .textfield-container {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+}
 
-    & label {
-        color: var(--textfield-label);
-    }
+.textfield-container label {
+    color: var(--textfield-label);
+}
 
-    & input,
-    textarea,
-    select {
-        background-color: var(--textfield-bg);
-        color: var(--textfield-fc);
-        width: 100%;
-        border: 1px solid var(--textfield-stroke-idle-active);
-        border-radius: 0.25rem;
-        padding: 0.5rem 2rem 0.5rem 1rem;
+.textfield-container input,
+.textfield-container textarea,
+.textfield-container select {
+    background-color: var(--textfield-bg);
+    color: var(--textfield-fc);
+    width: 100%;
+    border: 1px solid var(--textfield-stroke-idle-active);
+    border-radius: 0.25rem;
+    padding: 0.5rem 2rem 0.5rem 1rem;
+}
 
-        &::placeholder {
-            color: hsla(0, 0%, 100%, 25%);
-        }
-    }
-
-    & textarea {
-        height: 7rem;
-        resize: none;
-    }
-
-    & select {
-        color: var(--subtask-chkbox-fc);
-    }
+.textfield-container textarea {
+    height: 7rem;
+    resize: none;
 }
 
 .input-wrapper {
@@ -38,33 +32,30 @@
     align-items: center;
     flex-direction: row;
     gap: 1rem;
-
-    & .error-message {
-        position: absolute;
-        right: 1rem;
-        color: var(--red);
-    }
-
-    & input.error {
-        border-color: var(--red);
-    }
 }
 
-.shorter-field {
-    & .error-message {
-        right: 3rem;
-    }
+.input-wrapper .error-message {
+    position: absolute;
+    right: 1rem;
+    color: var(--red);
+}
+
+.input-wrapper input.error {
+    border-color: var(--red);
+}
+
+.shorter-field .error-message {
+    right: 3rem;
 }
 
 .checkbox-container {
     display: flex;
     align-items: center;
     width: 16px;
+}
 
-
-    & input {
-        width: 16px;
-    }
+.checkbox-container input {
+    width: 16px;
 }
 
 .label.is-checked {
@@ -76,15 +67,11 @@
     display: flex;
     position: relative;
     cursor: pointer;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none;
     border: 1px solid hsla(216, 15%, 57%, 25%);
     border-radius: 0.063rem;
 }
 
-/* Hide the browser's default checkbox */
 .checkbox-container input {
     position: absolute;
     opacity: 0;
@@ -93,7 +80,6 @@
     width: 0;
 }
 
-/* Create a custom checkbox */
 .checkmark {
     height: 1rem;
     width: 1rem;
@@ -104,27 +90,83 @@
     background-color: var(--main-purple);
 }
 
-/* Create the checkmark/indicator (hidden when not checked) */
 .checkmark:after {
     content: "";
     position: absolute;
     display: none;
 }
 
-/* Show the checkmark when checked */
 .checkbox-container input:checked ~ .checkmark:after {
     display: block;
 }
 
-/* Style the checkmark/indicator */
-.checkbox-container .checkmark:after {
+.checkmark:after {
     left: 0.25rem;
     top: 0.125rem;
     width: 5px;
     height: 10px;
     border: solid white;
     border-width: 0 2px 2px 0;
-    -webkit-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
     transform: rotate(45deg);
+}
+
+/* Custom Select Styling */
+.custom-select {
+    background-color: var(--textfield-bg);
+    border: 1px solid var(--textfield-stroke-idle-active);
+    color: var(--dropdown-fc-idle-active);
+    border-radius: 0.25rem;
+    cursor: pointer;
+    width: 100%;
+    user-select: none;
+    padding: 0.5rem 1rem;
+    outline: none;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    &:hover {
+        border: 1px solid var(--main-purple);
+    }
+}
+
+.custom-select-wrapper {
+    position: relative;
+    width: 100%;
+
+}
+
+.custom-select.error {
+    border-color: var(--red);
+
+}
+
+.custom-select-options {
+    position: absolute;
+    padding: 1rem;
+    width: 100%;
+    background-color: var(--dropdown-active-bg);
+    border-radius: 0.25rem;
+    margin-top: 0.25rem;
+    z-index: 10;
+    color: var(--medium-grey);
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.custom-select-option {
+    color: var(--dropdown-label-fc);
+    cursor: pointer;
+}
+
+.custom-select-option:hover {
+    color: var(--subtask-chkbox-fc);
+
+}
+
+.hidden-select {
+    display: none;
 }

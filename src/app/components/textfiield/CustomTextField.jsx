@@ -1,7 +1,7 @@
 import './customtextfield.css';
 import CrossIcon from '@/app/assets/icon-cross.svg';
 import Image from 'next/image';
-import { memo } from 'react';
+import {memo, useState} from 'react';
 
 /**
  * CustomTextField Component
@@ -26,7 +26,36 @@ import { memo } from 'react';
  * @param {boolean} checked - The checked state for the checkbox.
  * @param {boolean} disabled - Determines if the field should be disabled.
  */
-const CustomTextField = memo(({ label, name, placeholder, value, onChange, isList, isListOne, onRemove, error, id, multiline, select, options, checkbox, checked, disabled, classname }) => {
+const CustomTextField = memo(({
+                                label,
+                                name,
+                                placeholder,
+                                value,
+                                onChange,
+                                isList,
+                                isListOne,
+                                onRemove,
+                                error,
+                                id,
+                                multiline,
+                                select,
+                                options,
+                                checkbox,
+                                checked,
+                                disabled,
+                                classname
+                              }) => {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const handleSelectClick = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const handleOptionClick = (optionValue) => {
+    onChange(optionValue);
+    setIsDropdownOpen(false);
+  };
+
   return (
     <div className={`textfield-container ${classname}`}>
       {!isList && (
@@ -34,21 +63,44 @@ const CustomTextField = memo(({ label, name, placeholder, value, onChange, isLis
           {label}
         </label>
       )}
-      <div className={`input-wrapper ${(isList || isListOne) ? 'shorter-field' : ''}`}>
+      <div className={`input-wrapper ${isList || isListOne ? 'shorter-field' : ''}`}>
         {select ? (
-          <select
-            className={`body-l ${error ? 'error' : ''}`}
-            id={id}
-            name={name}
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-          >
-            {options.map((option, index) => (
-              <option key={index} value={option.name}>
-                {option.name}
-              </option>
-            ))}
-          </select>
+          <div className="custom-select-wrapper body-l">
+            <div className={`custom-select ${error ? 'error' : ''}`} onClick={handleSelectClick}>
+              {value || placeholder}
+              {isDropdownOpen ? <svg width="10" height="7" xmlns="http://www.w3.org/2000/svg">
+                <path stroke="#635FC7" strokeWidth="2" fill="none" d="M9 6 5 2 1 6"/>
+              </svg> : <svg width="10" height="7" xmlns="http://www.w3.org/2000/svg">
+                <path stroke="#635FC7" strokeWidth="2" fill="none" d="m1 1 4 4 4-4"/>
+              </svg>}
+            </div>
+            {isDropdownOpen && (
+              <ul className="custom-select-options">
+                {options.map((option, index) => (
+                  <li
+                    key={index}
+                    className="custom-select-option "
+                    onClick={() => handleOptionClick(option.name)}
+                  >
+                    {option.name}
+                  </li>
+                ))}
+              </ul>
+            )}
+            <select
+              className="hidden-select"
+              id={id}
+              name={name}
+              value={value}
+              onChange={(e) => onChange(e.target.value)}
+            >
+              {options.map((option, index) => (
+                <option key={index} value={option.name}>
+                  {option.name}
+                </option>
+              ))}
+            </select>
+          </div>
         ) : multiline ? (
           <textarea
             className={`body-l ${error ? 'error' : ''}`}
@@ -85,8 +137,8 @@ const CustomTextField = memo(({ label, name, placeholder, value, onChange, isLis
           />
         )}
         {(isList || isListOne) && (
-          <span onClick={onRemove} style={{ cursor: 'pointer' }}>
-            <Image src={CrossIcon} alt="Remove" />
+          <span onClick={onRemove} style={{cursor: 'pointer'}}>
+            <Image src={CrossIcon} alt="Remove"/>
           </span>
         )}
         {error && <span className="error-message">{error}</span>}
