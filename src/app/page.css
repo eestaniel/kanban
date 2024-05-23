@@ -28,8 +28,9 @@ main {
 .content-container {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: start;
     text-align: center;
+    flex-grow: 1;
 }
 
 .empty-state-group {
@@ -38,6 +39,7 @@ main {
     gap: 1.5rem;
     margin-inline: 1rem;
     align-items: center;
+    margin-block: auto;
 }
 
 #new-column-btn {
