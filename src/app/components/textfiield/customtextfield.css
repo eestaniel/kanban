@@ -121,6 +121,10 @@
     user-select: none;
     padding: 0.5rem 1rem;
     outline: none;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
 
     &:hover {
         border: 1px solid var(--main-purple);

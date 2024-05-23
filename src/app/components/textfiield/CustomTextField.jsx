@@ -1,7 +1,7 @@
 import './customtextfield.css';
 import CrossIcon from '@/app/assets/icon-cross.svg';
 import Image from 'next/image';
-import { memo, useState } from 'react';
+import {memo, useState} from 'react';
 
 /**
  * CustomTextField Component
@@ -27,24 +27,24 @@ import { memo, useState } from 'react';
  * @param {boolean} disabled - Determines if the field should be disabled.
  */
 const CustomTextField = memo(({
-  label,
-  name,
-  placeholder,
-  value,
-  onChange,
-  isList,
-  isListOne,
-  onRemove,
-  error,
-  id,
-  multiline,
-  select,
-  options,
-  checkbox,
-  checked,
-  disabled,
-  classname
-}) => {
+                                label,
+                                name,
+                                placeholder,
+                                value,
+                                onChange,
+                                isList,
+                                isListOne,
+                                onRemove,
+                                error,
+                                id,
+                                multiline,
+                                select,
+                                options,
+                                checkbox,
+                                checked,
+                                disabled,
+                                classname
+                              }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const handleSelectClick = () => {
@@ -68,6 +68,11 @@ const CustomTextField = memo(({
           <div className="custom-select-wrapper body-l">
             <div className={`custom-select ${error ? 'error' : ''}`} onClick={handleSelectClick}>
               {value || placeholder}
+              {isDropdownOpen ? <svg width="10" height="7" xmlns="http://www.w3.org/2000/svg">
+                <path stroke="#635FC7" strokeWidth="2" fill="none" d="M9 6 5 2 1 6"/>
+              </svg> : <svg width="10" height="7" xmlns="http://www.w3.org/2000/svg">
+                <path stroke="#635FC7" strokeWidth="2" fill="none" d="m1 1 4 4 4-4"/>
+              </svg>}
             </div>
             {isDropdownOpen && (
               <ul className="custom-select-options">
@@ -132,8 +137,8 @@ const CustomTextField = memo(({
           />
         )}
         {(isList || isListOne) && (
-          <span onClick={onRemove} style={{ cursor: 'pointer' }}>
-            <Image src={CrossIcon} alt="Remove" />
+          <span onClick={onRemove} style={{cursor: 'pointer'}}>
+            <Image src={CrossIcon} alt="Remove"/>
           </span>
         )}
         {error && <span className="error-message">{error}</span>}
