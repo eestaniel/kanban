@@ -134,7 +134,10 @@ const useStore = create((set, get) => ({
             if (column.name === updatedTask.status) {
               return {
                 ...column,
-                tasks: [...column.tasks, updatedTask],
+                tasks: [
+                  ...column.tasks.filter((task) => task.name !== updatedTask.name),
+                  updatedTask,
+                ],
               };
             }
             return {
@@ -155,21 +158,18 @@ const useStore = create((set, get) => ({
               task.name === state.initialData.name ? updatedTask : task
             ),
           })),
-        }
+        };
         break;
-
 
       default:
         return state;
     }
 
     return {
-
       activeBoard: updatedActiveBoard,
       boards: state.boards.map((board) =>
         board.name === updatedActiveBoard.name ? updatedActiveBoard : board
       ),
-
       initialData: updatedTask,
     };
   }),
