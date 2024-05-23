@@ -1,4 +1,5 @@
 import './custombutton.css';
+import { useState, useEffect } from 'react';
 
 /**
  * CustomButton Component
@@ -16,6 +17,20 @@ import './custombutton.css';
  * @returns {JSX.Element} The rendered button component.
  */
 const CustomButton = ({ label, type, onClick, id = '', disabled = false }) => {
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   // Determine additional class based on type
   const additionalClass = type === 'primary-large' ? 'heading-m' : 'btn-bold';
 
@@ -27,9 +42,13 @@ const CustomButton = ({ label, type, onClick, id = '', disabled = false }) => {
       disabled={disabled}
     >
       {label === 'add-task' ? (
-        <svg width="12" height="12" xmlns="http://www.w3.org/2000/svg">
-          <path fill="#FFF" d="M7.368 12V7.344H12V4.632H7.368V0H4.656v4.632H0v2.712h4.656V12z" />
-        </svg>
+        isMobile ? (
+          <svg width="12" height="12" xmlns="http://www.w3.org/2000/svg">
+            <path fill="#FFF" d="M7.368 12V7.344H12V4.632H7.368V0H4.656v4.632H0v2.712h4.656V12z" />
+          </svg>
+        ) : (
+          '+ Add New Task'
+        )
       ) : (
         label
       )}

@@ -12,12 +12,16 @@
     padding-top: 5rem;
     padding-bottom: 3rem;
     overflow-y: auto;
+
+    &.modal-board-form {
+        align-items: center;
+    }
+
 }
 
 .modal-content {
     display: flex;
     flex-direction: column;
-    width: 100%;
     padding-block: 1rem;
     background-color: var(--bg-color);
     border-radius: 8px;
@@ -31,18 +35,35 @@
     padding-left: 1.5rem;
 }
 
+.board-form, .board-select {
+    display: flex;
+    flex-grow: 1;
+}
+
 .board-select {
-    max-width: 16.5rem;
+    margin-inline: 3.5rem;
 }
 
 .board-form {
-    max-width: 21.375rem;
     padding: 1.5rem;
-
+    margin-inline: 1rem;
 }
 
 .modal-header {
     color: var(--dropdown-fc-idle-active);
 
 }
+
+@media screen and (min-width: 481px) {
+    .board-form {
+        max-width: 30rem;
+        padding: clamp(1.5rem, 5%, 2rem);
+    }
+
+    .board-select {
+        max-width: 23.125rem;
+    }
+}
+
+
 

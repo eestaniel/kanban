@@ -1,9 +1,10 @@
-nav {
-    height: fit-content;
+.top-nav {
+    height: 80px;
     padding: 1rem;
     background-color: var(--bg-color);
-
 }
+
+
 
 .nav-container {
     display: flex;
@@ -28,7 +29,6 @@ nav {
     justify-content: end;
     flex-grow: 1;
     gap: 1rem;
-
 
     & img:hover {
         cursor: pointer;
@@ -73,5 +73,66 @@ nav {
     &:hover {
         cursor: pointer;
         scale: 115%;
+    }
+}
+
+.logo-group {
+    /* for mobile, disable */
+    display: none;
+}
+
+.navgroup-wrapper {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    align-items: center;
+}
+
+
+@media screen and (min-width: 781px) {
+    .mobile-component {
+        display: none;
+    }
+
+    .top-nav {
+        padding: 0;
+
+        .nav-container {
+            height: 100%;
+        }
+    }
+    .nav-container {
+        gap: 0;
+    }
+
+    .logo-group {
+        display: flex;
+        flex-direction: row;
+        gap: 1rem;
+        max-width: 260px;
+        flex-grow: 1;
+        height: 100%;
+        align-items: center;
+        justify-content: start;
+        padding-inline: 1.625rem;
+
+
+        & svg path {
+            fill: var(--subtask-chkbox-fc);
+        }
+    }
+    .logo-group-bottom-border {
+        border-bottom:  1px solid hsl(0,0%,56%, 25%);
+    }
+
+    .navgroup-wrapper {
+        height: 100%;
+        border-bottom:  1px solid hsl(0,0%,56%, 25%);
+        border-left:  1px solid hsl(0,0%,56%, 25%);
+        padding: 1rem 1.5rem;
+    }
+
+    .navgroup-1, .navgroup-2{
+        height: 100%;
     }
 }

@@ -23,6 +23,13 @@
     }
 }
 
+.board-select-header-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+
+}
+
 .board-subgroup {
     display: flex;
     flex-direction: row;
@@ -53,6 +60,10 @@
     gap: 1rem;
     align-items: start;
     margin-right: 1rem;
+    flex-grow: 1;
+    max-height: 60vh;
+    overflow-y: auto;
+    overflow-x: hidden;
 
     & h3 {
         color: var(--medium-grey);
@@ -74,8 +85,10 @@
     }
 
     /* Edit this later to proper design */
+
     &:hover {
         cursor: pointer;
+
         & h3 {
             transform: scale(110%);
             transition: ease all 150ms;
@@ -154,4 +167,22 @@
 .dark-mode {
     justify-content: end;
 
+}
+
+@media screen and (min-width: 768px) {
+    .active-selector {
+        background-color: var(--main-purple);
+        margin-right: 1.25rem;
+
+        & h3 {
+            color: var(--white);
+        }
+
+        & svg {
+            color: var(--white);
+        }
+    }
+    .night-wrapper {
+        margin-top: 1rem;
+    }
 }

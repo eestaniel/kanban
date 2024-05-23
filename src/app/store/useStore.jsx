@@ -31,7 +31,7 @@ const generateId = () => Math.random().toString(36).substr(2, 9);
  * @function closeModal - Closes the modal.
  * @function createTask - Adds a new task to the appropriate column in the active board.
  * @function updateTask - Updates a task in the initialData.
- * @function updateActiveBoard - Updates the active board and saves changes to the boards array.
+ * @function toggleSidePanel - Toggles the side panel visibility.
  */
 const useStore = create((set, get) => ({
   // State variables
@@ -42,6 +42,7 @@ const useStore = create((set, get) => ({
   isModalOpen: false,
   modalType: '',
   initialData: {},
+  isSidePanelOpen: true,
 
   // Unique ID generator
   createUniqueId: (objectKey) => {
@@ -201,6 +202,11 @@ const useStore = create((set, get) => ({
     isModalOpen: false,
     modalType: '',
     initialData: {},
+  })),
+
+  // Side panel actions
+  toggleSidePanel: () => set((state) => ({
+    isSidePanelOpen: !state.isSidePanelOpen,
   })),
 }));
 

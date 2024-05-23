@@ -9,9 +9,15 @@ main {
     overflow-y: hidden;
     height: 100vh;
     flex-direction: column;
+    position: relative;
 
 }
 
+.main-panel {
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: row;
+}
 
 /* Main Container */
 .main-container {
@@ -22,14 +28,16 @@ main {
     overflow-x: auto;
     min-height: 90vh;
     overflow-y: auto;
+    border-left:  1px solid hsl(0,0%,56%, 25%);;
 
 }
 
 .content-container {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: start;
     text-align: center;
+    flex-grow: 1;
 }
 
 .empty-state-group {
@@ -38,6 +46,7 @@ main {
     gap: 1.5rem;
     margin-inline: 1rem;
     align-items: center;
+    margin-block: auto;
 }
 
 #new-column-btn {
@@ -46,4 +55,30 @@ main {
 
 .dashboard-header {
     color: var(--medium-grey);
+}
+
+.show-side-panel {
+    display: none;
+}
+
+@media screen and (min-width: 768px) {
+    .show-side-panel {
+        display: flex;
+        flex-direction: row;
+        max-width: 56px;
+        max-height: 48px;
+        height: 100%;
+        width: 56px;
+        justify-content: center;
+        align-items: center;
+        background-color: var(--main-purple);
+        border-radius: 0 24rem 24rem 0;
+        position: absolute;
+        bottom: 2rem;
+
+        &:hover {
+            cursor: pointer;
+            background-color: var(--main-purple-hover);
+        }
+    }
 }
