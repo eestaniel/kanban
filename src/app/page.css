@@ -2,41 +2,35 @@ body {
     background-color: var(--bg-color);
     display: flex;
     flex-direction: column;
+    height: 100vh; /* Ensure body fills the entire viewport height */
 }
 
 main {
     display: flex;
     overflow-y: hidden;
-    height: 100vh;
     flex-direction: column;
     position: relative;
-
+    flex-grow: 1;
+    height: 100%; /* Ensure main fills the height of its parent */
 }
 
-.main-panel {
+.main-container {
     overflow-x: hidden;
     display: flex;
     flex-direction: row;
+    flex-grow: 1;
+    overflow-y: hidden;
+    height: 100%; /* Ensure .main-container fills the height of its parent */
 }
 
-/* Main Container */
-.main-container {
-    flex:1;
+/* Content Wrapper */
+.content-wrapper {
     display: flex;
     flex-direction: column;
     background-color: var(--bg-content);
     overflow-x: auto;
-    min-height: 90vh;
     overflow-y: auto;
-    border-left:  1px solid hsl(0,0%,56%, 25%);;
-
-}
-
-.content-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: start;
-    text-align: center;
+    border-left: 1px solid hsl(0, 0%, 56%, 25%);
     flex-grow: 1;
 }
 
