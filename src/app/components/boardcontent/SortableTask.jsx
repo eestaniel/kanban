@@ -61,7 +61,7 @@ export const SortableTask = ({ id, task, onClick, handleTaskCompletions }) => {
   };
 
   const style = {
-    transform: CSS.Translate.toString(transform),
+    transform: CSS.Transform.toString(transform),
     transition,
     cursor: isDragging ? 'grabbing' : 'pointer',
     opacity: isDragging ? 0.25 : 1,

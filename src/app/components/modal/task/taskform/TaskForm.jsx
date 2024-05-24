@@ -159,7 +159,6 @@ const TaskForm = ({ mode }) => {
         createTask(newTask);
       }
       closeModal();
-      console.log(activeBoard)
     }
   };
 

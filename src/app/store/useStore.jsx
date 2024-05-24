@@ -241,11 +241,14 @@ const useStore = create((set, get) => ({
         };
       } else {
         // Move to a different column
-        const newTasks = [
-          ...overTasks.slice(0, overIndex),
-          activeTask,
-          ...overTasks.slice(overIndex),
-        ];
+        // if overIndex is -1, it means the task is being moved to the end of the column
+        const newTasks = overIndex === -1
+          ? [...overTasks, activeTask]
+          : [
+            ...overTasks.slice(0, overIndex),
+            activeTask,
+            ...overTasks.slice(overIndex),
+          ];
         const updatedActiveBoard = {
           ...state.activeBoard,
           columns: state.activeBoard.columns.map((column) => {

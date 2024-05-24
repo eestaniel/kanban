@@ -20,7 +20,7 @@ main {
     flex-direction: row;
     flex-grow: 1;
     overflow-y: hidden;
-    height: 100%; /* Ensure .main-container fills the height of its parent */
+    height: 100%;
 }
 
 /* Content Wrapper */
@@ -32,6 +32,9 @@ main {
     overflow-y: auto;
     border-left: 1px solid hsl(0, 0%, 56%, 25%);
     flex-grow: 1;
+    padding-bottom: 1rem;
+
+    cursor: all-scroll;
 }
 
 .empty-state-group {
@@ -54,6 +57,15 @@ main {
 .show-side-panel {
     display: none;
 }
+
+.content-wrapper {
+    cursor: all-scroll;
+}
+
+.content-wrapper:active {
+    cursor: grabbing;
+}
+
 
 @media screen and (min-width: 768px) {
     .show-side-panel {
