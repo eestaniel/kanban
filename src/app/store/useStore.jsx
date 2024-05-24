@@ -220,9 +220,6 @@ const useStore = create((set, get) => ({
       const overTasks = overColumn.tasks;
       const overIndex = overTasks.findIndex((task) => task.name === overId);
 
-      console.log('activeTasks', activeTasks);
-      console.log('overTasks', overTasks);
-      console.log('overIndex', overIndex);
 
       if (activeColumn === overColumn) {
         // Move within the same column

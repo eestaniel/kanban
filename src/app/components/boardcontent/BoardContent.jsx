@@ -75,11 +75,13 @@ const BoardContent = ({boardCount, activateModal}) => {
     const {id: activeName} = active;
     const {id: overName} = over;
 
-    console.log('activeName', activeName);
-    console.log('overName', overName);
-    console.log('over', over);
     updateTaskPositions(activeName, overName, getColumnName(overName, over.data));
   };
+
+  const handleDragOver = (e) => {
+    console.log(e.collisions)
+
+  }
 
   const handleTaskCompletions = (task) => {
     const completedSubtasks = task.subtasks.filter((subtask) => subtask.isCompleted);
@@ -123,13 +125,14 @@ const BoardContent = ({boardCount, activateModal}) => {
     );
   } else if (activeBoard && activeBoard.columns.length > 0) {
     return (
-      <DndContext sensors={sensors} collisionDetection={rectanbleIntersection} onDragStart={handleDragStart}
-                  onDragEnd={handleDragEnd}>
+      <DndContext sensors={sensors}  onDragStart={handleDragStart}
+                  onDragEnd={handleDragEnd}
+                  onDragOver={handleDragOver}
+      >
         <div className="columns-container">
           {activeBoard.columns.map((column, index) => (
             <SortableContext key={index} items={column.tasks.map((task) => task.name)}
                              strategy={verticalListSortingStrategy}
-                             collisionDetection={closestCorners}
             >
               <DroppableColumn column={column} columnId={column.name}>
                 <div className="column-card">

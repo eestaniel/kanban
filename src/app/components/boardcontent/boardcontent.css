@@ -41,6 +41,7 @@
     align-items: start;
     gap: 0.5rem;
     text-align: start;
+    box-shadow: 0 4px 6px 0 hsl(220, 40%, 35%, .10);
 
     &:hover {
         cursor: pointer;
