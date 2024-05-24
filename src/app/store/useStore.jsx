@@ -1,5 +1,13 @@
 import {create} from 'zustand';
 
+const arrayMove = (array, fromIndex, toIndex) => {
+  const newArray = array.slice();
+  const [movedItem] = newArray.splice(fromIndex, 1);
+  newArray.splice(toIndex, 0, movedItem);
+  return newArray;
+};
+
+
 // Utility function to generate unique IDs
 const generateId = () => Math.random().toString(36).substr(2, 9);
 
@@ -185,6 +193,80 @@ const useStore = create((set, get) => ({
       initialData: updatedTask,
     };
   }),
+
+  updateTaskPositions: (activeId, overId, newColumnId) => {
+    set((state) => {
+      const activeTask = state.activeBoard.columns.flatMap((column) =>
+        column.tasks.filter((task) => task.name === activeId)
+      )[0];
+
+      const activeColumn = state.activeBoard.columns.find((column) =>
+        column.tasks.includes(activeTask)
+      );
+
+      if (!activeTask || !activeColumn) {
+        return state;
+      }
+
+      const overColumn = state.activeBoard.columns.find((column) =>
+        column.name === newColumnId
+      );
+
+      if (!overColumn) {
+        return state;
+      }
+
+      const activeTasks = activeColumn.tasks.filter((task) => task.name !== activeId);
+      const overTasks = overColumn.tasks;
+      const overIndex = overTasks.findIndex((task) => task.name === overId);
+
+      console.log('activeTasks', activeTasks);
+      console.log('overTasks', overTasks);
+      console.log('overIndex', overIndex);
+
+      if (activeColumn === overColumn) {
+        // Move within the same column
+        const newTasks = arrayMove(overTasks, overTasks.indexOf(activeTask), overIndex);
+        const updatedActiveBoard = {
+          ...state.activeBoard,
+          columns: state.activeBoard.columns.map((column) =>
+            column === activeColumn ? {...column, tasks: newTasks} : column
+          ),
+        };
+        return {
+          activeBoard: updatedActiveBoard,
+          boards: state.boards.map((board) =>
+            board.name === updatedActiveBoard.name ? updatedActiveBoard : board
+          ),
+        };
+      } else {
+        // Move to a different column
+        const newTasks = [
+          ...overTasks.slice(0, overIndex),
+          activeTask,
+          ...overTasks.slice(overIndex),
+        ];
+        const updatedActiveBoard = {
+          ...state.activeBoard,
+          columns: state.activeBoard.columns.map((column) => {
+            if (column === activeColumn) {
+              return {...column, tasks: activeTasks};
+            }
+            if (column === overColumn) {
+              return {...column, tasks: newTasks};
+            }
+            return column;
+          }),
+        };
+        return {
+          activeBoard: updatedActiveBoard,
+          boards: state.boards.map((board) =>
+            board.name === updatedActiveBoard.name ? updatedActiveBoard : board
+          ),
+        };
+      }
+    });
+  },
 
   // Dark mode actions
   toggleDarkMode: () => set((state) => ({
