@@ -9,6 +9,7 @@
     color: var(--medium-grey);
     top: 3.75rem;
     right: 1rem;
+    box-shadow: 0 10px 20px 0 hsla(220, 40%, 35%, .25);
 }
 
 .popover-menu {

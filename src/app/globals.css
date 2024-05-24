@@ -50,6 +50,7 @@
 
     /* ---Light Theme Colors--- */
     --bg-color: var(--white);
+    --bg-color-hsla: hsla(0, 0%, 100%, 15%);
     --bg-content: var(--light-grey);
     --label-fc: var(--medium-grey);
     /* Buttons */
@@ -104,9 +105,14 @@
     --dropdown-item-fc: var(--medium-grey);
     --dropdown-item-hover: var(--dark-grey);
 
+    /* new column */
+    --new-column: linear-gradient(to right, hsl(198, 7%, 71%, .25) 0%, hsl(198, 7%, 71%, .25) 100%);
+
+
     .dark-mode {
         /* ---Light Theme Colors--- */
         --bg-color: var(--dark-grey);
+        --bg-color-hsla: hsla(235, 12%, 19%, 15%);
         --bg-content: var(--very-dark-grey);
         --label-fc: var(--white);
         /* Buttons */
@@ -135,7 +141,10 @@
 
         /* Dropdown Active */
         --dropdown-active-bg: var(--very-dark-grey);
-        --dropdown-item-hover: var(--light-grey)
+        --dropdown-item-hover: var(--light-grey);
+
+        /* new column */
+        --new-column: linear-gradient(to right, hsla(235, 12%, 19%, .25) 0%, hsla(235, 12%, 19%, 0.25) 100%);
     }
 
 

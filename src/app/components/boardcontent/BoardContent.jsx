@@ -4,41 +4,44 @@ import useStore from '@/app/store/useStore';
 import './boardcontent.css';
 import {
   DndContext,
-  closestCenter,
   KeyboardSensor,
   PointerSensor,
   useSensor,
   useSensors,
-  DragOverlay
+  DragOverlay,
 } from '@dnd-kit/core';
 import {
   SortableContext,
   sortableKeyboardCoordinates,
-  verticalListSortingStrategy
+  verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import {SortableTask} from './SortableTask'; // This will be our sortable task component
 import {DroppableColumn} from './DroppableColumn'; // This will be our droppable column component
 
 const BoardContent = ({boardCount, activateModal}) => {
-  const {activeBoard, boards, updateTaskPositions} = useStore((state) => ({
+  const {activeBoard, updateTaskPositions, isDarkMode} = useStore((state) => ({
     activeBoard: state.activeBoard,
-    boards: state.boards,
-    updateTaskPositions: state.updateTaskPositions
+    updateTaskPositions: state.updateTaskPositions,
+    isDarkMode: state.isDarkMode,
   }));
 
   const [activeDragItem, setActiveDragItem] = useState(null);
+  const [activeColumn, setActiveColumn] = useState(null);
+
 
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates
+      coordinateGetter: sortableKeyboardCoordinates,
     })
   );
 
   const handleDragStart = (event) => {
     const {active} = event;
     const {id: activeId} = active;
-    const task = activeBoard.columns.flatMap(column => column.tasks).find(task => task.name === activeId);
+    const task = activeBoard.columns
+      .flatMap((column) => column.tasks)
+      .find((task) => task.name === activeId);
     setActiveDragItem(task);
   };
 
@@ -48,9 +51,9 @@ const BoardContent = ({boardCount, activateModal}) => {
       newColumnName = overData.current.columnId;
     } else {
       // map over columns
-      activeBoard.columns.map((column) => {
+      activeBoard.columns.forEach((column) => {
         // map over column and find the column name that matches the overName
-        column.tasks.map((task) => {
+        column.tasks.forEach((task) => {
           if (task.name === overName) {
             newColumnName = column.name;
           }
@@ -58,13 +61,17 @@ const BoardContent = ({boardCount, activateModal}) => {
       });
     }
 
-
     return newColumnName;
+  };
+
+  const handleDragOver = (e) => {
+    console.log(e.collisions)
+    setActiveColumn(e.collisions[0].id)
+
   }
 
   const handleDragEnd = (event) => {
     const {active, over} = event;
-
 
     setActiveDragItem(null);
 
@@ -72,18 +79,24 @@ const BoardContent = ({boardCount, activateModal}) => {
       return;
     }
     const {id: activeName} = active;
-    const {id: overName,} = over
+    const {id: overName} = over;
+
     updateTaskPositions(activeName, overName, getColumnName(overName, over.data));
+    setActiveColumn(null)
   };
+
 
   const handleTaskCompletions = (task) => {
     const completedSubtasks = task.subtasks.filter((subtask) => subtask.isCompleted);
     return completedSubtasks.length;
   };
 
-  const handleTaskClick = useCallback((task) => {
-    activateModal('view-task', task);
-  }, [activateModal]);
+  const handleTaskClick = useCallback(
+    (task) => {
+      activateModal('view-task', task);
+    },
+    [activateModal]
+  );
 
   if (boardCount === 0) {
     return (
@@ -103,9 +116,7 @@ const BoardContent = ({boardCount, activateModal}) => {
   } else if (activeBoard && activeBoard.columns.length === 0) {
     return (
       <div className="empty-state-group">
-        <h2 className="dashboard-header heading-l">
-          This board is empty. Create a new column to get started!
-        </h2>
+        <h2 className="dashboard-header heading-l">This board is empty. Create a new column to get started!</h2>
         <CustomButton
           id="new-column-btn"
           label="+ Add New Column"
@@ -117,41 +128,47 @@ const BoardContent = ({boardCount, activateModal}) => {
     );
   } else if (activeBoard && activeBoard.columns.length > 0) {
     return (
-      <DndContext
-        sensors={sensors}
-        collisionDetection={closestCenter}
-        onDragStart={handleDragStart}
-        onDragEnd={handleDragEnd}
+      <DndContext sensors={sensors} onDragStart={handleDragStart}
+                  onDragEnd={handleDragEnd}
+                  onDragOver={handleDragOver}
       >
         <div className="columns-container">
           {activeBoard.columns.map((column, index) => (
-            <SortableContext
-              key={index}
-              items={column.tasks.map((task) => task.name)}
-              strategy={verticalListSortingStrategy}
+            <SortableContext key={index} items={column.tasks.map((task) => task.name)}
+                             strategy={verticalListSortingStrategy}
             >
               <DroppableColumn column={column} columnId={column.name}>
                 <div className="column-card">
                   <h3 className="column-header heading-s">
                     {column.name} ({column.tasks.length})
                   </h3>
-                  <div className="task-list-group">
-                    {column.tasks.map((task) => (
-                      <SortableTask
-                        key={task.name}
-                        id={task.name}
-                        task={task}
-                        onClick={() => handleTaskClick(task)}
-                        handleTaskCompletions={handleTaskCompletions}
-                      />
-                    ))}
+                  <div className={`task-list-group ${column.tasks.length === 0 && 'empty-column'} ${(activeColumn === column.name)&& 'active-column'}`}>
+                    {column.tasks.length > 0 &&
+                      column.tasks.map((task) => (
+                        <SortableTask
+                          key={task.name}
+                          id={task.name}
+                          task={task}
+                          onClick={() => handleTaskClick(task)}
+                          handleTaskCompletions={handleTaskCompletions}
+                        />
+                      ))}
                   </div>
                 </div>
               </DroppableColumn>
             </SortableContext>
           ))}
+          {/* Blank column for adding a new column */}
+          <div className="column-card new-column">
+            <h3 className="column-header heading-s new-column-hidden-header">header</h3>
+            <div className={`task-list-group new-column-container ${!isDarkMode && 'new-column-light'}`}
+                 onClick={() => activateModal('edit-board')}>
+              <h4 className="heading-xl">+ New Column</h4>
+            </div>
+          </div>
         </div>
         <DragOverlay
+          position={'fixed'}
           dropAnimation={{
             duration: 200,
             easing: 'cubic-bezier(0.18, 0.67, 0.6, 1.22)',
@@ -161,8 +178,7 @@ const BoardContent = ({boardCount, activateModal}) => {
             <div className="task-card">
               <h4 className="task-header heading-m">{activeDragItem.name}</h4>
               <p className="subtask-amount body-m">
-                {handleTaskCompletions(activeDragItem)} of {activeDragItem.subtasks.length}{' '}
-                {activeDragItem.subtasks.length > 1 ? 'subtasks' : 'subtask'}
+                {handleTaskCompletions(activeDragItem)} of {activeDragItem.subtasks.length} {activeDragItem.subtasks.length > 1 ? 'subtasks' : 'subtask'}
               </p>
             </div>
           ) : null}
