@@ -47,7 +47,7 @@ export const SortableTask = ({ id, task, onClick, handleTaskCompletions }) => {
     }
   };
 
-  const handleMouseUp = (event) => {
+  const handleMouseUp = () => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }

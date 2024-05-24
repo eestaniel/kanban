@@ -4,7 +4,6 @@ import useStore from '@/app/store/useStore';
 import './boardcontent.css';
 import {
   DndContext,
-  closestCenter,
   rectanbleIntersection,
   KeyboardSensor,
   PointerSensor,
