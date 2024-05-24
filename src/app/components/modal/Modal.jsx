@@ -1,4 +1,4 @@
-import './modal.css'
+import './modal.css';
 import BoardSelector from "@/app/components/modal/board/modalboardselect/BoardSelector";
 import BoardForm from "@/app/components/modal/board/boardform/BoardForm";
 import Delete from "@/app/components/modal/delete/Delete";
@@ -7,39 +7,40 @@ import ViewTask from "@/app/components/modal/task/viewtask/ViewTask";
 import useStore from "@/app/store/useStore";
 
 
-
-
+/**
+ * Modal component
+ * This component is responsible for rendering the modal component
+ *
+ * @return {JSX.Element}
+ * */
 const Modal = () => {
-  const { isModalOpen, modalType, closeModal} = useStore(state => ({
+  const { isModalOpen, modalType, closeModal } = useStore(state => ({
     isModalOpen: state.isModalOpen,
     modalType: state.modalType,
     closeModal: state.closeModal,
   }));
 
-
   const modalContent = {
-    'board-select': <BoardSelector/>,
-    'new-board': <BoardForm/>,
+    'board-select': <BoardSelector />,
+    'new-board': <BoardForm />,
     'new-task': <TaskForm />,
     'view-task': <ViewTask />,
-    'edit-board': <BoardForm mode='edit'/>,
-    'edit-task': <TaskForm mode='edit'/>,
-    'delete': <Delete type={'board'}
-    />
-  }
+    'edit-board': <BoardForm mode='edit' />,
+    'edit-task': <TaskForm mode='edit' />,
+    'delete': <Delete type='board' />
+  };
 
   if (!isModalOpen) return null;
 
   return (
-    <div className={`modal-backdrop ${modalType==='board-select'?'':'modal-board-form'}`} onClick={()=> closeModal()}>
+    <div className={`modal-backdrop ${modalType !== 'board-select' ? 'modal-board-form' : ''}`} onClick={closeModal}>
       <div
-        className={`modal-content ${modalType==='board-select' ? 'board-select' : 'board-form'}`}
-        onClick={e => e.stopPropagation()}>
+        className={`modal-content ${modalType === 'board-select' ? 'board-select' : 'board-form'}`}
+        onClick={e => e.stopPropagation()}
+      >
         {modalContent[modalType]}
       </div>
-
     </div>
-
   );
 };
 
