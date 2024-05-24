@@ -2,6 +2,16 @@ import './popover.css';
 import useStore from "@/app/store/useStore";
 import { useEffect, useRef, useCallback } from "react";
 
+/**
+ * Popover component
+ * @param {Object} props
+ * @param {Boolean} props.isPopoverOpen
+ * @param {Function} props.setIsPopoverOpen
+ * @param {String} props.popoverType
+ * @param {Object} props.task
+ * @returns {JSX.Element}
+ */
+
 const Popover = ({ isPopoverOpen, setIsPopoverOpen, popoverType, task }) => {
   const popoverRef = useRef(null);
 

@@ -2,6 +2,15 @@ import './sidenav.css';
 import useStore from "@/app/store/useStore";
 import BoardSelector from "@/app/components/modal/board/modalboardselect/BoardSelector";
 
+
+/**
+ * SideNav component
+ * This component is responsible for rendering the side navigation bar
+ * It also renders the board selector
+ * It also renders the hide sidebar button
+ * It also renders the board list
+ * @returns {JSX.Element}
+ */
 const SideNav = () => {
   const { isSidePanelOpen, toggleSidePanel } = useStore((state) => ({
     isSidePanelOpen: state.isSidePanelOpen,

@@ -8,6 +8,14 @@ import { useState } from "react";
 import Popover from "@/app/components/popover/Popover";
 import Logo from '@/app/components/navbar/logo/Logo';
 
+
+/**
+ * Navbar component
+ * THis component is responsible for rendering the top navigation bar
+ * It also renders the logo and the board name
+ * It also renders the add task button and the popover menu
+ * @returns {JSX.Element}
+ * */
 const Navbar = () => {
   const { isModalOpen, modalType, activateModal, boards, activeBoard, isSidePanelOpen } = useStore((state) => ({
     isModalOpen: state.isModalOpen,
