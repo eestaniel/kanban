@@ -4,13 +4,11 @@ import useStore from '@/app/store/useStore';
 import './boardcontent.css';
 import {
   DndContext,
-  rectanbleIntersection,
   KeyboardSensor,
   PointerSensor,
   useSensor,
   useSensors,
   DragOverlay,
-  closestCorners,
 } from '@dnd-kit/core';
 import {
   SortableContext,
@@ -28,6 +26,8 @@ const BoardContent = ({boardCount, activateModal}) => {
   }));
 
   const [activeDragItem, setActiveDragItem] = useState(null);
+  const [activeColumn, setActiveColumn] = useState(null);
+
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -64,6 +64,12 @@ const BoardContent = ({boardCount, activateModal}) => {
     return newColumnName;
   };
 
+  const handleDragOver = (e) => {
+    console.log(e.collisions)
+    setActiveColumn(e.collisions[0].id)
+
+  }
+
   const handleDragEnd = (event) => {
     const {active, over} = event;
 
@@ -76,12 +82,9 @@ const BoardContent = ({boardCount, activateModal}) => {
     const {id: overName} = over;
 
     updateTaskPositions(activeName, overName, getColumnName(overName, over.data));
+    setActiveColumn(null)
   };
 
-  const handleDragOver = (e) => {
-    console.log(e.collisions)
-
-  }
 
   const handleTaskCompletions = (task) => {
     const completedSubtasks = task.subtasks.filter((subtask) => subtask.isCompleted);
@@ -125,7 +128,7 @@ const BoardContent = ({boardCount, activateModal}) => {
     );
   } else if (activeBoard && activeBoard.columns.length > 0) {
     return (
-      <DndContext sensors={sensors}  onDragStart={handleDragStart}
+      <DndContext sensors={sensors} onDragStart={handleDragStart}
                   onDragEnd={handleDragEnd}
                   onDragOver={handleDragOver}
       >
@@ -139,7 +142,7 @@ const BoardContent = ({boardCount, activateModal}) => {
                   <h3 className="column-header heading-s">
                     {column.name} ({column.tasks.length})
                   </h3>
-                  <div className={`task-list-group ${column.tasks.length === 0 && 'empty-column'}`}>
+                  <div className={`task-list-group ${column.tasks.length === 0 && 'empty-column'} ${(activeColumn === column.name)&& 'active-column'}`}>
                     {column.tasks.length > 0 &&
                       column.tasks.map((task) => (
                         <SortableTask
@@ -158,7 +161,8 @@ const BoardContent = ({boardCount, activateModal}) => {
           {/* Blank column for adding a new column */}
           <div className="column-card new-column">
             <h3 className="column-header heading-s new-column-hidden-header">header</h3>
-            <div className={`task-list-group new-column-container ${!isDarkMode && 'new-column-light'}`} onClick={()=>activateModal('edit-board')}>
+            <div className={`task-list-group new-column-container ${!isDarkMode && 'new-column-light'}`}
+                 onClick={() => activateModal('edit-board')}>
               <h4 className="heading-xl">+ New Column</h4>
             </div>
           </div>

@@ -97,6 +97,9 @@
     visibility: hidden;
 }
 
+.active-column {
+    border: 6px dashed hsla(243, 100%, 82%, 45%);
+}
 
 @media screen and (min-width: 768px) {
 
