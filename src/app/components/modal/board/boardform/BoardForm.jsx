@@ -4,29 +4,13 @@ import CustomButton from "@/app/components/buttons/CustomButton";
 import useInputValidator from "@/app/hooks/useInputValidator";
 import useStore from "@/app/store/useStore";
 
+
 /**
- * BoardForm Component
- *
- * Handles the creation and editing of boards. Allows users to add new columns,
- * update board information, and validate input fields. The form is used in both creation and
- * editing modes, determined by the `mode` prop.
- *
- * @param {string} mode - Determines if the form is in 'create' or 'edit' mode.
- * @param {Object} initialData - Initial data for the board, used in edit mode.
- *
- * @typedef {Object} BoardData
- * @property {string} name - The name of the board.
- * @property {Array<Column>} columns - The columns in the board.
- *
- * @typedef {Object} Column
- * @property {string} name - The name of the column.
- *
- * @typedef {Object} Errors
- * @property {string} boardName - Error message for the board name.
- * @property {Object.<number, string>} columns - Error messages for the columns, indexed by column number.
- *
- * @type {BoardData} boardData - State object containing the board's data.
- * @type {Errors} errors - State object containing error messages for board and columns.
+  * BoardForm component
+ * This component is responsible for rendering the board form component
+ * It can be used to render a form to create or edit a board
+ * @param mode
+ * @returns {JSX.Element}
  */
 const BoardForm = ({ mode }) => {
   const [boardData, setBoardData] = useState({
@@ -43,7 +27,6 @@ const BoardForm = ({ mode }) => {
     activeBoard: state.activeBoard
   }));
 
-
   const { validateInput } = useInputValidator();
 
   useEffect(() => {
@@ -59,7 +42,6 @@ const BoardForm = ({ mode }) => {
     const boardNameError = validateInput(boardData.name, 'board-name', mode === 'edit' ? 'edit' : '');
     const columnErrors = {};
 
-    // validate column names
     boardData.columns.forEach((column, index) => {
       const error = validateInput(column.name, 'column-name');
       if (error) {
@@ -67,7 +49,6 @@ const BoardForm = ({ mode }) => {
       }
     });
 
-    // validate if columns are unique
     const columnNames = boardData.columns.map(column => column.name.toLowerCase());
     const uniqueColumns = new Set(columnNames);
     if (columnNames.length !== uniqueColumns.size) {
@@ -88,9 +69,7 @@ const BoardForm = ({ mode }) => {
 
   const handleSubmitBoard = () => {
     if (validateForm()) {
-      const newBoard = {
-        ...boardData,
-      };
+      const newBoard = { ...boardData };
 
       if (mode === 'edit') {
         updateBoard(newBoard);
@@ -109,7 +88,6 @@ const BoardForm = ({ mode }) => {
     const uniqueColumns = new Set(columnNames);
     const columnErrors = { ...errors.columns };
 
-    // Validate the specific column being changed
     const error = validateInput(newName, 'column-name');
     if (error) {
       columnErrors[index] = error;
@@ -117,7 +95,6 @@ const BoardForm = ({ mode }) => {
       delete columnErrors[index];
     }
 
-    // Check for uniqueness errors for the specific column
     if (columnNames.length !== uniqueColumns.size) {
       newColumns.forEach((column, i) => {
         if (i !== index && column.name.toLowerCase() === newName.toLowerCase()) {
@@ -145,11 +122,7 @@ const BoardForm = ({ mode }) => {
   const addColumn = () => {
     setBoardData(prev => ({
       ...prev,
-      columns: [...prev.columns, {
-        name: '',
-        error: '',
-        tasks: []
-      }]
+      columns: [...prev.columns, { name: '', error: '', tasks: [] }]
     }));
   };
 
