@@ -1,5 +1,5 @@
 .top-nav {
-    height: 80px;
+    height: 60px;
     padding: 1rem;
     background-color: var(--bg-color);
 }
@@ -79,6 +79,7 @@
 .logo-group {
     /* for mobile, disable */
     display: none;
+    border-right: none;
 }
 
 .navgroup-wrapper {

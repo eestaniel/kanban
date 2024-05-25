@@ -30,9 +30,7 @@ main {
     background-color: var(--bg-content);
     overflow-x: auto;
     overflow-y: auto;
-    border-left: 1px solid hsl(0, 0%, 56%, 25%);
     flex-grow: 1;
-    padding-bottom: 1rem;
 
     cursor: all-scroll;
 }
@@ -51,7 +49,9 @@ main {
 }
 
 .dashboard-header {
+    text-align: center;
     color: var(--medium-grey);
+
 }
 
 .show-side-panel {
@@ -86,5 +86,8 @@ main {
             cursor: pointer;
             background-color: var(--main-purple-hover);
         }
+    }
+    .content-wrapper {
+        border-left: 1px solid hsl(0, 0%, 56%, 25%);
     }
 }
