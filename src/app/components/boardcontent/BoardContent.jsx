@@ -1,4 +1,3 @@
-import React, {useCallback} from 'react';
 import CustomButton from '@/app/components/buttons/CustomButton';
 import useStore from '@/app/store/useStore';
 import './boardcontent.css';
