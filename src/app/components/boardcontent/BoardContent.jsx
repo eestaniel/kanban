@@ -5,6 +5,19 @@ import './boardcontent.css';
 import {DragDropContext} from '@hello-pangea/dnd';
 import {DroppableColumn} from './DroppableColumn'; // This will be our droppable column component
 
+
+
+/**
+ * BoardContent component
+ * This component renders the board content based on the active board
+ * If there are no boards, it displays a message to create a new board
+ * If the active board has no columns, it displays a message to create a new column
+ * If the active board has columns, it displays the columns and tasks
+ * @param {object} props - Component props
+ * @param {number} props.boardCount - The number of boards
+ * @param {function} props.activateModal - Function to activate a modal
+ * @returns {JSX.Element}
+ * */
 const BoardContent = ({boardCount, activateModal}) => {
   const {activeBoard, updateTaskPositions, isDarkMode} = useStore((state) => ({
     activeBoard: state.activeBoard,
@@ -33,13 +46,6 @@ const BoardContent = ({boardCount, activateModal}) => {
     const completedSubtasks = task.subtasks.filter((subtask) => subtask.isCompleted);
     return completedSubtasks.length;
   };
-
-  const handleTaskClick = useCallback(
-    (task) => {
-      activateModal('view-task', task);
-    },
-    [activateModal]
-  );
 
   if (boardCount === 0) {
     return (

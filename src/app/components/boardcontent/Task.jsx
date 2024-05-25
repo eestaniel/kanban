@@ -1,7 +1,17 @@
-import React, {useState, useEffect, useRef} from 'react';
 import {Draggable} from '@hello-pangea/dnd';
 import useStore from "@/app/store/useStore";
 
+
+/**
+ * Task component
+ * This component renders a task card
+ * It is draggable and displays the task name and the number of subtasks
+ * It also activates the view task modal when clicked
+ * @param {object} props - Component props
+ * @param {number} props.index - The task index
+ * @param {object} props.task - The task object
+ * @returns {JSX.Element}
+ */
 export const Task = (props) => {
 
   const {activateModal} = useStore((state) => ({

@@ -4,11 +4,15 @@ import {Task} from "@/app/components/boardcontent/Task";
 
 /**
  * DroppableColumn component
- * @param {object} props
- * @param {JSX.Element} props.children - The children components to be rendered within the column.
- * @param {string} props.columnId - The unique identifier for the column.
+ * This component renders a column with tasks
+ * It is droppable and displays the column name and the number of tasks
+ * @param {object} props - Component props
+ * @param {string} props.columnId - The column ID
+ * @param {object} props.column - The column object
+ * @param {function} props.handleTaskCompletions - Function to handle task completions
+ * @returns {JSX.Element}
  */
-export const DroppableColumn = ({children, columnId, column, handleTaskCompletions}) => {
+export const DroppableColumn = ({columnId, column, handleTaskCompletions}) => {
   return (
     <Droppable droppableId={columnId}>
       {(provided) => (
