@@ -35,8 +35,20 @@ const TaskForm = ({mode}) => {
   }));
 
   const {validateInput} = useInputValidator();
-  const [subtasks, setSubtasks] = useState(['Make Coffee', 'Take a break', 'Go for a walk', 'Read a book', 'Meditate', 'Stretch', 'Have a snack', 'Listen to music']
-  );
+
+  const [placeholderSubtasks, setPlaceholderSubtasks] = useState([]);
+
+  // Generate random placeholder subtasks once
+  useEffect(() => {
+    const subtasksList = ['Make Coffee', 'Take a break', 'Go for a walk', 'Read a book', 'Meditate', 'Stretch', 'Have a snack', 'Listen to music'];
+
+    const generateRandomPlaceholderTasks = () => {
+      const shuffledSubtasks = [...subtasksList].sort(() => 0.5 - Math.random());
+      setPlaceholderSubtasks(shuffledSubtasks);
+    };
+
+    generateRandomPlaceholderTasks();
+  }, []);
 
   // If mode is edit and initial data exists, set the task data to the initial data
   useEffect(() => {
@@ -51,10 +63,6 @@ const TaskForm = ({mode}) => {
     }
   }, [mode, initialData, activeBoard]);
 
-  /**
-   * @function handleOnChange - Handles input changes for task fields and validates them.
-   * @param {Object} e - The event object containing the input data.
-   */
   const handleOnChange = useCallback((e) => {
     const {name, value} = e.target;
     setTaskData(prevState => ({
@@ -63,10 +71,6 @@ const TaskForm = ({mode}) => {
     }));
   }, []);
 
-  /**
-   * @function addSubtask - Adds a new subtask to the task.
-   * @param {Object} e - The event object.
-   */
   const addSubtask = (e) => {
     e.preventDefault();
     setTaskData(prevData => ({
@@ -75,11 +79,6 @@ const TaskForm = ({mode}) => {
     }));
   };
 
-  /**
-   * @function handleSubtaskChange - Handles input changes for subtasks and validates them.
-   * @param {number} index - The index of the subtask to be updated.
-   * @param {string} newTitle - The new title for the subtask.
-   */
   const handleSubtaskChange = useCallback((index, newTitle) => {
     setTaskData(prevData => ({
       ...prevData,
@@ -92,10 +91,6 @@ const TaskForm = ({mode}) => {
     }));
   }, [validateInput]);
 
-  /**
-   * @function removeSubtask - Removes a subtask from the task.
-   * @param {number} index - The index of the subtask to be removed.
-   */
   const removeSubtask = useCallback((index) => {
     setTaskData(prevData => ({
       ...prevData,
@@ -103,25 +98,13 @@ const TaskForm = ({mode}) => {
     }));
   }, []);
 
-
-  /**
-   * @function handleSelectStatus - Handles the selection of a new status for the task.
-   * @type {(function(*): void)|*}
-   * @param {Object} menuItem - The selected status menu item.
-   * @returns {void}
-   */
   const handleSelectStatus = useCallback((menuItem) => {
-    // create a new task object with the updated status
     setTaskData(prevData => ({
       ...prevData,
       status: menuItem
     }));
   }, []);
 
-  /**
-   * @function handleSubmitTask - Handles form submission, validates fields, and sets error messages.
-   * @param {Object} e - The event object.
-   */
   const handleSubmitTask = (e) => {
     e.preventDefault();
 
@@ -164,12 +147,6 @@ const TaskForm = ({mode}) => {
     }
   };
 
-  const generateRandomPlaceholderTasks = () => {
-    // pop a subtask from the list of subtasks
-    const randomIndex = Math.floor(Math.random() * subtasks.length);
-    return subtasks[randomIndex];
-  }
-
   return (
     <div className="task-container">
       <h2 className="heading-l task-header">{mode !== 'edit' ? 'Add New Task' : 'Edit Task'}</h2>
@@ -201,7 +178,7 @@ const TaskForm = ({mode}) => {
               label={index === 0 ? 'Subtasks' : ''}
               id={`subtask-id-${index}`}
               type="text"
-              placeholder={generateRandomPlaceholderTasks()}
+              placeholder={placeholderSubtasks[index % placeholderSubtasks.length] || ''}
               value={subtask.name}
               onChange={e => handleSubtaskChange(index, e.target.value)}
               isList={index !== 0}
@@ -219,7 +196,6 @@ const TaskForm = ({mode}) => {
             onClick={addSubtask}
           />
         </div>
-
 
         <Menu newTask={taskData} handleSelectStatus={handleSelectStatus}/>
 
