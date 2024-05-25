@@ -64,7 +64,7 @@ const Navbar = () => {
             <div className="add-task-container">
               <CustomButton
                 label="add-task"
-                type="primary-small"
+                type="primary-large"
                 id="add_task"
                 disabled={boards.length === 0 || !activeBoard?.columns?.length}
                 onClick={() => activateModal('new-task')}

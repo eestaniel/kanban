@@ -194,30 +194,32 @@ const TaskForm = ({mode}) => {
           onChange={handleOnChange}
           error={taskData.description_error}
         />
+        <div className="task-subtasks-group">
+          {taskData?.subtasks?.length > 0 && taskData.subtasks.map((subtask, index) => (
+            <CustomTextField
+              key={index}
+              label={index === 0 ? 'Subtasks' : ''}
+              id={`subtask-id-${index}`}
+              type="text"
+              placeholder={generateRandomPlaceholderTasks()}
+              value={subtask.name}
+              onChange={e => handleSubtaskChange(index, e.target.value)}
+              isList={index !== 0}
+              isListOne={index === 0}
+              onRemove={() => removeSubtask(index)}
+              error={subtask.error}
+            />
+          ))}
 
-        {taskData?.subtasks?.length > 0 && taskData.subtasks.map((subtask, index) => (
-          <CustomTextField
-            key={index}
-            label={index === 0 ? 'Subtasks' : ''}
-            id={`subtask-id-${index}`}
-            type="text"
-            placeholder={generateRandomPlaceholderTasks()}
-            value={subtask.name}
-            onChange={e => handleSubtaskChange(index, e.target.value)}
-            isList={index !== 0}
-            isListOne={index === 0}
-            onRemove={() => removeSubtask(index)}
-            error={subtask.error}
+          <CustomButton
+            label={'+ Add New Subtask'}
+            type={'secondary'}
+            id="add_subtask"
+            disabled={false}
+            onClick={addSubtask}
           />
-        ))}
+        </div>
 
-        <CustomButton
-          label={'+ Add New Subtask'}
-          type={'secondary'}
-          id="add_subtask"
-          disabled={false}
-          onClick={addSubtask}
-        />
 
         <Menu newTask={taskData} handleSelectStatus={handleSelectStatus}/>
 

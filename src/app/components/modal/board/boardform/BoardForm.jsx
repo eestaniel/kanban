@@ -1,33 +1,33 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, {useState, useCallback, useEffect} from 'react';
 import CustomTextField from "@/app/components/textfiield/CustomTextField";
 import CustomButton from "@/app/components/buttons/CustomButton";
 import useInputValidator from "@/app/hooks/useInputValidator";
 import useStore from "@/app/store/useStore";
-
+import './bordform.css'
 
 /**
-  * BoardForm component
+ * BoardForm component
  * This component is responsible for rendering the board form component
  * It can be used to render a form to create or edit a board
  * @param mode
  * @returns {JSX.Element}
  */
-const BoardForm = ({ mode }) => {
+const BoardForm = ({mode}) => {
   const [boardData, setBoardData] = useState({
     name: '',
     columns: [],
   });
 
-  const [errors, setErrors] = useState({ boardName: '', columns: {} });
+  const [errors, setErrors] = useState({boardName: '', columns: {}});
 
-  const { createBoard, closeModal, updateBoard, activeBoard } = useStore(state => ({
+  const {createBoard, closeModal, updateBoard, activeBoard} = useStore(state => ({
     createBoard: state.createBoard,
     closeModal: state.closeModal,
     updateBoard: state.updateBoard,
     activeBoard: state.activeBoard
   }));
 
-  const { validateInput } = useInputValidator();
+  const {validateInput} = useInputValidator();
 
   useEffect(() => {
     if (mode === 'edit') {
@@ -69,7 +69,7 @@ const BoardForm = ({ mode }) => {
 
   const handleSubmitBoard = () => {
     if (validateForm()) {
-      const newBoard = { ...boardData };
+      const newBoard = {...boardData};
 
       if (mode === 'edit') {
         updateBoard(newBoard);
@@ -82,11 +82,11 @@ const BoardForm = ({ mode }) => {
 
   const handleInputChange = useCallback((index, newName) => {
     const newColumns = [...boardData.columns];
-    newColumns[index] = { ...newColumns[index], name: newName };
+    newColumns[index] = {...newColumns[index], name: newName};
 
     const columnNames = newColumns.map(column => column.name.toLowerCase());
     const uniqueColumns = new Set(columnNames);
-    const columnErrors = { ...errors.columns };
+    const columnErrors = {...errors.columns};
 
     const error = validateInput(newName, 'column-name');
     if (error) {
@@ -104,7 +104,7 @@ const BoardForm = ({ mode }) => {
       });
     }
 
-    setBoardData({ ...boardData, columns: newColumns });
+    setBoardData({...boardData, columns: newColumns});
     setErrors(prevErrors => ({
       ...prevErrors,
       columns: columnErrors
@@ -112,7 +112,7 @@ const BoardForm = ({ mode }) => {
   }, [boardData, errors.columns, validateInput]);
 
   const handleBoardNameChange = (newName) => {
-    setBoardData({ ...boardData, name: newName });
+    setBoardData({...boardData, name: newName});
     setErrors(prevErrors => ({
       ...prevErrors,
       boardName: validateInput(newName, 'boardName')
@@ -122,13 +122,13 @@ const BoardForm = ({ mode }) => {
   const addColumn = () => {
     setBoardData(prev => ({
       ...prev,
-      columns: [...prev.columns, { name: '', error: '', tasks: [] }]
+      columns: [...prev.columns, {name: '', error: '', tasks: []}]
     }));
   };
 
   const removeColumn = (index) => {
     const newColumns = boardData.columns.filter((_, i) => i !== index);
-    setBoardData(prev => ({ ...prev, columns: newColumns }));
+    setBoardData(prev => ({...prev, columns: newColumns}));
   };
 
   return (
@@ -142,6 +142,7 @@ const BoardForm = ({ mode }) => {
         value={boardData.name}
         onChange={e => handleBoardNameChange(e.target.value)}
         error={errors.boardName}
+        classname={'board-form-header'}
       />
       {boardData.columns.map((column, index) => (
         <CustomTextField
@@ -158,8 +159,11 @@ const BoardForm = ({ mode }) => {
           error={errors.columns[index]}
         />
       ))}
-      <CustomButton label="+ Add New Column" type="secondary" onClick={addColumn} />
-      <CustomButton label={mode !== 'edit' ? 'Create Board' : 'Save Changes'} type="primary-small" onClick={handleSubmitBoard} />
+      <div className="board-button-group">
+        <CustomButton label="+ Add New Column" type="secondary" onClick={addColumn}/>
+        <CustomButton label={mode !== 'edit' ? 'Create Board' : 'Save Changes'} type="primary-small"
+                      onClick={handleSubmitBoard}/>
+      </div>
     </>
   );
 };

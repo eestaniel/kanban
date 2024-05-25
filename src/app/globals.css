@@ -87,7 +87,7 @@
     /* TextField */
     --textfield-bg: var(--white);
     --textfield-label: var(--medium-grey);
-    --textfield-fc: var(--medium-grey);
+    --textfield-fc: var(--black);
     --textfield-opactiy-idle-error: 25%;
     --textfield-opactiy-active: 100%;
     --textfield-stroke-idle-active: hsla(216, 15%, 57%, 25%);

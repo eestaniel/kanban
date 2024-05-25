@@ -5,7 +5,6 @@
 }
 
 
-
 .nav-container {
     display: flex;
     flex-direction: row;
@@ -50,6 +49,8 @@
 #add_task {
     display: flex;
     flex-direction: row;
+    align-items: start;
+    justify-content: center;
     padding: 0.625rem 1.125rem;
 
 }
@@ -70,6 +71,10 @@
 }
 
 .popover-trigger {
+    & svg {
+        overflow: visible;
+    }
+
     &:hover {
         cursor: pointer;
         scale: 115%;
@@ -80,6 +85,7 @@
     /* for mobile, disable */
     display: none;
     border-right: none;
+    transition: ease all 250ms;
 }
 
 .navgroup-wrapper {
@@ -96,14 +102,20 @@
     }
 
     .top-nav {
+        height: 80px;
         padding: 0;
 
         .nav-container {
             height: 100%;
         }
     }
+
     .nav-container {
         gap: 0;
+    }
+
+    .nav-header {
+        font-size: 1.25rem;
     }
 
     .logo-group {
@@ -122,18 +134,35 @@
             fill: var(--subtask-chkbox-fc);
         }
     }
+
     .logo-group-bottom-border {
-        border-bottom:  1px solid hsl(0,0%,56%, 25%);
+        border-bottom: 1px solid hsl(0, 0%, 56%, 25%);
+    }
+
+    #add_task {
+        width: 164px;
+        padding: 1rem 1.5rem;
+        max-height: 3rem;
     }
 
     .navgroup-wrapper {
         height: 100%;
-        border-bottom:  1px solid hsl(0,0%,56%, 25%);
-        border-left:  1px solid hsl(0,0%,56%, 25%);
+        border-bottom: 1px solid hsl(0, 0%, 56%, 25%);
+        border-left: 1px solid hsl(0, 0%, 56%, 25%);
         padding: 1rem 1.5rem;
     }
 
-    .navgroup-1, .navgroup-2{
+    .navgroup-1, .navgroup-2 {
         height: 100%;
+    }
+}
+
+@media screen and (min-width: 1440px) {
+    .top-nav {
+        height: 96px;
+    }
+
+    .logo-group {
+        max-width: 300px;
     }
 }

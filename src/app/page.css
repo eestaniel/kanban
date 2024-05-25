@@ -87,7 +87,13 @@ main {
             background-color: var(--main-purple-hover);
         }
     }
+
     .content-wrapper {
         border-left: 1px solid hsl(0, 0%, 56%, 25%);
+    }
+
+    .empty-state-group {
+        max-width: 460px;
+        padding-inline: 3rem;
     }
 }
