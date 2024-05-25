@@ -1,50 +1,14 @@
-import {create} from 'zustand';
+import { create } from 'zustand';
 
 // Utility function to generate unique IDs
 const generateId = () => Math.random().toString(36).substr(2, 9);
 
-/**
- * Utility function to move an item within an array
- * @param {Array} array - The array to modify
- * @param {number} fromIndex - Index of the item to move
- * @param {number} toIndex - Index where the item should be moved
- * @returns {Array} - New array with the item moved
- */
-const arrayMove = (array, fromIndex, toIndex) => {
-  const newArray = array.slice();
-  const [movedItem] = newArray.splice(fromIndex, 1);
-  newArray.splice(toIndex, 0, movedItem);
-  return newArray;
-};
 
 
 /**
  * Zustand store to manage the application state
  * @returns {Object} - Store object with state variables and actions
- * @property {Array} boards - List of boards
- * @property {Object} selectedBoard - Board selected for editing
- * @property {Object} activeBoard - Board currently being viewed
- * @property {boolean} isDarkMode - Flag to toggle dark mode
- * @property {boolean} isModalOpen - Flag to toggle modal visibility
- * @property {string} modalType - Type of modal to display
- * @property {Object} initialData - Initial data for the modal
- * @property {boolean} isSidePanelOpen - Flag to toggle side panel visibility
- * @property {Function} createUniqueId - Function to generate unique IDs
- * @property {Function} initializeBoard - Action to initialize the board data
- * @property {Function} createBoard - Action to create a new board
- * @property {Function} updateBoard - Action to update an existing board
- * @property {Function} selectBoardToEdit - Action to select a board for editing
- * @property {Function} changeActiveBoard - Action to change the active board
- * @property {Function} deleteBoard - Action to delete a board
- * @property {Function} getBoardAmount - Action to get the number of boards
- * @property {Function} createTask - Action to create a new task
- * @property {Function} updateTask - Action to update a task
- * @property {Function} updateTaskPositions - Action to update task positions
- * @property {Function} toggleDarkMode - Action to toggle dark mode
- * @property {Function} activateModal - Action to activate a modal
- * @property {Function} closeModal - Action to close the modal
- * @property {Function} toggleSidePanel - Action to toggle the side panel
- * */
+ */
 const useStore = create((set, get) => ({
   // State variables
   boards: [],
@@ -81,7 +45,7 @@ const useStore = create((set, get) => ({
     activeBoard: updatedBoard,
   })),
 
-  selectBoardToEdit: (board) => set({selectedBoard: board}),
+  selectBoardToEdit: (board) => set({ selectedBoard: board }),
 
   changeActiveBoard: (board) => set({
     activeBoard: board,
@@ -191,67 +155,89 @@ const useStore = create((set, get) => ({
     };
   }),
 
-  updateTaskPositions: (activeId, overId, newColumnId) => set((state) => {
-    const activeTask = state.activeBoard.columns.flatMap((column) => column.tasks).find((task) => task.name === activeId);
-    const activeColumn = state.activeBoard.columns.find((column) => column.tasks.includes(activeTask));
-    const overColumn = state.activeBoard.columns.find((column) => column.name === newColumnId);
+  updateTaskPositions: (activeId, sourceColumnId, destinationColumnId, sourceIndex, destinationIndex) => set((state) => {
+    const activeTask = state.activeBoard.columns
+      .flatMap((column) => column.tasks)
+      .find((task) => task.name === activeId);
 
-    if (!activeTask || !activeColumn || !overColumn) {
-      return state;
+    let  updatedActiveBoard = null
+
+    // handle the case where the task is moved within the same column and the same index
+    if (sourceColumnId === destinationColumnId && sourceIndex === destinationIndex) {
+      return { activeBoard: state.activeBoard };
     }
-
-    const activeTasks = activeColumn.tasks.filter((task) => task.name !== activeId);
-    const overTasks = overColumn.tasks;
-    const overIndex = overTasks.findIndex((task) => task.name === overId);
-
-    if (activeColumn === overColumn) {
-      const newTasks = arrayMove(overTasks, overTasks.indexOf(activeTask), overIndex);
-      const updatedActiveBoard = {
-        ...state.activeBoard,
-        columns: state.activeBoard.columns.map((column) => column === activeColumn ? {
-          ...column,
-          tasks: newTasks
-        } : column),
-      };
-      return {
-        activeBoard: updatedActiveBoard,
-        boards: state.boards.map((board) => board.name === updatedActiveBoard.name ? updatedActiveBoard : board),
-      };
-    } else {
-      const newTasks = overIndex === -1 ? [...overTasks, activeTask] : [
-        ...overTasks.slice(0, overIndex),
-        activeTask,
-        ...overTasks.slice(overIndex),
-      ];
-      const updatedActiveBoard = {
+    // handle the case where the task is moved within the same column but to a different index
+    else if (sourceColumnId === destinationColumnId) {
+      const updatedTasks = arrayMove(
+        state.activeBoard.columns.find((column) => column.name === sourceColumnId).tasks,
+        sourceIndex,
+        destinationIndex
+      );
+      updatedActiveBoard = {
         ...state.activeBoard,
         columns: state.activeBoard.columns.map((column) => {
-          if (column === activeColumn) {
-            return {...column, tasks: activeTasks};
-          }
-          if (column === overColumn) {
-            return {...column, tasks: newTasks};
+          if (column.name === sourceColumnId) {
+            return {
+              ...column,
+              tasks: updatedTasks,
+            };
           }
           return column;
         }),
       };
-      return {
-        activeBoard: updatedActiveBoard,
-        boards: state.boards.map((board) => board.name === updatedActiveBoard.name ? updatedActiveBoard : board),
+    }
+    // handle the case where the task is moved to a different column
+    else {
+      const updatedSourceTasks = state.activeBoard.columns
+        .find((column) => column.name === sourceColumnId)
+        .tasks.filter((task) => task.name !== activeId);
+
+      const updatedDestinationTasks = state.activeBoard.columns
+        .find((column) => column.name === destinationColumnId)
+        .tasks;
+
+      updatedActiveBoard = {
+        ...state.activeBoard,
+        columns: state.activeBoard.columns.map((column) => {
+          if (column.name === sourceColumnId) {
+            return {
+              ...column,
+              tasks: updatedSourceTasks,
+            };
+          }
+          if (column.name === destinationColumnId) {
+            return {
+              ...column,
+              tasks: [
+                ...updatedDestinationTasks.slice(0, destinationIndex),
+                activeTask,
+                ...updatedDestinationTasks.slice(destinationIndex),
+              ],
+            };
+          }
+          return column;
+        }),
       };
     }
+
+    return {
+      activeBoard: updatedActiveBoard,
+      boards: state.boards.map((board) =>
+        board.name === updatedActiveBoard.name ? updatedActiveBoard : board
+      ),
+    };
   }),
 
   // Dark mode actions
-  toggleDarkMode: () => set((state) => ({isDarkMode: !state.isDarkMode})),
+  toggleDarkMode: () => set((state) => ({ isDarkMode: !state.isDarkMode })),
 
   // Modal actions
-  activateModal: (modalType, initialData) => set({isModalOpen: true, modalType, initialData}),
+  activateModal: (modalType, initialData) => set({ isModalOpen: true, modalType, initialData }),
 
-  closeModal: () => set({isModalOpen: false, modalType: '', initialData: {}}),
+  closeModal: () => set({ isModalOpen: false, modalType: '', initialData: {} }),
 
   // Side panel actions
-  toggleSidePanel: () => set((state) => ({isSidePanelOpen: !state.isSidePanelOpen})),
+  toggleSidePanel: () => set((state) => ({ isSidePanelOpen: !state.isSidePanelOpen })),
 }));
 
 export default useStore;
