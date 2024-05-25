@@ -94,6 +94,7 @@ const useStore = create((set, get) => ({
   updateTask: (updatedTask, type) => set((state) => {
     let updatedActiveBoard;
 
+
     switch (type) {
       case 'checklist':
         updatedActiveBoard = {
@@ -130,29 +131,53 @@ const useStore = create((set, get) => ({
         const oldStatus = state.initialData.status;
         const newStatus = updatedTask.status;
 
-        updatedActiveBoard = {
-          ...state.activeBoard,
-          columns: state.activeBoard.columns.map((column) => {
-            if (column.name === oldStatus) {
-              return {
-                ...column,
-                tasks: column.tasks.filter((task) => task.name !== state.initialData.name),
-              };
-            }
-            if (column.name === newStatus) {
-              return {
-                ...column,
-                tasks: [...column.tasks, updatedTask],
-              };
-            }
-            return column;
-          }),
-        };
+        // handle the case where the task status is changed
+        if (oldStatus !== newStatus) {
+          const updatedSourceTasks = state.activeBoard.columns
+            .find((column) => column.name === oldStatus)
+            .tasks.filter((task) => task.name !== updatedTask.name);
+
+          const updatedDestinationTasks = state.activeBoard.columns
+            .find((column) => column.name === newStatus)
+            .tasks;
+
+          updatedActiveBoard = {
+            ...state.activeBoard,
+            columns: state.activeBoard.columns.map((column) => {
+              if (column.name === oldStatus) {
+                return {
+                  ...column,
+                  tasks: updatedSourceTasks,
+                };
+              }
+              if (column.name === newStatus) {
+                return {
+                  ...column,
+                  tasks: [...updatedDestinationTasks, updatedTask],
+                };
+              }
+              return column;
+            }),
+          };
+        }
+
+        // handle the case where the task status is not changed
+        else {
+          updatedActiveBoard = {
+            ...state.activeBoard,
+            columns: state.activeBoard.columns.map((column) => ({
+              ...column,
+              tasks: column.tasks.map((task) => task.name === updatedTask.name ? updatedTask : task),
+            })),
+          };
+        }
+
         break;
 
       default:
         return state;
     }
+    console.log(updatedActiveBoard)
 
     return {
       activeBoard: updatedActiveBoard,
