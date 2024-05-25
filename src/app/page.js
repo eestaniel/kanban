@@ -1,16 +1,23 @@
 "use client";
-
+import React, { useRef, useEffect } from "react";
 import Navbar from "@/app/components/navbar/Navbar";
 import SideNav from "@/app/components/navbar/SideNav";
 import Modal from "@/app/components/modal/Modal";
 import "./page.css";
-import {useEffect, useRef} from "react";
 import useStore from "@/app/store/useStore";
 import BoardContent from "@/app/components/boardcontent/BoardContent";
 import Data from "@/app/data.json";
+import useHorizontalDrag from "@/app/hooks/useHorizontalDrag"; // Import the custom hook
 
 export default function Home() {
-  const {isDarkMode, activateModal, initializeBoard, boards, isSidePanelOpen, toggleSidePanel} = useStore((state) => ({
+  const {
+    isDarkMode,
+    activateModal,
+    initializeBoard,
+    boards,
+    isSidePanelOpen,
+    toggleSidePanel,
+  } = useStore((state) => ({
     isDarkMode: state.isDarkMode,
     activateModal: state.activateModal,
     initializeBoard: state.initializeBoard,
@@ -20,12 +27,9 @@ export default function Home() {
   }));
 
   const contentWrapperRef = useRef(null);
-  const isDragging = useRef(false);
-  const startX = useRef(0);
-  const scrollLeft = useRef(0);
+  useHorizontalDrag(contentWrapperRef); // Use the custom hook
 
   useEffect(() => {
-    // Add dark mode class to body if dark mode is enabled
     if (isDarkMode) {
       document.body.classList.add("dark-mode");
     } else {
@@ -34,70 +38,14 @@ export default function Home() {
   }, [isDarkMode]);
 
   useEffect(() => {
-    // Initialize boards from data.json
     if (Data.boards) {
       initializeBoard(Data.boards);
     }
   }, [initializeBoard]);
 
-  useEffect(() => {
-    const contentWrapper = contentWrapperRef.current;
-
-    const handleMouseDown = (e) => {
-      // if e.target conatins a div that has a class of task-card, return
-      const validClasses = ['task-list-group', 'columns-container', 'column-card'];
-      if (!validClasses.some(cls => e.target.classList.contains(cls))) return;
-      isDragging.current = true;
-      startX.current = e.pageX - contentWrapper.offsetLeft;
-      scrollLeft.current = contentWrapper.scrollLeft;
-      contentWrapper.style.cursor = "grabbing";
-      contentWrapper.style.userSelect = "none";
-    };
-
-    const handleMouseMove = (e) => {
-      if (!isDragging.current) return;
-      e.preventDefault();
-      const x = e.pageX - contentWrapper.offsetLeft;
-      const walk = (x - startX.current) * 2; // Scroll-fast horizontally
-      contentWrapper.scrollLeft = scrollLeft.current - walk;
-    };
-
-    const handleMouseUp = () => {
-      isDragging.current = false;
-      contentWrapper.style.cursor = "default";
-      contentWrapper.style.userSelect = "auto";
-    };
-
-    const handleMouseLeave = () => {
-      isDragging.current = false;
-      contentWrapper.style.cursor = "auto";
-      contentWrapper.style.userSelect = "auto";
-    };
-
-    const handleWindowMouseUp = () => {
-      isDragging.current = false;
-      contentWrapper.style.cursor = "all-scroll";
-      contentWrapper.style.userSelect = "auto";
-    };
-
-    contentWrapper.addEventListener("mousedown", handleMouseDown);
-    contentWrapper.addEventListener("mousemove", handleMouseMove);
-    contentWrapper.addEventListener("mouseup", handleMouseUp);
-    contentWrapper.addEventListener("mouseleave", handleMouseLeave);
-    window.addEventListener("mouseup", handleWindowMouseUp);
-
-    return () => {
-      contentWrapper.removeEventListener("mousedown", handleMouseDown);
-      contentWrapper.removeEventListener("mousemove", handleMouseMove);
-      contentWrapper.removeEventListener("mouseup", handleMouseUp);
-      contentWrapper.removeEventListener("mouseleave", handleMouseLeave);
-      window.removeEventListener("mouseup", handleWindowMouseUp);
-    };
-  }, []);
-
   return (
     <main>
-      <Navbar/>
+      <Navbar />
       {!isSidePanelOpen && (
         <div className="show-side-panel" onClick={() => toggleSidePanel()}>
           <svg width="16" height="11" xmlns="http://www.w3.org/2000/svg">
@@ -109,10 +57,13 @@ export default function Home() {
         </div>
       )}
       <div className="main-container">
-        <SideNav/>
+        <SideNav />
         <div className="content-wrapper" ref={contentWrapperRef}>
-          <BoardContent boardCount={Object.keys(boards)?.length} activateModal={activateModal}/>
-          <Modal/>
+          <BoardContent
+            boardCount={Object.keys(boards)?.length}
+            activateModal={activateModal}
+          />
+          <Modal />
         </div>
       </div>
     </main>
