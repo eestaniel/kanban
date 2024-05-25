@@ -1,3 +1,4 @@
+'use client';
 import { useState, useEffect, useRef } from "react";
 
 /**
@@ -10,13 +11,15 @@ const useHorizontalDrag = (ref) => {
   const scrollLeft = useRef(0);
 
   useEffect(() => {
+    // Only run on client-side
+    if (typeof window === "undefined") return;
+
     const element = ref.current;
 
     if (!element) return;
 
     const handleMouseDown = (e) => {
-      // Prevent dragging if e.target.classList does not contain any of the valid class names
-      const validClasses = ['task-list-group', 'columns-container'];
+      const validClasses = ['task-list-group', '\'columns-container\''];
       const isValidTarget = validClasses.some(className => e.target.classList.contains(className));
 
       if (!isValidTarget) return;

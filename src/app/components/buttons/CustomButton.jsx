@@ -1,3 +1,4 @@
+
 import './custombutton.css';
 import { useState, useEffect } from 'react';
 
@@ -20,6 +21,9 @@ const CustomButton = ({ label, type, onClick, id = '', disabled = false }) => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
   useEffect(() => {
+
+    if (typeof window === 'undefined') return;
+
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
     };

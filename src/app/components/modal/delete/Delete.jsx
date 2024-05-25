@@ -1,6 +1,7 @@
 import './delete.css'
 import useStore from "@/app/store/useStore";
-import CustomButton from "@/app/components/buttons/CustomButton";
+import dynamic from 'next/dynamic'
+const CustomButton = dynamic(() => import("@/app/components/buttons/CustomButton"), {ssr: false});
 import {useCallback} from "react";
 
 const Delete = ({type}) => {

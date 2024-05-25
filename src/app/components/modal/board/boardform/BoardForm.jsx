@@ -1,6 +1,7 @@
 import React, {useState, useCallback, useEffect} from 'react';
 import CustomTextField from "@/app/components/textfiield/CustomTextField";
-import CustomButton from "@/app/components/buttons/CustomButton";
+import dynamic from 'next/dynamic'
+const CustomButton = dynamic(() => import("@/app/components/buttons/CustomButton"), {ssr: false});
 import useInputValidator from "@/app/hooks/useInputValidator";
 import useStore from "@/app/store/useStore";
 import './bordform.css'
