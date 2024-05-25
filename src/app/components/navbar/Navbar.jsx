@@ -2,7 +2,8 @@ import './navbar.css';
 import Image from 'next/image';
 import Chevron_Down from '@/app/assets/icon-chevron-down.svg';
 import Chevron_Up from '@/app/assets/icon-chevron-up.svg';
-import CustomButton from "@/app/components/buttons/CustomButton";
+import dynamic from 'next/dynamic'
+const CustomButton = dynamic(() => import("@/app/components/buttons/CustomButton"), {ssr: false});
 import useStore from "@/app/store/useStore";
 import { useState } from "react";
 import Popover from "@/app/components/popover/Popover";

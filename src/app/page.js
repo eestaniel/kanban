@@ -7,7 +7,8 @@ import "./page.css";
 import useStore from "@/app/store/useStore";
 import BoardContent from "@/app/components/boardcontent/BoardContent";
 import Data from "@/app/data.json";
-import useHorizontalDrag from "@/app/hooks/useHorizontalDrag"; // Import the custom hook
+import dynamic from 'next/dynamic'
+const useHorizontalDrag = dynamic(() => import("@/app/hooks/useHorizontalDrag"), {ssr: false});
 
 export default function Home() {
   const {
@@ -25,6 +26,7 @@ export default function Home() {
     isSidePanelOpen: state.isSidePanelOpen,
     toggleSidePanel: state.toggleSidePanel,
   }));
+
 
   const contentWrapperRef = useRef(null);
   useHorizontalDrag(contentWrapperRef); // Use the custom hook

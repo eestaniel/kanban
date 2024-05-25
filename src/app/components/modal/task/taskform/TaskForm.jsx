@@ -1,6 +1,7 @@
 import './taskform.css';
 import CustomTextField from "@/app/components/textfiield/CustomTextField";
-import CustomButton from "@/app/components/buttons/CustomButton";
+import dynamic from 'next/dynamic'
+const CustomButton = dynamic(() => import("@/app/components/buttons/CustomButton"), {ssr: false});
 import {useCallback, useEffect, useState} from "react";
 import useInputValidator from "@/app/hooks/useInputValidator";
 import Menu from "@/app/components/menu/Menu";
