@@ -87,7 +87,7 @@
     /* TextField */
     --textfield-bg: var(--white);
     --textfield-label: var(--medium-grey);
-    --textfield-fc: var(--medium-grey);
+    --textfield-fc: var(--black);
     --textfield-opactiy-idle-error: 25%;
     --textfield-opactiy-active: 100%;
     --textfield-stroke-idle-active: hsla(216, 15%, 57%, 25%);
@@ -145,6 +145,9 @@
 
         /* new column */
         --new-column: linear-gradient(to right, hsla(235, 12%, 19%, .25) 0%, hsla(235, 12%, 19%, 0.25) 100%);
+
+        /* task hover column */
+        --column-hover: hsl(235, 16%, 17%);
     }
 
 

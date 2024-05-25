@@ -10,7 +10,7 @@ const useInputValidator = () => {
   // General validation function for handling common logic
   const validateCommon = (newValue, maxLength, fieldName, isDescription=false) => {
     if (!isDescription && !newValue.trim()) {
-      return `${fieldName} cannot be empty`;
+      return `Can't be empty`;
     }
     if (newValue.length > maxLength) {
       return `${fieldName} cannot exceed ${maxLength} characters`;

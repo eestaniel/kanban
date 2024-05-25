@@ -1,7 +1,7 @@
 import './taskform.css';
 import CustomTextField from "@/app/components/textfiield/CustomTextField";
 import CustomButton from "@/app/components/buttons/CustomButton";
-import { useState, useEffect, useCallback } from "react";
+import {useCallback, useEffect, useState} from "react";
 import useInputValidator from "@/app/hooks/useInputValidator";
 import Menu from "@/app/components/menu/Menu";
 import useStore from "@/app/store/useStore";
@@ -15,7 +15,7 @@ import useStore from "@/app/store/useStore";
  * Props:
  * @param {string} mode - Determines if the form is in 'create' or 'edit' mode.
  */
-const TaskForm = ({ mode }) => {
+const TaskForm = ({mode}) => {
   const [taskData, setTaskData] = useState({
     id: '',
     name: '',
@@ -26,7 +26,7 @@ const TaskForm = ({ mode }) => {
     status: ''
   });
 
-  const { activeBoard, createTask, closeModal, initialData, updateTask } = useStore(state => ({
+  const {activeBoard, createTask, closeModal, initialData, updateTask} = useStore(state => ({
     activeBoard: state.activeBoard,
     createTask: state.createTask,
     closeModal: state.closeModal,
@@ -34,7 +34,21 @@ const TaskForm = ({ mode }) => {
     updateTask: state.updateTask
   }));
 
-  const { validateInput } = useInputValidator();
+  const {validateInput} = useInputValidator();
+
+  const [placeholderSubtasks, setPlaceholderSubtasks] = useState([]);
+
+  // Generate random placeholder subtasks once
+  useEffect(() => {
+    const subtasksList = ['Make Coffee', 'Take a break', 'Go for a walk', 'Read a book', 'Meditate', 'Stretch', 'Have a snack', 'Listen to music'];
+
+    const generateRandomPlaceholderTasks = () => {
+      const shuffledSubtasks = [...subtasksList].sort(() => 0.5 - Math.random());
+      setPlaceholderSubtasks(shuffledSubtasks);
+    };
+
+    generateRandomPlaceholderTasks();
+  }, []);
 
   // If mode is edit and initial data exists, set the task data to the initial data
   useEffect(() => {
@@ -49,51 +63,34 @@ const TaskForm = ({ mode }) => {
     }
   }, [mode, initialData, activeBoard]);
 
-  /**
-   * @function handleOnChange - Handles input changes for task fields and validates them.
-   * @param {Object} e - The event object containing the input data.
-   */
   const handleOnChange = useCallback((e) => {
-    const { name, value } = e.target;
+    const {name, value} = e.target;
     setTaskData(prevState => ({
       ...prevState,
       [name]: value
     }));
   }, []);
 
-  /**
-   * @function addSubtask - Adds a new subtask to the task.
-   * @param {Object} e - The event object.
-   */
   const addSubtask = (e) => {
     e.preventDefault();
     setTaskData(prevData => ({
       ...prevData,
-      subtasks: [...prevData.subtasks, { name: '', isCompleted: false }]
+      subtasks: [...prevData.subtasks, {name: '', isCompleted: false}]
     }));
   };
 
-  /**
-   * @function handleSubtaskChange - Handles input changes for subtasks and validates them.
-   * @param {number} index - The index of the subtask to be updated.
-   * @param {string} newTitle - The new title for the subtask.
-   */
   const handleSubtaskChange = useCallback((index, newTitle) => {
     setTaskData(prevData => ({
       ...prevData,
       subtasks: prevData.subtasks.map((subtask, i) => {
         if (i === index) {
-          return { ...subtask, name: newTitle, error: validateInput(newTitle, 'task-name') };
+          return {...subtask, name: newTitle, error: validateInput(newTitle, 'task-name')};
         }
         return subtask;
       })
     }));
   }, [validateInput]);
 
-  /**
-   * @function removeSubtask - Removes a subtask from the task.
-   * @param {number} index - The index of the subtask to be removed.
-   */
   const removeSubtask = useCallback((index) => {
     setTaskData(prevData => ({
       ...prevData,
@@ -101,30 +98,18 @@ const TaskForm = ({ mode }) => {
     }));
   }, []);
 
-
-  /**
-   * @function handleSelectStatus - Handles the selection of a new status for the task.
-   * @type {(function(*): void)|*}
-   * @param {Object} menuItem - The selected status menu item.
-   * @returns {void}
-   */
   const handleSelectStatus = useCallback((menuItem) => {
-    // create a new task object with the updated status
     setTaskData(prevData => ({
       ...prevData,
       status: menuItem
     }));
-  } , []);
+  }, []);
 
-  /**
-   * @function handleSubmitTask - Handles form submission, validates fields, and sets error messages.
-   * @param {Object} e - The event object.
-   */
   const handleSubmitTask = (e) => {
     e.preventDefault();
 
     let hasError = false;
-    const updatedTaskData = { ...taskData };
+    const updatedTaskData = {...taskData};
 
     // Validate task name
     updatedTaskData.name_error = validateInput(taskData.name, 'task-name');
@@ -138,7 +123,7 @@ const TaskForm = ({ mode }) => {
     updatedTaskData.subtasks = updatedTaskData.subtasks.map((subtask) => {
       const subtaskError = validateInput(subtask.name, 'task-name');
       if (subtaskError) hasError = true;
-      return { ...subtask, error: subtaskError };
+      return {...subtask, error: subtaskError};
     });
 
     if (hasError) {
@@ -186,32 +171,33 @@ const TaskForm = ({ mode }) => {
           onChange={handleOnChange}
           error={taskData.description_error}
         />
+        <div className="task-subtasks-group">
+          {taskData?.subtasks?.length > 0 && taskData.subtasks.map((subtask, index) => (
+            <CustomTextField
+              key={index}
+              label={index === 0 ? 'Subtasks' : ''}
+              id={`subtask-id-${index}`}
+              type="text"
+              placeholder={placeholderSubtasks[index % placeholderSubtasks.length] || ''}
+              value={subtask.name}
+              onChange={e => handleSubtaskChange(index, e.target.value)}
+              isList={index !== 0}
+              isListOne={index === 0}
+              onRemove={() => removeSubtask(index)}
+              error={subtask.error}
+            />
+          ))}
 
-        {taskData?.subtasks?.length > 0 && taskData.subtasks.map((subtask, index) => (
-          <CustomTextField
-            key={index}
-            label={index === 0 ? 'Subtasks' : ''}
-            id={`subtask-id-${index}`}
-            type="text"
-            placeholder="e.g. Make coffee"
-            value={subtask.name}
-            onChange={e => handleSubtaskChange(index, e.target.value)}
-            isList={index !== 0}
-            isListOne={index === 0}
-            onRemove={() => removeSubtask(index)}
-            error={subtask.error}
+          <CustomButton
+            label={'+ Add New Subtask'}
+            type={'secondary'}
+            id="add_subtask"
+            disabled={false}
+            onClick={addSubtask}
           />
-        ))}
+        </div>
 
-        <CustomButton
-          label={'+ Add New Subtask'}
-          type={'secondary'}
-          id="add_subtask"
-          disabled={false}
-          onClick={addSubtask}
-        />
-
-        <Menu newTask={taskData} handleSelectStatus={handleSelectStatus} />
+        <Menu newTask={taskData} handleSelectStatus={handleSelectStatus}/>
 
         <CustomButton
           label={`${mode !== 'edit' ? 'Create Task' : 'Save Changes'}`}

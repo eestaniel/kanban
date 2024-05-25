@@ -1,45 +1,19 @@
-import {create} from 'zustand';
-
-const arrayMove = (array, fromIndex, toIndex) => {
-  const newArray = array.slice();
-  const [movedItem] = newArray.splice(fromIndex, 1);
-  newArray.splice(toIndex, 0, movedItem);
-  return newArray;
-};
-
+import { create } from 'zustand';
 
 // Utility function to generate unique IDs
 const generateId = () => Math.random().toString(36).substr(2, 9);
 
+const arrayMove = (array, from, to) => {
+  const newArray = [...array];
+  const [element] = newArray.splice(from, 1);
+  newArray.splice(to, 0, element);
+  return newArray;
+
+}
+
 /**
- * useStore Hook
- *
- * This hook provides a global state management solution using Zustand. It manages the state for boards,
- * dark mode, and modal visibility, and includes actions for manipulating these states.
- *
- * State:
- * @param {Array} boards - List of board objects.
- * @param {Object|null} selectedBoard - The board object currently selected for editing.
- * @param {Object|null} activeBoard - The board object currently being viewed.
- * @param {boolean} isDarkMode - The state of the dark mode (true if dark mode is enabled).
- * @param {boolean} isModalOpen - The state of the modal visibility (true if a modal is open).
- * @param {string} modalType - The type of modal currently open.
- * @param {Object} initialData - The initial data for the currently viewed task.
- *
- * Actions:
- * @function createUniqueId - Generates a unique ID that does not exist in the provided object key.
- * @function createBoard - Adds a new board to the state and sets it as the active board.
- * @function updateBoard - Updates an existing board in the state.
- * @function selectBoardToEdit - Sets the selected board for editing.
- * @function changeActiveBoard - Sets the active board.
- * @function deleteBoard - Deletes a board from the state and updates the active board.
- * @function getBoardAmount - Returns the number of boards in the state.
- * @function toggleDarkMode - Toggles the dark mode state.
- * @function activateModal - Activates a modal with the specified type.
- * @function closeModal - Closes the modal.
- * @function createTask - Adds a new task to the appropriate column in the active board.
- * @function updateTask - Updates a task in the initialData.
- * @function toggleSidePanel - Toggles the side panel visibility.
+ * Zustand store to manage the application state
+ * @returns {Object} - Store object with state variables and actions
  */
 const useStore = create((set, get) => ({
   // State variables
@@ -62,10 +36,10 @@ const useStore = create((set, get) => ({
   },
 
   // Board actions
-  initializeBoard: (boardData) => set(() => ({
+  initializeBoard: (boardData) => set({
     boards: boardData,
     activeBoard: boardData.length > 0 ? boardData[0] : null,
-  })),
+  }),
 
   createBoard: (newBoard) => set((state) => ({
     boards: [...state.boards, newBoard],
@@ -73,20 +47,16 @@ const useStore = create((set, get) => ({
   })),
 
   updateBoard: (updatedBoard) => set((state) => ({
-    boards: state.boards.map((board) =>
-      board.name === updatedBoard.name ? updatedBoard : board
-    ),
+    boards: state.boards.map((board) => board.name === updatedBoard.name ? updatedBoard : board),
     activeBoard: updatedBoard,
   })),
 
-  selectBoardToEdit: (board) => set(() => ({
-    selectedBoard: board,
-  })),
+  selectBoardToEdit: (board) => set({ selectedBoard: board }),
 
-  changeActiveBoard: (board) => set(() => ({
+  changeActiveBoard: (board) => set({
     activeBoard: board,
     initialData: {},
-  })),
+  }),
 
   deleteBoard: (boardId) => set((state) => {
     const updatedBoards = state.boards.filter((board) => board.name !== boardId);
@@ -100,23 +70,24 @@ const useStore = create((set, get) => ({
 
   // Task actions
   createTask: (newTask) => set((state) => {
+    const updatedColumns = state.activeBoard.columns.map((column) => {
+      if (column.name === newTask.status) {
+        return {
+          ...column,
+          tasks: [...column.tasks, newTask],
+        };
+      }
+      return column;
+    });
+
     const updatedActiveBoard = {
       ...state.activeBoard,
-      columns: state.activeBoard.columns.map((column) => {
-        if (column.name === newTask.status) {
-          return {
-            ...column,
-            tasks: [...column.tasks, newTask],
-          };
-        }
-        return column;
-      }),
+      columns: updatedColumns,
     };
+
     return {
       activeBoard: updatedActiveBoard,
-      boards: state.boards.map((board) =>
-        board.name === updatedActiveBoard.name ? updatedActiveBoard : board
-      ),
+      boards: state.boards.map((board) => board.name === updatedActiveBoard.name ? updatedActiveBoard : board),
     };
   }),
 
@@ -129,9 +100,7 @@ const useStore = create((set, get) => ({
           ...state.activeBoard,
           columns: state.activeBoard.columns.map((column) => ({
             ...column,
-            tasks: column.tasks.map((task) =>
-              task.name === updatedTask.name ? updatedTask : task
-            ),
+            tasks: column.tasks.map((task) => task.name === updatedTask.name ? updatedTask : task),
           })),
         };
         break;
@@ -187,109 +156,94 @@ const useStore = create((set, get) => ({
 
     return {
       activeBoard: updatedActiveBoard,
-      boards: state.boards.map((board) =>
-        board.name === updatedActiveBoard.name ? updatedActiveBoard : board
-      ),
+      boards: state.boards.map((board) => board.name === updatedActiveBoard.name ? updatedActiveBoard : board),
       initialData: updatedTask,
     };
   }),
 
-  updateTaskPositions: (activeId, overId, newColumnId) => {
-    set((state) => {
-      const activeTask = state.activeBoard.columns.flatMap((column) =>
-        column.tasks.filter((task) => task.name === activeId)
-      )[0];
+  updateTaskPositions: (activeId, sourceColumnId, destinationColumnId, sourceIndex, destinationIndex) => set((state) => {
+    const activeTask = state.activeBoard.columns
+      .flatMap((column) => column.tasks)
+      .find((task) => task.name === activeId);
 
-      const activeColumn = state.activeBoard.columns.find((column) =>
-        column.tasks.includes(activeTask)
+    let  updatedActiveBoard = null
+
+    // handle the case where the task is moved within the same column and the same index
+    if (sourceColumnId === destinationColumnId && sourceIndex === destinationIndex) {
+      return { activeBoard: state.activeBoard };
+    }
+    // handle the case where the task is moved within the same column but to a different index
+    else if (sourceColumnId === destinationColumnId) {
+      const updatedTasks = arrayMove(
+        state.activeBoard.columns.find((column) => column.name === sourceColumnId).tasks,
+        sourceIndex,
+        destinationIndex
       );
+      updatedActiveBoard = {
+        ...state.activeBoard,
+        columns: state.activeBoard.columns.map((column) => {
+          if (column.name === sourceColumnId) {
+            return {
+              ...column,
+              tasks: updatedTasks,
+            };
+          }
+          return column;
+        }),
+      };
+    }
+    // handle the case where the task is moved to a different column
+    else {
+      const updatedSourceTasks = state.activeBoard.columns
+        .find((column) => column.name === sourceColumnId)
+        .tasks.filter((task) => task.name !== activeId);
 
-      if (!activeTask || !activeColumn) {
-        return state;
-      }
+      const updatedDestinationTasks = state.activeBoard.columns
+        .find((column) => column.name === destinationColumnId)
+        .tasks;
 
-      const overColumn = state.activeBoard.columns.find((column) =>
-        column.name === newColumnId
-      );
+      updatedActiveBoard = {
+        ...state.activeBoard,
+        columns: state.activeBoard.columns.map((column) => {
+          if (column.name === sourceColumnId) {
+            return {
+              ...column,
+              tasks: updatedSourceTasks,
+            };
+          }
+          if (column.name === destinationColumnId) {
+            return {
+              ...column,
+              tasks: [
+                ...updatedDestinationTasks.slice(0, destinationIndex),
+                activeTask,
+                ...updatedDestinationTasks.slice(destinationIndex),
+              ],
+            };
+          }
+          return column;
+        }),
+      };
+    }
 
-      if (!overColumn) {
-        return state;
-      }
-
-      const activeTasks = activeColumn.tasks.filter((task) => task.name !== activeId);
-      const overTasks = overColumn.tasks;
-      const overIndex = overTasks.findIndex((task) => task.name === overId);
-
-
-      if (activeColumn === overColumn) {
-        // Move within the same column
-        const newTasks = arrayMove(overTasks, overTasks.indexOf(activeTask), overIndex);
-        const updatedActiveBoard = {
-          ...state.activeBoard,
-          columns: state.activeBoard.columns.map((column) =>
-            column === activeColumn ? {...column, tasks: newTasks} : column
-          ),
-        };
-        return {
-          activeBoard: updatedActiveBoard,
-          boards: state.boards.map((board) =>
-            board.name === updatedActiveBoard.name ? updatedActiveBoard : board
-          ),
-        };
-      } else {
-        // Move to a different column
-        // if overIndex is -1, it means the task is being moved to the end of the column
-        const newTasks = overIndex === -1
-          ? [...overTasks, activeTask]
-          : [
-            ...overTasks.slice(0, overIndex),
-            activeTask,
-            ...overTasks.slice(overIndex),
-          ];
-        const updatedActiveBoard = {
-          ...state.activeBoard,
-          columns: state.activeBoard.columns.map((column) => {
-            if (column === activeColumn) {
-              return {...column, tasks: activeTasks};
-            }
-            if (column === overColumn) {
-              return {...column, tasks: newTasks};
-            }
-            return column;
-          }),
-        };
-        return {
-          activeBoard: updatedActiveBoard,
-          boards: state.boards.map((board) =>
-            board.name === updatedActiveBoard.name ? updatedActiveBoard : board
-          ),
-        };
-      }
-    });
-  },
+    return {
+      activeBoard: updatedActiveBoard,
+      boards: state.boards.map((board) =>
+        board.name === updatedActiveBoard.name ? updatedActiveBoard : board
+      ),
+    };
+  }),
 
   // Dark mode actions
-  toggleDarkMode: () => set((state) => ({
-    isDarkMode: !state.isDarkMode,
-  })),
+  toggleDarkMode: () => set((state) => ({ isDarkMode: !state.isDarkMode })),
 
   // Modal actions
-  activateModal: (modalType, initialData) => set(() => ({
-    isModalOpen: true,
-    modalType,
-    initialData,
-  })),
+  activateModal: (modalType, initialData) => set({ isModalOpen: true, modalType, initialData }),
 
-  closeModal: () => set(() => ({
-    isModalOpen: false,
-    modalType: '',
-    initialData: {},
-  })),
+  closeModal: () => set({ isModalOpen: false, modalType: '', initialData: {} }),
 
   // Side panel actions
-  toggleSidePanel: () => set((state) => ({
-    isSidePanelOpen: !state.isSidePanelOpen,
-  })),
+  toggleSidePanel: () => set((state) => ({ isSidePanelOpen: !state.isSidePanelOpen })),
 }));
 
 export default useStore;

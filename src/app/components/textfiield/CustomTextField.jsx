@@ -1,54 +1,30 @@
 import './customtextfield.css';
-import CrossIcon from '@/app/assets/icon-cross.svg';
-import Image from 'next/image';
-import {memo, useState} from 'react';
+import { memo, useState, useEffect, useRef } from 'react';
 
-/**
- * CustomTextField Component
- *
- * A reusable text field component that supports input, textarea, select, and checkbox elements.
- *
- * Props:
- * @param {string} label - The label for the input field.
- * @param {string} name - The name attribute for the input field.
- * @param {string} placeholder - The placeholder text for the input field.
- * @param {string} value - The current value of the input field.
- * @param {function} onChange - The function to call when the input value changes.
- * @param {boolean} isList - Determines if the field is part of a list.
- * @param {boolean} isListOne - Determines if the field is the first item in a list.
- * @param {function} onRemove - The function to call to remove the field (used for list items).
- * @param {string} error - The error message to display.
- * @param {string} id - The id attribute for the input field.
- * @param {boolean} multiline - Determines if the field should be a textarea instead of an input.
- * @param {boolean} select - Determines if the field should be a dropdown menu instead of an input or textarea.
- * @param {Array} options - The list of options for the dropdown menu.
- * @param {boolean} checkbox - Determines if the field should be a checkbox instead of an input, textarea, or select.
- * @param {boolean} checked - The checked state for the checkbox.
- * @param {boolean} disabled - Determines if the field should be disabled.
- */
 const CustomTextField = memo(({
-                                label,
-                                name,
-                                placeholder,
-                                value,
-                                onChange,
-                                isList,
-                                isListOne,
-                                onRemove,
-                                error,
-                                id,
-                                multiline,
-                                select,
-                                options,
-                                checkbox,
-                                checked,
-                                disabled,
-                                classname
-                              }) => {
+  label,
+  name,
+  placeholder,
+  value,
+  onChange,
+  isList,
+  isListOne,
+  onRemove,
+  error,
+  id,
+  multiline,
+  select,
+  options,
+  checkbox,
+  checked,
+  disabled,
+  classname
+}) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
   const handleSelectClick = () => {
-    setIsDropdownOpen(!isDropdownOpen);
+    setIsDropdownOpen(prev => !prev);
   };
 
   const handleOptionClick = (optionValue) => {
@@ -56,8 +32,26 @@ const CustomTextField = memo(({
     setIsDropdownOpen(false);
   };
 
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setIsDropdownOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isDropdownOpen]);
+
   return (
-    <div className={`textfield-container ${classname}`}>
+    <div className={`textfield-container ${classname}`} ref={dropdownRef}>
       {!isList && (
         <label className={`label heading-s ${checkbox && checked ? 'is-checked' : ''}`}>
           {label}
@@ -65,21 +59,27 @@ const CustomTextField = memo(({
       )}
       <div className={`input-wrapper ${isList || isListOne ? 'shorter-field' : ''}`}>
         {select ? (
-          <div className="custom-select-wrapper body-l">
-            <div className={`custom-select ${error ? 'error' : ''}`} onClick={handleSelectClick}>
-              {value || placeholder}
-              {isDropdownOpen ? <svg width="10" height="7" xmlns="http://www.w3.org/2000/svg">
-                <path stroke="#635FC7" strokeWidth="2" fill="none" d="M9 6 5 2 1 6"/>
-              </svg> : <svg width="10" height="7" xmlns="http://www.w3.org/2000/svg">
-                <path stroke="#635FC7" strokeWidth="2" fill="none" d="m1 1 4 4 4-4"/>
-              </svg>}
+          <>
+            <div className="custom-select-wrapper body-l">
+              <div className={`custom-select ${error ? 'error' : ''}`} onClick={handleSelectClick}>
+                {value || placeholder}
+                {isDropdownOpen ? (
+                  <svg width="10" height="7" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke="#635FC7" strokeWidth="2" fill="none" d="M9 6 5 2 1 6" />
+                  </svg>
+                ) : (
+                  <svg width="10" height="7" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke="#635FC7" strokeWidth="2" fill="none" d="m1 1 4 4 4-4" />
+                  </svg>
+                )}
+              </div>
             </div>
             {isDropdownOpen && (
               <ul className="custom-select-options">
                 {options.map((option, index) => (
                   <li
                     key={index}
-                    className="custom-select-option "
+                    className="custom-select-option"
                     onClick={() => handleOptionClick(option.name)}
                   >
                     {option.name}
@@ -100,7 +100,7 @@ const CustomTextField = memo(({
                 </option>
               ))}
             </select>
-          </div>
+          </>
         ) : multiline ? (
           <textarea
             className={`body-l ${error ? 'error' : ''}`}
@@ -137,8 +137,10 @@ const CustomTextField = memo(({
           />
         )}
         {(isList || isListOne) && (
-          <span onClick={onRemove} style={{cursor: 'pointer'}}>
-            <Image src={CrossIcon} alt="Remove"/>
+          <span onClick={onRemove} style={{ cursor: 'pointer' }}>
+            <svg width="15" height="15" xmlns="http://www.w3.org/2000/svg"><g fill="#828FA3" fillRule="evenodd"><path
+              d="m12.728 0 2.122 2.122L2.122 14.85 0 12.728z"/><path
+              d="M0 2.122 2.122 0 14.85 12.728l-2.122 2.122z"/></g></svg>
           </span>
         )}
         {error && <span className="error-message">{error}</span>}

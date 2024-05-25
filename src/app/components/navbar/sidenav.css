@@ -1,6 +1,8 @@
 .side-nav-container {
     display: flex;
     flex-direction: column;
+    width: 260px;
+    transition: ease all 250ms;
 }
 
 
@@ -43,7 +45,7 @@
         flex-direction: row;
         align-items: center;
         gap: 0.625rem;
-        margin-top: 0.5rem;
+        margin-top: 1rem;
         margin-bottom: 2rem;
 
         & h3 {
@@ -55,11 +57,18 @@
 
             &:hover {
                 cursor: pointer;
-                background-color: hsla(242, 48%, 58%, 10%);
+                background-color: var(--btn-secondary-hover-bacground-color);
             }
         }
     }
 
+
+}
+
+@media screen and (min-width: 1440px) {
+    .side-nav-container {
+        max-width: 300px;
+    }
 
 }
 

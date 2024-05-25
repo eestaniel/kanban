@@ -2,7 +2,6 @@
     display: flex;
     flex-direction: row;
     padding: 1.5rem 1rem;
-    width: fit-content;
     gap: 1.5rem;
     overflow-y: auto;
     height: 100%;
@@ -18,7 +17,21 @@
 
     & h3 {
         letter-spacing: 2px;
+        text-transform: uppercase;
     }
+}
+
+.card-header-group {
+    display: flex;
+    flex-direction: row;
+    gap: 0.75rem;
+}
+
+.header-color-circle {
+    width: 1rem;
+    height: 1rem;
+    background-color: aquamarine;
+    border-radius: 32rem;
 }
 
 .task-list-group {
@@ -38,6 +51,7 @@
     background-color: var(--bg-color);
     border-radius: 0.5rem;
     width: 100%;
+    max-width: 280px;
     align-items: start;
     gap: 0.5rem;
     text-align: start;
@@ -76,12 +90,22 @@
         scale: 105%;
         cursor: pointer;
         filter: brightness(125%);
+
+        & h4 {
+            color: var(--main-purple);
+        }
     }
 
     & h4 {
-        color: var(--medium-grey);
-
+        color: #2B2C37;
+        filter: brightness(125%);
     }
+
+
+}
+
+.task-header-card {
+    color: var(--textfield-fc);
 }
 
 .new-column-light {
@@ -98,7 +122,7 @@
 }
 
 .active-column {
-    border: 6px dashed hsla(243, 100%, 82%, 45%);
+    background-color: var(--column-hover);
 }
 
 @media screen and (min-width: 768px) {
