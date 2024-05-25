@@ -4,7 +4,7 @@
     padding: 1.5rem 1rem;
     gap: 1.5rem;
     overflow-y: auto;
-    height: 100%;
+    min-height: 100vh;
     min-width: fit-content;
 }
 
@@ -77,6 +77,12 @@
     border: 0.25rem dashed var(--dark-grey);
 }
 
+.new-column {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
 .new-column-container {
     display: flex;
     flex-direction: column;
@@ -86,6 +92,7 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    min-height: 100vh;
 
     &:hover {
         scale: 105%;
