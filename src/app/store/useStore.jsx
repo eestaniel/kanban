@@ -3,7 +3,13 @@ import { create } from 'zustand';
 // Utility function to generate unique IDs
 const generateId = () => Math.random().toString(36).substr(2, 9);
 
+const arrayMove = (array, from, to) => {
+  const newArray = [...array];
+  const [element] = newArray.splice(from, 1);
+  newArray.splice(to, 0, element);
+  return newArray;
 
+}
 
 /**
  * Zustand store to manage the application state
