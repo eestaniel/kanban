@@ -1,6 +1,6 @@
-import React from 'react';
-import {Droppable} from '@hello-pangea/dnd';
-import {Task} from "@/app/components/boardcontent/Task";
+import React, { useMemo } from 'react';
+import { Droppable } from '@hello-pangea/dnd';
+import { Task } from '@/app/components/boardcontent/Task';
 
 /**
  * DroppableColumn component
@@ -12,19 +12,23 @@ import {Task} from "@/app/components/boardcontent/Task";
  * @param {function} props.handleTaskCompletions - Function to handle task completions
  * @returns {JSX.Element}
  */
-export const DroppableColumn = ({columnId, column, handleTaskCompletions}) => {
+export const DroppableColumn = ({ columnId, column, handleTaskCompletions }) => {
   const getBackgroundColor = (snapshot) => {
-    // Giving isDraggingOver preference
     if (snapshot.isDraggingOver) {
       return 'active-column';
     } else if (snapshot.draggingFromThisWith) {
       return '';
     } else {
-      // Otherwise use our default background
       return '';
     }
-
   };
+
+  const generateRandomColorCSS = () => {
+    const randomColor = Math.floor(Math.random() * 16777215).toString(16);
+    return `#${randomColor}`;
+  };
+
+  const randomColor = useMemo(generateRandomColorCSS, []);
 
   return (
     <Droppable droppableId={columnId}>
@@ -35,12 +39,17 @@ export const DroppableColumn = ({columnId, column, handleTaskCompletions}) => {
           {...provided.droppableProps}
         >
           <div className="column-card">
-            <h3 className="column-header heading-s">
-              {column.name} ({column.tasks.length})
-            </h3>
-            <div className={`task-list-group ${column.tasks.length === 0 && 'empty-column'} ${getBackgroundColor(snapshot)}`}>
+            <div className="card-header-group">
+              <div className="header-color-circle" style={{ backgroundColor: randomColor }}></div>
+              <h3 className="column-header heading-s">
+                {column.name} ({column.tasks.length})
+              </h3>
+            </div>
+            <div
+              className={`task-list-group ${column.tasks.length === 0 && 'empty-column'} ${getBackgroundColor(snapshot)}`}
+            >
               {column.tasks.map((task, index) => (
-                <Task key={task.name} index={index} task={task} handleTaskCompletions={handleTaskCompletions}/>
+                <Task key={task.name} index={index} task={task} handleTaskCompletions={handleTaskCompletions} />
               ))}
             </div>
           </div>
