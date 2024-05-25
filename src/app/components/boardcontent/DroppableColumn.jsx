@@ -13,9 +13,22 @@ import {Task} from "@/app/components/boardcontent/Task";
  * @returns {JSX.Element}
  */
 export const DroppableColumn = ({columnId, column, handleTaskCompletions}) => {
+  const getBackgroundColor = (snapshot) => {
+    // Giving isDraggingOver preference
+    if (snapshot.isDraggingOver) {
+      return 'active-column';
+    } else if (snapshot.draggingFromThisWith) {
+      return '';
+    } else {
+      // Otherwise use our default background
+      return '';
+    }
+
+  };
+
   return (
     <Droppable droppableId={columnId}>
-      {(provided) => (
+      {(provided, snapshot) => (
         <div
           className="column"
           ref={provided.innerRef}
@@ -25,7 +38,7 @@ export const DroppableColumn = ({columnId, column, handleTaskCompletions}) => {
             <h3 className="column-header heading-s">
               {column.name} ({column.tasks.length})
             </h3>
-            <div className={`task-list-group ${column.tasks.length === 0 && 'empty-column'}`}>
+            <div className={`task-list-group ${column.tasks.length === 0 && 'empty-column'} ${getBackgroundColor(snapshot)}`}>
               {column.tasks.map((task, index) => (
                 <Task key={task.name} index={index} task={task} handleTaskCompletions={handleTaskCompletions}/>
               ))}
