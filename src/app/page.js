@@ -64,13 +64,13 @@ export default function Home() {
 
     const handleMouseUp = () => {
       isDragging.current = false;
-      contentWrapper.style.cursor = "all-scroll";
+      contentWrapper.style.cursor = "default";
       contentWrapper.style.userSelect = "auto";
     };
 
     const handleMouseLeave = () => {
       isDragging.current = false;
-      contentWrapper.style.cursor = "all-scroll";
+      contentWrapper.style.cursor = "auto";
       contentWrapper.style.userSelect = "auto";
     };
 

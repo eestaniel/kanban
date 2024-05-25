@@ -32,6 +32,15 @@
     align-items: center;
     flex-direction: row;
     gap: 1rem;
+
+    ::placeholder {
+        opacity: 25%;
+    }
+
+    & svg {
+        overflow: visible;
+    }
+
 }
 
 .input-wrapper .error-message {
@@ -83,7 +92,8 @@
 .checkmark {
     height: 1rem;
     width: 1rem;
-    background-color: var(--subtask-chkbox-idle-bg);
+    background-color: var(--white);
+    border-radius: 2px;
 }
 
 .checkbox-container input:checked ~ .checkmark {

@@ -32,7 +32,7 @@ export const Task = (props) => {
              ref={provided.innerRef}
               onClick={handleActivateModal}
         >
-          <div className="task-header">{props.task.name}</div>
+          <div className="task-header heading-m">{props.task.name}</div>
           <p className="subtask-amount body-m">
             {props.handleTaskCompletions(props.task)} of {props.task.subtasks.length} {props.task.subtasks.length === 1 ? 'subtask' : 'subtasks'}
           </p>

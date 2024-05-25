@@ -51,6 +51,7 @@
     background-color: var(--bg-color);
     border-radius: 0.5rem;
     width: 100%;
+    max-width: 280px;
     align-items: start;
     gap: 0.5rem;
     text-align: start;
