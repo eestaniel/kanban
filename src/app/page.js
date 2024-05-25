@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useEffect } from "react";
+import React, {useEffect} from "react";
 import Navbar from "@/app/components/navbar/Navbar";
 import SideNav from "@/app/components/navbar/SideNav";
 import Modal from "@/app/components/modal/Modal";
@@ -7,8 +7,6 @@ import "./page.css";
 import useStore from "@/app/store/useStore";
 import BoardContent from "@/app/components/boardcontent/BoardContent";
 import Data from "@/app/data.json";
-import dynamic from 'next/dynamic'
-const useHorizontalDrag = dynamic(() => import("@/app/hooks/useHorizontalDrag"), {ssr: false});
 
 export default function Home() {
   const {
@@ -28,9 +26,6 @@ export default function Home() {
   }));
 
 
-  const contentWrapperRef = useRef(null);
-  useHorizontalDrag(contentWrapperRef); // Use the custom hook
-
   useEffect(() => {
     if (isDarkMode) {
       document.body.classList.add("dark-mode");
@@ -45,9 +40,10 @@ export default function Home() {
     }
   }, [initializeBoard]);
 
+
   return (
     <main>
-      <Navbar />
+      <Navbar/>
       {!isSidePanelOpen && (
         <div className="show-side-panel" onClick={() => toggleSidePanel()}>
           <svg width="16" height="11" xmlns="http://www.w3.org/2000/svg">
@@ -59,14 +55,14 @@ export default function Home() {
         </div>
       )}
       <div className="main-container">
-        <SideNav />
-        <div className="content-wrapper" ref={contentWrapperRef}>
-          <BoardContent
-            boardCount={Object.keys(boards)?.length}
-            activateModal={activateModal}
-          />
-          <Modal />
-        </div>
+        <SideNav/>
+          <div className="content-wrapper">
+            <BoardContent
+              boardCount={Object.keys(boards)?.length}
+              activateModal={activateModal}
+            />
+            <Modal/>
+          </div>
       </div>
     </main>
   );
