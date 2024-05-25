@@ -1,6 +1,4 @@
 import './customtextfield.css';
-import CrossIcon from '@/app/assets/icon-cross.svg';
-import Image from 'next/image';
 import { memo, useState, useEffect, useRef } from 'react';
 
 const CustomTextField = memo(({
