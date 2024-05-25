@@ -1,31 +1,8 @@
 import './customtextfield.css';
 import CrossIcon from '@/app/assets/icon-cross.svg';
 import Image from 'next/image';
-import { memo, useState } from 'react';
+import { memo, useState, useEffect, useRef } from 'react';
 
-/*
-* CustomTextField component
-* This component is responsible for rendering the custom text field component
-* It can be used to render a text field, a dropdown, a checkbox or a textarea
-* @param {string} label - The label of the text field
-* @param {string} name - The name of the text field
-* @param {string} placeholder - The placeholder of the text field
-* @param {string} value - The value of the text field
-* @param {function} onChange - The function to handle the change event
-* @param {boolean} isList - A flag to determine if the text field is a list
-* @param {boolean} isListOne - A flag to determine if the text field is a list with one item
-* @param {function} onRemove - The function to handle the remove event
-* @param {string} error - The error message to display
-* @param {string} id - The id of the text field
-* @param {boolean} multiline - A flag to determine if the text field is a textarea
-* @param {boolean} select - A flag to determine if the text field is a dropdown
-* @param {array} options - The options for the dropdown
-* @param {boolean} checkbox - A flag to determine if the text field is a checkbox
-* @param {boolean} checked - A flag to determine if the checkbox is checked
-* @param {boolean} disabled - A flag to determine if the checkbox is disabled
-* @param {string} classname - The class name of the text field
-* @return {JSX.Element}
-* */
 const CustomTextField = memo(({
   label,
   name,
@@ -46,6 +23,7 @@ const CustomTextField = memo(({
   classname
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
   const handleSelectClick = () => {
     setIsDropdownOpen(prev => !prev);
@@ -56,8 +34,26 @@ const CustomTextField = memo(({
     setIsDropdownOpen(false);
   };
 
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setIsDropdownOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isDropdownOpen]);
+
   return (
-    <div className={`textfield-container ${classname}`}>
+    <div className={`textfield-container ${classname}`} ref={dropdownRef}>
       {!isList && (
         <label className={`label heading-s ${checkbox && checked ? 'is-checked' : ''}`}>
           {label}
@@ -65,14 +61,20 @@ const CustomTextField = memo(({
       )}
       <div className={`input-wrapper ${isList || isListOne ? 'shorter-field' : ''}`}>
         {select ? (
-          <div className="custom-select-wrapper body-l">
-            <div className={`custom-select ${error ? 'error' : ''}`} onClick={handleSelectClick}>
-              {value || placeholder}
-              {isDropdownOpen ? <svg width="10" height="7" xmlns="http://www.w3.org/2000/svg">
-                <path stroke="#635FC7" strokeWidth="2" fill="none" d="M9 6 5 2 1 6" />
-              </svg> : <svg width="10" height="7" xmlns="http://www.w3.org/2000/svg">
-                <path stroke="#635FC7" strokeWidth="2" fill="none" d="m1 1 4 4 4-4" />
-              </svg>}
+          <>
+            <div className="custom-select-wrapper body-l">
+              <div className={`custom-select ${error ? 'error' : ''}`} onClick={handleSelectClick}>
+                {value || placeholder}
+                {isDropdownOpen ? (
+                  <svg width="10" height="7" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke="#635FC7" strokeWidth="2" fill="none" d="M9 6 5 2 1 6" />
+                  </svg>
+                ) : (
+                  <svg width="10" height="7" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke="#635FC7" strokeWidth="2" fill="none" d="m1 1 4 4 4-4" />
+                  </svg>
+                )}
+              </div>
             </div>
             {isDropdownOpen && (
               <ul className="custom-select-options">
@@ -100,7 +102,7 @@ const CustomTextField = memo(({
                 </option>
               ))}
             </select>
-          </div>
+          </>
         ) : multiline ? (
           <textarea
             className={`body-l ${error ? 'error' : ''}`}
