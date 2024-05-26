@@ -1,36 +1,71 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Frontend Mentor - Kanban Task Management Web App Solution
 
-## Getting Started
+This is a solution to
+the [Kanban task management web app challenge on Frontend Mentor](https://www.frontendmentor.io/challenges/kanban-task-management-web-app-wgQLt-HlbB).
+Frontend Mentor challenges help you improve your coding skills by building realistic projects.
 
-First, run the development server:
+## Table of contents
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- [Overview](#overview)
+    - [Features](#Features)
+    - [Screenshot](#screenshot)
+    - [Links](#links)
+- [My process](#my-process)
+    - [Built with](#built-with)
+    - [Continued development](#continued-development)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Overview
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+### Features
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- **Responsive Design:** Optimized for various device screen sizes.
+- **Interactive Elements:** Hover states for better UX.
+- **CRUD Operations:** Create, read, update, and delete boards and tasks.
+- **Form Validations:** Ensuring data integrity during board and task creation/editing.
+- **Subtask Management:** Mark subtasks as complete.
+- **Drag and Drop:** Change task status and reorder within columns.
+- **Sidebar Management:** Show/hide the board sidebar.
+- **Theme Toggle:** Switch between light and dark modes.
 
-## Learn More
+### Screenshot
 
-To learn more about Next.js, take a look at the following resources:
+![Preview](public/screenshots/preview.jpg)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Links
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- Solution URL: [Frontend Mentor](https://www.frontendmentor.io/solutions/)
+- Live Site URL: [kanban-ee](https://kanban-ee.vercell.app/)
 
-## Deploy on Vercel
+## My process
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Built with
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- HTML
+- CSS
+- [Next.js](https://nextjs.org/) - React framework
+- [Hello-Pangea-Dnd](https://github.com/hello-pangea/dnd) - Drag-and-drop library
+- [React-Indiana-Drag-Scroll](https://www.npmjs.com/package/react-indiana-drag-scroll) - Drag-scroll library
+
+### Continued development
+
+- **Autoscrolling on Drag and Drop:**
+    - Implement autoscrolling for smoother drag-and-drop interactions when tasks are moved to the edges of the screen.
+
+- **Advanced Task Management Features:**
+    - Task Dependencies: Allow users to set dependencies between tasks, ensuring a task can only start when another task
+      is completed.
+    - Task Priorities: Implement a priority system to help users identify high-priority tasks.
+    - Sprint Planning and Tracking: Add features to plan and track sprints, similar to agile methodologies.
+    - Burndown Charts: Visualize the progress of tasks over time.
+    - User Mentions and Comments: Enable users to mention others and add comments to tasks for better collaboration.
+
+- **Enhanced Task Functionalities:**
+    - Due Dates and Reminders: Allow users to set due dates for tasks and receive reminders.
+    - Task Assignments: Enable task assignment to specific users for better task management.
+        - File Attachments: Allow users to attach files to tasks for better documentation.
+
+- **Full-Stack Integration**:
+    - Database Integration: Use a database (e.g., PostgreSQL, MongoDB) to store and retrieve data, ensuring data
+      persistence.
+    - API Development: Develop a robust API for handling CRUD operations and other functionalities.
+    - Authentication and Authorization: Implement user authentication and role-based access control.
