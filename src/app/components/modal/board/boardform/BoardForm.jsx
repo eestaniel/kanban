@@ -99,8 +99,8 @@ const BoardForm = ({mode}) => {
     if (columnNames.length !== uniqueColumns.size) {
       newColumns.forEach((column, i) => {
         if (i !== index && column.name.toLowerCase() === newName.toLowerCase()) {
-          columnErrors[i] = 'Column names must be unique';
-          columnErrors[index] = 'Column names must be unique';
+          columnErrors[i] = 'Duplicate';
+          columnErrors[index] = 'Duplicate';
         }
       });
     }
