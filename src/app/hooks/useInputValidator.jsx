@@ -13,7 +13,7 @@ const useInputValidator = () => {
       return `Can't be empty`;
     }
     if (newValue.length > maxLength) {
-      return `${fieldName} cannot exceed ${maxLength} characters`;
+      return `Too Long: ${maxLength} characters allowed`;
     }
     return ''; // No error
   };
@@ -44,7 +44,7 @@ const useInputValidator = () => {
         if (mode !== 'edit') {
           const boardNames = boards.map((board) => board.name.toLowerCase());
           if (boardNames.includes(sanitizedValue.toLowerCase())) {
-            return 'Board name already exists';
+            return 'Duplicate';
           }
         }
         return '';
