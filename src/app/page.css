@@ -98,11 +98,10 @@ main {
 
     .content-wrapper {
         border-left: 1px solid hsl(0, 0%, 56%, 25%);
-        align-items: center;
+
     }
 
     .empty-state-group {
-        max-width: 460px;
         padding-inline: 3rem;
     }
 }
