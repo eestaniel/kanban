@@ -15,7 +15,7 @@ import useStore from "@/app/store/useStore";
 export const Task = (props) => {
 
   const {activateModal} = useStore((state) => ({
-    activateModal: state.activateModal
+    activateModal: state.activateModal,
   }));
 
   const handleActivateModal = () => {

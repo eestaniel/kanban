@@ -5,19 +5,24 @@ const CustomButton = dynamic(() => import("@/app/components/buttons/CustomButton
 import {useCallback} from "react";
 
 const Delete = ({type}) => {
-  const {activeBoard, deleteBoard, closeModal} = useStore(state => ({
+  const {activeBoard, deleteBoard, closeModal, deleteTask, initialData} = useStore(state => ({
     activeBoard: state.activeBoard,
     deleteBoard: state.deleteBoard,
-    closeModal: state.closeModal
-
+    closeModal: state.closeModal,
+    deleteTask: state.deleteTask,
+    initialData: state.initialData,
   }));
 
   const handleDelete = useCallback(() => {
     if (type === 'board') {
       closeModal();
       deleteBoard(activeBoard.name);
+    } else {
+      deleteTask(initialData.name);
+      closeModal();
+
     }
-  }, [type, activeBoard, deleteBoard, closeModal]);
+  }, [type, closeModal, deleteBoard, activeBoard.name, deleteTask, initialData.name]);
 
   const handleCancel = useCallback(() => {
     closeModal();
