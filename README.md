@@ -34,7 +34,7 @@ Frontend Mentor challenges help you improve your coding skills by building reali
 ### Links
 
 - Solution URL: [Frontend Mentor](https://www.frontendmentor.io/solutions/kanban-with-nextjs-RDQEiTAlkN)
-- Live Site URL: [kanban-ee](https://kanban-ee.vercell.app/)
+- Live Site URL: [kanban-ee](https://kanban-ee.vercel.app/)
 
 ## My process
 
