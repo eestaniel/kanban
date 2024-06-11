@@ -1,4 +1,4 @@
-import { create } from 'zustand';
+import {create} from 'zustand';
 
 // Utility function to generate unique IDs
 const generateId = () => Math.random().toString(36).substr(2, 9);
@@ -25,6 +25,9 @@ const useStore = create((set, get) => ({
   modalType: '',
   initialData: {},
   isSidePanelOpen: true,
+  activeTask: null,
+
+
 
   // Unique ID generator
   createUniqueId: (objectKey) => {
@@ -51,7 +54,7 @@ const useStore = create((set, get) => ({
     activeBoard: updatedBoard,
   })),
 
-  selectBoardToEdit: (board) => set({ selectedBoard: board }),
+  selectBoardToEdit: (board) => set({selectedBoard: board}),
 
   changeActiveBoard: (board) => set({
     activeBoard: board,
@@ -191,11 +194,11 @@ const useStore = create((set, get) => ({
       .flatMap((column) => column.tasks)
       .find((task) => task.name === activeId);
 
-    let  updatedActiveBoard = null
+    let updatedActiveBoard = null
 
     // handle the case where the task is moved within the same column and the same index
     if (sourceColumnId === destinationColumnId && sourceIndex === destinationIndex) {
-      return { activeBoard: state.activeBoard };
+      return {activeBoard: state.activeBoard};
     }
     // handle the case where the task is moved within the same column but to a different index
     else if (sourceColumnId === destinationColumnId) {
@@ -259,16 +262,34 @@ const useStore = create((set, get) => ({
     };
   }),
 
+  // delete task by task name
+  deleteTask: (taskName) => set((state) => {
+    const updatedColumns = state.activeBoard.columns.map((column) => ({
+      ...column,
+      tasks: column.tasks.filter((task) => task.name !== taskName),
+    }));
+
+    const updatedActiveBoard = {
+      ...state.activeBoard,
+      columns: updatedColumns,
+    };
+
+    return {
+      activeBoard: updatedActiveBoard,
+      boards: state.boards.map((board) => board.name === updatedActiveBoard.name ? updatedActiveBoard : board),
+    };
+  }),
+
   // Dark mode actions
-  toggleDarkMode: () => set((state) => ({ isDarkMode: !state.isDarkMode })),
+  toggleDarkMode: () => set((state) => ({isDarkMode: !state.isDarkMode})),
 
   // Modal actions
-  activateModal: (modalType, initialData) => set({ isModalOpen: true, modalType, initialData }),
+  activateModal: (modalType, initialData) => set({isModalOpen: true, modalType, initialData}),
 
-  closeModal: () => set({ isModalOpen: false, modalType: '', initialData: {} }),
+  closeModal: () => set({isModalOpen: false, modalType: '', initialData: {}}),
 
   // Side panel actions
-  toggleSidePanel: () => set((state) => ({ isSidePanelOpen: !state.isSidePanelOpen })),
+  toggleSidePanel: () => set((state) => ({isSidePanelOpen: !state.isSidePanelOpen})),
 }));
 
 export default useStore;

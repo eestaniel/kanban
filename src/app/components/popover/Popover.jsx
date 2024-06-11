@@ -34,6 +34,11 @@ const Popover = ({ isPopoverOpen, setIsPopoverOpen, popoverType, task }) => {
     activateModal('edit-task', task);
   };
 
+  const handleDeleteTask = () => {
+    activateModal('delete-task', task);
+    setIsPopoverOpen(false);
+  }
+
   const handleClickOutside = useCallback((event) => {
     if (popoverRef.current && !popoverRef.current.contains(event.target)) {
       setIsPopoverOpen(false);
@@ -63,7 +68,7 @@ const Popover = ({ isPopoverOpen, setIsPopoverOpen, popoverType, task }) => {
             {popoverType === 'nav-task' && (
               <ul className="popover-menu">
                 <li className="popover-menu-item" onClick={handleEditTask}>Edit Task</li>
-                <li className="popover-menu-item popover-delete" onClick={handleDeleteBoard}>Delete Task</li>
+                <li className="popover-menu-item popover-delete" onClick={handleDeleteTask}>Delete Task</li>
               </ul>
             )}
           </div>

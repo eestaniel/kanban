@@ -20,6 +20,7 @@ const Modal = () => {
     closeModal: state.closeModal,
   }));
 
+  // useEffect to open task summary modal
   useEffect(() => {
     if (modalType === 'view-task') {
       setIsTaskSummaryOpen(true);
@@ -35,6 +36,7 @@ const Modal = () => {
     'view-task': <ViewTask/>,
     'edit-board': <BoardForm mode='edit'/>,
     'edit-task': <TaskForm mode='edit'/>,
+    'delete-task': <Delete type='task' />,
     'delete': <Delete type='board'/>
   };
 
